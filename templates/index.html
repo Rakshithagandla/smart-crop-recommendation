@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌾 Smart Crop Recommendation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🌾 Smart Crop Recommendation System</h1>
+            <p class="subtitle">AI-Powered Recommendations for Better Harvests</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Form Section -->
+            <div class="form-section">
+                <form id="farmForm" class="farm-form">
+                    
+                    <!-- Language Selection -->
+                    <div class="form-group">
+                        <label for="language">🌐 Select Language</label>
+                        <select id="language" name="language">
+                            <option value="en">English</option>
+                            <option value="hi">हिंदी (Hindi)</option>
+                            <option value="te">తెలుగు (Telugu)</option>
+                        </select>
+                    </div>
+
+                    <!-- Soil Condition -->
+                    <fieldset class="fieldset">
+                        <legend>📋 How is your soil?</legend>
+                        
+                        <div class="radio-option">
+                            <input type="radio" name="soil_condition" value="sandy" id="sandy">
+                            <label for="sandy">
+                                <span class="emoji">🏜️</span>
+                                <span class="text">Sandy (Light, drains fast)</span>
+                            </label>
+                        </div>
+
+                        <div class="radio-option">
+                            <input type="radio" name="soil_condition" value="loamy" id="loamy" checked>
+                            <label for="loamy">
+                                <span class="emoji">🟤</span>
+                                <span class="text">Loamy (Mixed, ideal)</span>
+                            </label>
+                        </div>
+
+                        <div class="radio-option">
+                            <input type="radio" name="soil_condition" value="clay" id="clay">
+                            <label for="clay">
+                                <span class="emoji">🪨</span>
+                                <span class="text">Clay (Heavy, holds water)</span>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <!-- Soil Fertility -->
+                    <fieldset class="fieldset">
+                        <legend>💚 How fertile is your soil?</legend>
+                        
+                        <div class="radio-option">
+                            <input type="radio" name="soil_fertility" value="low" id="low">
+                            <label for="low">
+                                <span class="emoji">🔴</span>
+                                <span class="text">Low (Weak growth)</span>
+                            </label>
+                        </div>
+
+                        <div class="radio-option">
+                            <input type="radio" name="soil_fertility" value="medium" id="medium" checked>
+                            <label for="medium">
+                                <span class="emoji">🟡</span>
+                                <span class="text">Medium (Normal)</span>
+                            </label>
+                        </div>
+
+                        <div class="radio-option">
+                            <input type="radio" name="soil_fertility" value="high" id="high">
+                            <label for="high">
+                                <span class="emoji">🟢</span>
+                                <span class="text">High (Excellent growth)</span>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <!-- Last Harvest -->
+                    <fieldset class="fieldset">
+                        <legend>🌾 How was your last harvest?</legend>
+                        
+                        <div class="radio-option">
+                            <input type="radio" name="last_harvest" value="poor" id="poor">
+                            <label for="poor">
+                                <span class="emoji">🔴</span>
+                                <span class="text">Poor (Low production)</span>
+                            </label>
+                        </div>
+
+                        <div class="radio-option">
+                            <input type="radio" name="last_harvest" value="medium" id="harvest_medium" checked>
+                            <label for="harvest_medium">
+                                <span class="emoji">🟡</span>
+                                <span class="text">Medium (Normal)</span>
+                            </label>
+                        </div>
+
+                        <div class="radio-option">
+                            <input type="radio" name="last_harvest" value="good" id="good">
+                            <label for="good">
+                                <span class="emoji">🟢</span>
+                                <span class="text">Good (Excellent)</span>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <!-- City/Village -->
+                    <div class="form-group">
+                        <label for="city">📍 Enter your city/village</label>
+                        <input type="text" id="city" name="city" value="Delhi" 
+                               placeholder="e.g., Delhi, Mumbai, Hyderabad">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-submit">🌱 Get Recommendation</button>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resultSection" class="result-section hidden">
+                <div class="result-card">
+                    <h2 class="result-title">✅ Recommended Crop</h2>
+                    
+                    <div class="crop-result">
+                        <div class="crop-emoji">🌾</div>
+                        <h3 id="cropName"></h3>
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="info-box">
+                            <h4>📊 Confidence</h4>
+                            <div class="confidence-bar">
+                                <div id="confidenceBar" class="confidence-fill"></div>
+                            </div>
+                            <p id="confidenceText"></p>
+                        </div>
+
+                        <div class="info-box">
+                            <h4>💧 Recommended Fertilizer</h4>
+                            <p id="fertilizerName"></p>
+                            <p id="fertilizerDesc"></p>
+                        </div>
+                    </div>
+
+                    <div id="weatherSection" class="info-box weather-box hidden">
+                        <h4>🌤️ Weather Information</h4>
+                        <p id="weatherInfo"></p>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>🔍 Key Factors</h4>
+                        <ul id="explanationList"></ul>
+                    </div>
+
+                    <button type="button" class="btn-back" onclick="resetForm()">🔙 Back</button>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>🌱 Smart Crop Recommendation System | Powered by AI 🤖</p>
+        </footer>
+    </div>
+
+    <script>
+        const cropEmojis = {
+            'rice': '🌾', 'maize': '🌽', 'chickpea': '🫛', 'kidneybeans': '🫘',
+            'pigeonpeas': '🫘', 'mothbeans': '🫘', 'mungbean': '🫘', 'blackgram': '🫘',
+            'lentil': '🫛', 'pomegranate': '🍎', 'banana': '🍌', 'mango': '🥭',
+            'grapes': '🍇', 'watermelon': '🍉', 'muskmelon': '🍈', 'apple': '🍎',
+            'orange': '🍊', 'papaya': '🧡', 'coconut': '🥥', 'cotton': '🤍',
+            'sugarcane': '🍯', 'tobacco': '🔶', 'arecanut': '🎀', 'jute': '🧵'
+        };
+
+        document.getElementById('farmForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await makePrediction();
+        });
+
+        async function makePrediction() {
+            const formData = {
+                soil_condition: document.querySelector('input[name="soil_condition"]:checked').value,
+                soil_fertility: document.querySelector('input[name="soil_fertility"]:checked').value,
+                last_harvest: document.querySelector('input[name="last_harvest"]:checked').value,
+                city: document.getElementById('city').value,
+                language: document.getElementById('language').value
+            };
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    displayResults(result);
+                } else {
+                    alert('❌ Error: ' + result.error);
+                }
+            } catch (error) {
+                alert('❌ Connection error');
+            }
+        }
+
+        function displayResults(data) {
+            const cropName = data.crop.toLowerCase();
+            const emoji = cropEmojis[cropName] || '🌾';
+            
+            document.getElementById('cropName').textContent = `${emoji} ${data.crop}`;
+            document.getElementById('confidenceBar').style.width = `${data.confidence}%`;
+            document.getElementById('confidenceText').textContent = `${data.confidence}% Confidence`;
+            
+            document.getElementById('fertilizerName').textContent = data.fertilizer.name;
+            document.getElementById('fertilizerDesc').textContent = 
+                `N: ${data.fertilizer.n} | P: ${data.fertilizer.p} | K: ${data.fertilizer.k}`;
+            
+            if (data.weather) {
+                document.getElementById('weatherSection').classList.remove('hidden');
+                document.getElementById('weatherInfo').textContent = 
+                    `🌡️ ${data.weather.temperature}°C | 💧 ${data.weather.humidity}% | 📍 ${data.weather.city}`;
+            }
+            
+            let explanationHTML = '';
+            data.explanation.forEach((exp) => {
+                explanationHTML += `<li>${exp[0]}: ${(exp[1] * 100).toFixed(1)}%</li>`;
+            });
+            document.getElementById('explanationList').innerHTML = explanationHTML;
+            
+            document.querySelector('.form-section').classList.add('hidden');
+            document.getElementById('resultSection').classList.remove('hidden');
+        }
+
+        function resetForm() {
+            document.querySelector('.form-section').classList.remove('hidden');
+            document.getElementById('resultSection').classList.add('hidden');
+            document.getElementById('farmForm').reset();
+        }
+    </script>
+</body>
+</html>
