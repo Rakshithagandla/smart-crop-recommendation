@@ -6,3 +6,9 @@ requests
 joblib
 python-dotenv
 gunicorn
+Flask-SQLAlchemy==3.0.5
+psycopg2[binary]
+PyJWT
+bcrypt==4.0.1
+python-dotenv==1.0.0
+twilio==8.10.0
