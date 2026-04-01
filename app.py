@@ -324,29 +324,73 @@ def get_officer_farmers(current_user_id):
 
 def fetch_weather(city):
     return {'temperature': 25, 'humidity': 60, 'city': city}
-
 @app.route('/api/predict', methods=['POST'])
 @token_required
 def predict(current_user_id):
+    """Get real crop recommendation"""
     try:
         user = User.query.get(current_user_id)
         farmer_input = request.json
+        city = farmer_input.get('city', 'Delhi')
         
+        if rf_model is None:
+            return jsonify({'success': False, 'error': 'Model not loaded'}), 500
+        
+        # Get correct farmer profile
         if user.role == 'literate_farmer':
             farmer = Farmer.query.filter_by(user_id=current_user_id).first()
         else:
-            farmer = Farmer.query.get(farmer_input.get('farmer_id'))
+            farmer_id = farmer_input.get('farmer_id')
+            farmer = Farmer.query.get(farmer_id)
+
+        # 1. Fetch Weather and Convert Soil Inputs
+        weather = fetch_weather(city)
+        dataset_values = convert_farmer_input_to_dataset_values(farmer_input, weather)
         
-        weather = fetch_weather(farmer_input.get('city', 'Delhi'))
+        # 2. Prepare Features for the AI Model
+        features = np.array([[
+            dataset_values['N'],
+            dataset_values['P'],
+            dataset_values['K'],
+            dataset_values['temperature'],
+            dataset_values['humidity'],
+            dataset_values['ph'],
+            dataset_values['rainfall']
+        ]])
         
-        # Mocking Prediction Logic for brevity in snippet
-        prediction = rf_model.predict(np.array([[90, 42, 43, 20, 82, 6, 202]]))[0]
+        # 3. Run Prediction
+        prediction = rf_model.predict(features)[0]
+        probabilities = rf_model.predict_proba(features)[0]
+        confidence = max(probabilities) * 100
         
-        recommendation = Recommendation(farmer_id=farmer.id, crop=prediction.title(), fertilizer="DAP", confidence=95, weather_data=weather)
-        db.session.add(recommendation); db.session.commit()
+        # 4. Get Fertilizer info
+        fertilizer = FERTILIZER_MAP.get(prediction.lower(), {
+            'name': 'Balanced NPK', 'n': 20, 'p': 20, 'k': 20
+        })
         
-        return jsonify({'success': True, 'crop': prediction.title(), 'fertilizer': {'name': 'DAP', 'n': 18, 'p': 46, 'k': 0}, 'weather': weather, 'confidence': 95, 'explanation': [['Soil', 80]]})
+        # 5. Save to Database
+        if farmer:
+            recommendation = Recommendation(
+                farmer_id=farmer.id,
+                crop=prediction.title(),
+                fertilizer=str(fertilizer),
+                confidence=round(confidence, 2),
+                weather_data=weather
+            )
+            db.session.add(recommendation)
+            db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'crop': prediction.title(),
+            'fertilizer': fertilizer,
+            'weather': weather,
+            'confidence': round(confidence, 2),
+            'explanation': [['Soil Quality', 85], ['Climate', 15]] # Simplified for UI
+        }), 200
+    
     except Exception as e:
+        print(f"Prediction Error: {e}")
         return jsonify({'success': False, 'error': str(e)}), 400
 
 if __name__ == '__main__':
