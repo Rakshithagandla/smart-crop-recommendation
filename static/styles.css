@@ -59,7 +59,7 @@ body {
 }
 
 .screen.active {
-    display: block;
+    display: block !important;
 }
 
 @keyframes fadeIn {

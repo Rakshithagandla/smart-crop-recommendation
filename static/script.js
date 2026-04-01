@@ -4,10 +4,26 @@ let currentUserToken = localStorage.getItem('token');
 let currentUserRole = localStorage.getItem('role');
 let currentUser = JSON.parse(localStorage.getItem('user') || '{}');
 
-// Show/Hide Screens
+// GLOBAL VARIABLE: Tracks which farmer the officer is helping
+let selectedFarmerId = null; 
+
+// ===== NAVIGATION LOGIC =====
+
 function showScreen(screenId) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(screenId).classList.add('active');
+    // 1. Hide all screens by removing 'active' and adding 'hidden'
+    document.querySelectorAll('.screen').forEach(s => {
+        s.classList.remove('active');
+        s.classList.add('hidden');
+    });
+
+    // 2. Show the target screen by adding 'active' and removing 'hidden'
+    const target = document.getElementById(screenId);
+    if (target) {
+        target.classList.add('active');
+        target.classList.remove('hidden');
+    } else {
+        console.error(`Screen with id "${screenId}" not found.`);
+    }
 }
 
 function showLiteracySelection() {
@@ -18,7 +34,7 @@ function selectLiteracy(type) {
     if (type === 'literate') {
         showScreen('otpRegisterScreen');
     } else {
-        showScreen('officerLoginScreen');
+        showScreen('officerLoginScreen'); // Illiterate farmers are handled via Officer Login
     }
 }
 
@@ -26,6 +42,7 @@ function goBack() {
     showScreen('welcomeScreen');
 }
 
+// Navbar Shortcuts
 function showLogin() {
     showScreen('officerLoginScreen');
 }
@@ -38,26 +55,31 @@ function showOfficerRegister() {
     showScreen('officerRegisterScreen');
 }
 
-// OTP Functions
+// ===== FARMER SELECTION LOGIC =====
+
+function startPredictionForFarmer(farmerId, farmerName) {
+    selectedFarmerId = farmerId; // Remember this farmer
+    alert(`🌱 Starting recommendation for: ${farmerName}`);
+    showScreen('farmerInputScreen'); // Move to the input form
+}
+
+// ===== OTP & AUTH FUNCTIONS =====
+
 async function sendOTP() {
     const phone = document.getElementById('phoneInput').value;
-    
     if (!phone || phone.length !== 10) {
         alert('Please enter a valid 10-digit mobile number');
         return;
     }
-
     try {
         const response = await fetch(`${API_BASE_URL}/api/auth/send-otp`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phone })
         });
-
         const data = await response.json();
-
         if (data.success) {
-            alert('✅ OTP sent to your phone!');
+            alert('✅ OTP sent! Check your Python terminal.');
             document.getElementById('otpStep1').classList.add('hidden');
             document.getElementById('otpStep2').classList.remove('hidden');
         } else {
@@ -74,12 +96,7 @@ async function verifyOTP() {
     const name = document.getElementById('nameInput').value;
     const aadhar = document.getElementById('aadharInput').value;
 
-    if (!otp || otp.length !== 6) {
-        alert('Please enter a valid 6-digit OTP');
-        return;
-    }
-
-    if (!name || !aadhar || aadhar.length !== 12) {
+    if (!otp || otp.length !== 6 || !name || aadhar.length !== 12) {
         alert('Please fill all fields correctly');
         return;
     }
@@ -90,19 +107,9 @@ async function verifyOTP() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phone, otp, name, aadhar })
         });
-
         const data = await response.json();
-
         if (data.success) {
-            // Save token and user data
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('role', 'literate_farmer');
-            localStorage.setItem('user', JSON.stringify(data.user));
-            
-            currentUserToken = data.token;
-            currentUserRole = 'literate_farmer';
-            currentUser = data.user;
-
+            saveUserSession(data.token, 'literate_farmer', data.user);
             alert('✅ Registration successful!');
             showScreen('farmerInputScreen');
         } else {
@@ -113,11 +120,8 @@ async function verifyOTP() {
     }
 }
 
-function resendOTP() {
-    sendOTP();
-}
+// ===== OFFICER FUNCTIONS =====
 
-// Officer Functions
 async function officerLogin() {
     const email = document.getElementById('officerEmail').value;
     const password = document.getElementById('officerPassword').value;
@@ -133,53 +137,11 @@ async function officerLogin() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
         });
-
         const data = await response.json();
-
         if (data.success) {
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('role', 'officer');
-            localStorage.setItem('user', JSON.stringify(data.user));
-            
-            currentUserToken = data.token;
-            currentUserRole = 'officer';
-            currentUser = data.user;
-
-            alert('✅ Login successful!');
+            saveUserSession(data.token, 'officer', data.user);
+            alert('✅ Officer Login successful!');
             loadOfficerDashboard();
-        } else {
-            alert('❌ Error: ' + data.error);
-        }
-    } catch (error) {
-        alert('❌ Connection error');
-    }
-}
-
-async function registerOfficer() {
-    const name = document.getElementById('officerName').value;
-    const email = document.getElementById('officerRegEmail').value;
-    const phone = document.getElementById('officerPhone').value;
-    const password = document.getElementById('officerRegPassword').value;
-
-    if (!name || !email || !phone || !password) {
-        alert('Please fill all fields');
-        return;
-    }
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/auth/officer-register`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, phone, password })
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            alert('✅ Registration successful! Now login.');
-            document.getElementById('officerRegEmail').value = email;
-            document.getElementById('officerRegPassword').value = '';
-            showScreen('officerLoginScreen');
         } else {
             alert('❌ Error: ' + data.error);
         }
@@ -198,8 +160,8 @@ async function addFarmer() {
     const aadhar = document.getElementById('farmerAadhar').value;
     const phone = document.getElementById('farmerPhone').value;
 
-    if (!name || !aadhar || aadhar.length !== 12) {
-        alert('Please fill all required fields correctly');
+    if (!name || aadhar.length !== 12) {
+        alert('Please fill required fields (Name & 12-digit Aadhar)');
         return;
     }
 
@@ -212,14 +174,11 @@ async function addFarmer() {
             },
             body: JSON.stringify({ name, aadhar, phone })
         });
-
         const data = await response.json();
-
         if (data.success) {
-            alert('✅ Farmer added successfully!');
+            alert('✅ Farmer added to your list!');
             document.getElementById('farmerName').value = '';
             document.getElementById('farmerAadhar').value = '';
-            document.getElementById('farmerPhone').value = '';
             loadFarmers();
         } else {
             alert('❌ Error: ' + data.error);
@@ -234,9 +193,7 @@ async function loadFarmers() {
         const response = await fetch(`${API_BASE_URL}/api/officer/farmers`, {
             headers: { 'Authorization': `Bearer ${currentUserToken}` }
         });
-
         const data = await response.json();
-
         const farmersList = document.getElementById('farmersList');
         farmersList.innerHTML = '';
 
@@ -249,10 +206,12 @@ async function loadFarmers() {
             const div = document.createElement('div');
             div.className = 'farmer-item';
             div.innerHTML = `
-                <p><strong>${farmer.name}</strong></p>
-                <p>Aadhar: ${farmer.aadhar}</p>
-                <p>Phone: ${farmer.phone || 'N/A'}</p>
-                <p>Recommendations: ${farmer.recommendations_count}</p>
+                <p><strong>👤 ${farmer.name}</strong></p>
+                <p>🆔 Aadhar: ${farmer.aadhar}</p>
+                <p>📊 Recommendations: ${farmer.recommendations_count}</p>
+                <button onclick="startPredictionForFarmer(${farmer.id}, '${farmer.name}')" class="btn btn-primary" style="margin-top:10px; font-size:0.85em;">
+                    🌱 Get Recommendation
+                </button>
             `;
             farmersList.appendChild(div);
         });
@@ -261,7 +220,8 @@ async function loadFarmers() {
     }
 }
 
-// Crop Recommendation
+// ===== PREDICTION LOGIC =====
+
 async function getPrediction() {
     const soilCondition = document.querySelector('input[name="soil_condition"]:checked')?.value || 'loamy';
     const soilFertility = document.querySelector('input[name="soil_fertility"]:checked')?.value || 'medium';
@@ -272,7 +232,8 @@ async function getPrediction() {
         soil_condition: soilCondition,
         soil_fertility: soilFertility,
         last_harvest: lastHarvest,
-        city: city
+        city: city,
+        farmer_id: selectedFarmerId // Sends the selected farmer ID to Python
     };
 
     try {
@@ -284,9 +245,7 @@ async function getPrediction() {
             },
             body: JSON.stringify(formData)
         });
-
         const data = await response.json();
-
         if (data.success) {
             displayResults(data);
         } else {
@@ -308,7 +267,7 @@ function displayResults(data) {
     };
 
     const cropName = data.crop.toLowerCase();
-    const emoji = cropEmojis[cropName] || '🌾';
+    const emoji = cropEmojis[cropName] || '🌱';
 
     document.getElementById('resultEmoji').textContent = emoji;
     document.getElementById('resultCrop').textContent = data.crop;
@@ -316,7 +275,7 @@ function displayResults(data) {
     document.getElementById('confidenceText').textContent = `${data.confidence}% Confidence`;
     document.getElementById('fertilizerName').textContent = data.fertilizer.name;
     document.getElementById('fertilizerDesc').textContent = `N: ${data.fertilizer.n} | P: ${data.fertilizer.p} | K: ${data.fertilizer.k}`;
-    document.getElementById('weatherInfo').textContent = `🌡️ ${data.weather.temperature}°C | 💧 ${data.weather.humidity}% | 📍 ${data.weather.city}`;
+    document.getElementById('weatherInfo').textContent = `🌡️ ${data.weather.temperature}°C | 📍 ${data.weather.city}`;
 
     let explanationHTML = '';
     data.explanation.forEach(exp => {
@@ -327,12 +286,22 @@ function displayResults(data) {
     showScreen('resultsScreen');
 }
 
+// ===== HELPERS & INIT =====
+
+function saveUserSession(token, role, user) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('role', role);
+    localStorage.setItem('user', JSON.stringify(user));
+    currentUserToken = token;
+    currentUserRole = role;
+    currentUser = user;
+}
+
 function logout() {
     localStorage.clear();
     location.reload();
 }
 
-// Initialize
 window.addEventListener('load', () => {
     if (currentUserToken && currentUserRole) {
         if (currentUserRole === 'officer') {
@@ -340,5 +309,7 @@ window.addEventListener('load', () => {
         } else {
             showScreen('farmerInputScreen');
         }
+    } else {
+        showScreen('welcomeScreen');
     }
 });

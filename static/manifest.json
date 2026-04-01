@@ -1,0 +1,16 @@
+{
+  "name": "Smart Crop Recommendation",
+  "short_name": "SmartCrop",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#d7f5d2",
+  "theme_color": "#2e7d32",
+  "description": "AI-Powered Crop Recommendations for Farmers",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2329/2329013.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
