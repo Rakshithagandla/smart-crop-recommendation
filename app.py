@@ -106,7 +106,7 @@ def generate_otp():
     return ''.join(secrets.choice(string.digits) for _ in range(6))
 
 TWILIO_ACCOUNT_SID = 'AC307fa26fee0cb788f7b24e72f0ce337e' 
-TWILIO_AUTH_TOKEN = '202ff28388e46b1490958f6214796f73'
+TWILIO_AUTH_TOKEN = 'af053af80f1c8e8d40439f601f2bd889'
 TWILIO_PHONE_NUMBER = '+12605445133'
 
 def send_otp_sms(phone, otp):
