@@ -165,22 +165,21 @@ def index():
 
 @app.route('/api/auth/send-otp', methods=['POST'])
 def send_otp():
-    """Send OTP to phone number (Literate Farmer)"""
+    """Send OTP to phone number (Works for both Register & Login)"""
     data = request.json
     phone = data.get('phone')
     
     if not phone or len(phone) != 10:
         return jsonify({'success': False, 'error': 'Invalid phone number'}), 400
     
-    # Check if user already exists
+    # Check if user exists to determine if this is a Login or Registration
     user = User.query.filter_by(phone=phone).first()
-    if user:
-        return jsonify({'success': False, 'error': 'Phone number already registered'}), 400
+    is_existing_user = True if user else False
     
     # Generate OTP
     otp = generate_otp()
     
-    # Save OTP in database
+    # Save/Update OTP in database
     otp_record = OTPVerification.query.filter_by(phone=phone).first()
     if otp_record:
         otp_record.otp = otp
@@ -195,10 +194,14 @@ def send_otp():
     
     db.session.commit()
     
-    # Send SMS
+    # Send real SMS via Twilio
     send_otp_sms(phone, otp)
     
-    return jsonify({'success': True, 'message': 'OTP sent to your phone'}), 200
+    return jsonify({
+        'success': True, 
+        'message': 'OTP sent successfully',
+        'is_registered': is_existing_user # Tell the frontend if we need to ask for Name/Aadhar later
+    }), 200
 
 @app.route('/api/auth/verify-otp', methods=['POST'])
 def verify_otp():
@@ -266,6 +269,37 @@ def verify_otp():
             'name': user.name,
             'role': user.role,
             'farmer_id': farmer.id
+        }
+    }), 200
+@app.route('/api/auth/login-verify', methods=['POST'])
+def login_verify():
+    """Verify OTP for existing users and log them in"""
+    data = request.json
+    phone = data.get('phone')
+    otp = data.get('otp')
+    
+    # Verify OTP logic
+    otp_record = OTPVerification.query.filter_by(phone=phone, otp=otp).first()
+    if not otp_record or datetime.utcnow() > otp_record.expires_at:
+        return jsonify({'success': False, 'error': 'Invalid or expired OTP'}), 400
+    
+    user = User.query.filter_by(phone=phone).first()
+    farmer = Farmer.query.filter_by(phone=phone).first()
+    
+    # Generate JWT Token
+    token = jwt.encode({
+        'user_id': user.id,
+        'role': user.role
+    }, app.config['SECRET_KEY'], algorithm='HS256')
+    
+    return jsonify({
+        'success': True,
+        'token': token,
+        'user': {
+            'id': user.id,
+            'name': user.name,
+            'role': user.role,
+            'farmer_id': farmer.id if farmer else None
         }
     }), 200
 

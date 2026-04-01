@@ -78,10 +78,22 @@ async function sendOTP() {
             body: JSON.stringify({ phone })
         });
         const data = await response.json();
+        
         if (data.success) {
-            alert('✅ OTP sent! Check your Python terminal.');
+            alert('✅ OTP sent!');
             document.getElementById('otpStep1').classList.add('hidden');
             document.getElementById('otpStep2').classList.remove('hidden');
+
+            // NEW LOGIC: If user exists, hide Registration-only fields
+            if (data.is_registered) {
+                document.getElementById('nameInput').classList.add('hidden');
+                document.getElementById('aadharInput').classList.add('hidden');
+                // Change button text to "Login"
+                document.querySelector('#otpStep2 button').innerText = "Login & Get Recommendation";
+            } else {
+                document.getElementById('nameInput').classList.remove('hidden');
+                document.getElementById('aadharInput').classList.remove('hidden');
+            }
         } else {
             alert('❌ Error: ' + data.error);
         }
@@ -96,21 +108,29 @@ async function verifyOTP() {
     const name = document.getElementById('nameInput').value;
     const aadhar = document.getElementById('aadharInput').value;
 
-    if (!otp || otp.length !== 6 || !name || aadhar.length !== 12) {
-        alert('Please fill all fields correctly');
+    if (!otp || otp.length !== 6) {
+        alert('Please enter the 6-digit OTP');
         return;
     }
 
+    // Determine if we are Registering or Logging In
+    const isLogin = document.getElementById('nameInput').classList.contains('hidden');
+    const endpoint = isLogin ? '/api/auth/login-verify' : '/api/auth/verify-otp';
+    
+    const payload = isLogin ? { phone, otp } : { phone, otp, name, aadhar };
+
     try {
-        const response = await fetch(`${API_BASE_URL}/api/auth/verify-otp`, {
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone, otp, name, aadhar })
+            body: JSON.stringify(payload)
         });
         const data = await response.json();
+        
         if (data.success) {
             saveUserSession(data.token, 'literate_farmer', data.user);
-            alert('✅ Registration successful!');
+            selectedFarmerId = data.user.farmer_id; // Set the global ID for prediction
+            alert(isLogin ? '✅ Login Successful!' : '✅ Registration Successful!');
             showScreen('farmerInputScreen');
         } else {
             alert('❌ Error: ' + data.error);
