@@ -14,11 +14,18 @@
 <body>
     <div class="container">
         <nav class="navbar" id="navbar">
-            <div class="nav-brand">🌾 Smart Crop</div>
+          <div class="nav-brand">🌾 Smart Crop</div>
+          <div class="nav-right">
+            <select id="languageSelect" onchange="changeLanguage(this.value)" class="lang-dropdown">
+              <option value="en">English</option>
+              <option value="hi">हिन्दी (Hindi)</option>
+              <option value="te">తెలుగు (Telugu)</option>
+            </select>
             <div class="nav-links">
-                <a href="#" onclick="showLogin()">Login</a>
-                <a href="#" onclick="showRegister()">Register</a>
+              <a href="#" onclick="showLogin()" data-key="navLogin">Login</a>
+              <a href="#" onclick="showRegister()" data-key="navRegister">Register</a>
             </div>
+          </div>
         </nav>
 
         <main class="main-content">

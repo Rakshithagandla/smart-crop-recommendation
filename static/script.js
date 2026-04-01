@@ -1,3 +1,61 @@
+const translations = {
+    'en': {
+        'navLogin': 'Login',
+        'navRegister': 'Register',
+        'welcomeTitle': 'Smart Crop Recommendation System',
+        'welcomeSub': 'AI-Powered Recommendations for Better Harvests',
+        'getStarted': 'Get Started',
+        'phoneTitle': 'Phone Verification',
+        'sendOtp': 'Send OTP',
+        'verifyBtn': 'Verify & Register'
+    },
+    'hi': {
+        'navLogin': 'लॉगिन',
+        'navRegister': 'पंजीकरण',
+        'welcomeTitle': 'स्मार्ट फसल अनुशंसा प्रणाली',
+        'welcomeSub': 'बेहतर फसल के लिए एआई-संचालित सिफारिशें',
+        'getStarted': 'शुरू करें',
+        'phoneTitle': 'फ़ोन सत्यापन',
+        'sendOtp': 'ओटीपी भेजें',
+        'verifyBtn': 'सत्यापित करें और पंजीकरण करें'
+    },
+    'te': {
+        'navLogin': 'లాగిన్',
+        'navRegister': 'రిజిస్టర్',
+        'welcomeTitle': 'స్మార్ట్ పంట సిఫార్సు వ్యవస్థ',
+        'welcomeSub': 'మెరుగైన దిగుబడి కోసం AI సిఫార్సులు',
+        'getStarted': 'ప్రారంభించండి',
+        'phoneTitle': 'ఫోన్ వెరిఫికేషన్',
+        'sendOtp': 'OTP పంపండి',
+        'verifyBtn': 'ధృవీకరించండి & నమోదు చేయండి'
+    }
+};
+
+function changeLanguage(lang) {
+    // Save preference
+    localStorage.setItem('preferredLanguage', lang);
+    
+    // Loop through all elements with a data-key and change their text
+    document.querySelectorAll('[data-key]').forEach(element => {
+        const key = element.getAttribute('data-key');
+        if (translations[lang][key]) {
+            element.innerText = translations[lang][key];
+        }
+    });
+
+    // Handle Placeholders separately
+    const phoneInput = document.getElementById('phoneInput');
+    if (lang === 'te') phoneInput.placeholder = "మొబైల్ సంఖ్యను నమోదు చేయండి";
+    else if (lang === 'hi') phoneInput.placeholder = "मोबाइल नंबर दर्ज करें";
+    else phoneInput.placeholder = "Enter mobile number";
+}
+
+// Load saved language on page load
+window.onload = () => {
+    const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+    document.getElementById('languageSelect').value = savedLang;
+    changeLanguage(savedLang);
+};
 // Configuration
 const API_BASE_URL = '';
 let currentUserToken = localStorage.getItem('token');

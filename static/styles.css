@@ -1,3 +1,17 @@
+.lang-dropdown {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background: white;
+    margin-right: 15px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+}
 * {
     margin: 0;
     padding: 0;
