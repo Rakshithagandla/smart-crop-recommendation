@@ -32,9 +32,9 @@
             
             <section id="welcomeScreen" class="screen active">
                 <div class="welcome-card">
-                    <h1>🌾 Smart Crop Recommendation System</h1>
-                    <p>AI-Powered Recommendations for Better Harvests</p>
-                    <button onclick="showLiteracySelection()" class="btn btn-primary btn-large">
+                    <h1 data-key="welcomeTitle">🌾 Smart Crop Recommendation System</h1>
+                    <p data-key="welcomeSub">AI-Powered Recommendations for Better Harvests</p>
+                    <button onclick="showLiteracySelection()" class="btn btn-primary btn-large" data-key="getStarted">
                         Get Started
                     </button>
                 </div>
@@ -42,17 +42,17 @@
 
             <section id="literacyScreen" class="screen hidden">
                 <div class="card">
-                    <h2>Are you literate or illiterate?</h2>
+                    <h2 data-key="literacyQuestion">Are you literate or illiterate?</h2>
                     <div class="literacy-options">
                         <div class="option-box" onclick="selectLiteracy('literate')">
                             <div class="option-icon">📖</div>
-                            <h3>Literate</h3>
-                            <p>I can read and write</p>
+                            <h3 data-key="literateTitle">Literate</h3>
+                            <p data-key="literateDesc">I can read and write</p>
                         </div>
                         <div class="option-box" onclick="selectLiteracy('illiterate')">
                             <div class="option-icon">👥</div>
-                            <h3>Illiterate</h3>
-                            <p>Agricultural Officer will help</p>
+                            <h3 data-key="illiterateTitle">Illiterate</h3>
+                            <p data-key="illiterateDesc">Agricultural Officer will help</p>
                         </div>
                     </div>
                 </div>
@@ -60,68 +60,55 @@
 
             <section id="otpRegisterScreen" class="screen hidden">
                 <div class="card">
-                    <h2>🔐 Phone Verification</h2>
+                    <h2 data-key="phoneTitle">🔐 Phone Verification</h2>
                     
                     <div id="otpStep1">
-                        <input type="tel" id="phoneInput" placeholder="Enter your 10-digit mobile number" maxlength="10">
-                        <button onclick="sendOTP()" class="btn btn-primary">Send OTP</button>
-                        <button onclick="goBack()" class="btn btn-secondary">Back</button>
+                        <input type="tel" id="phoneInput" data-key="phoneLabel" placeholder="Enter mobile number" maxlength="10">
+                        <button onclick="sendOTP()" class="btn btn-primary" data-key="sendOtp">Send OTP</button>
+                        <button onclick="goBack()" class="btn btn-secondary" data-key="backBtn">Back</button>
                     </div>
                     
                     <div id="otpStep2" class="hidden">
-                        <input type="text" id="otpInput" placeholder="Enter 6-digit OTP" maxlength="6">
+                        <input type="text" id="otpInput" data-key="otpLabel" placeholder="Enter 6-digit OTP" maxlength="6">
                         
                         <div id="registrationFields">
-                            <input type="text" id="nameInput" placeholder="Enter your name">
-                            <input type="text" id="aadharInput" placeholder="Enter your 12-digit Aadhar" maxlength="12">
+                            <input type="text" id="nameInput" data-key="nameLabel" placeholder="Enter your name">
+                            <input type="text" id="aadharInput" data-key="aadharLabel" placeholder="Enter your 12-digit Aadhar" maxlength="12">
                         </div>
 
-                        <button id="verifyBtn" onclick="verifyOTP()" class="btn btn-primary">Verify & Register</button>
-                        <button onclick="sendOTP()" class="btn btn-secondary">Resend OTP</button>
+                        <button id="verifyBtn" onclick="verifyOTP()" class="btn btn-primary" data-key="verifyBtn">Verify & Register</button>
+                        <button onclick="sendOTP()" class="btn btn-secondary" data-key="resendOtp">Resend OTP</button>
                     </div>
                 </div>
             </section>
 
             <section id="officerLoginScreen" class="screen hidden">
                 <div class="card">
-                    <h2>🚜 Agricultural Officer</h2>
+                    <h2 data-key="officerTitle">🚜 Agricultural Officer</h2>
                     <input type="email" id="officerEmail" placeholder="Email">
                     <input type="password" id="officerPassword" placeholder="Password">
-                    <button onclick="officerLogin()" class="btn btn-primary">Login</button>
-                    <button onclick="showOfficerRegister()" class="btn btn-secondary">New Officer? Register</button>
-                    <button onclick="goBack()" class="btn btn-secondary">Back</button>
-                </div>
-            </section>
-
-            <section id="officerRegisterScreen" class="screen hidden">
-                <div class="card">
-                    <h2>📝 Register as Officer</h2>
-                    <input type="text" id="officerName" placeholder="Your Name">
-                    <input type="email" id="officerRegEmail" placeholder="Email">
-                    <input type="tel" id="officerPhone" placeholder="Mobile Number">
-                    <input type="password" id="officerRegPassword" placeholder="Password">
-                    <button onclick="registerOfficer()" class="btn btn-primary">Register</button>
-                    <button onclick="goBack()" class="btn btn-secondary">Back</button>
+                    <button onclick="officerLogin()" class="btn btn-primary" data-key="navLogin">Login</button>
+                    <button onclick="goBack()" class="btn btn-secondary" data-key="backBtn">Back</button>
                 </div>
             </section>
 
             <section id="officerDashboard" class="screen hidden">
                 <div class="dashboard-header">
-                    <h2>🚜 Officer Dashboard</h2>
-                    <button onclick="logout()" class="btn btn-secondary">Logout</button>
+                    <h2 data-key="dashTitle">🚜 Officer Dashboard</h2>
+                    <button onclick="logout()" class="btn btn-secondary" data-key="logout">Logout</button>
                 </div>
                 
                 <div class="dashboard-grid">
                     <div class="card">
-                        <h3>➕ Add New Farmer</h3>
-                        <input type="text" id="farmerName" placeholder="Farmer Name">
-                        <input type="text" id="farmerAadhar" placeholder="Farmer Aadhar (12 digits)" maxlength="12">
-                        <input type="tel" id="farmerPhone" placeholder="Mobile (Optional)">
-                        <button onclick="addFarmer()" class="btn btn-primary">Add Farmer</button>
+                        <h3 data-key="addNewFarmer">➕ Add New Farmer</h3>
+                        <input type="text" id="farmerName" data-key="nameLabel" placeholder="Farmer Name">
+                        <input type="text" id="farmerAadhar" data-key="aadharLabel" placeholder="Farmer Aadhar" maxlength="12">
+                        <input type="tel" id="farmerPhone" data-key="phoneLabel" placeholder="Mobile">
+                        <button onclick="addFarmer()" class="btn btn-primary" data-key="addFarmerBtn">Add Farmer</button>
                     </div>
 
                     <div class="card">
-                        <h3>👨‍🌾 My Farmers</h3>
+                        <h3 data-key="myFarmers">👨‍🌾 My Farmers</h3>
                         <div id="farmersList"></div>
                     </div>
                 </div>
@@ -129,57 +116,56 @@
 
             <section id="farmerInputScreen" class="screen hidden">
                 <div class="card">
-                    <h2>🌱 Get Crop Recommendation</h2>
+                    <h2 data-key="formTitle">🌱 Get Crop Recommendation</h2>
                     
                     <div class="form-group">
-                        <label>📋 How is your soil?</label>
+                        <label data-key="soilLabel">📋 How is your soil?</label>
                         <div class="radio-group">
-                            <label><input type="radio" name="soil_condition" value="sandy"> 🏜️ Sandy</label>
-                            <label><input type="radio" name="soil_condition" value="loamy" checked> 🟤 Loamy</label>
-                            <label><input type="radio" name="soil_condition" value="clay"> 🪨 Clay</label>
+                            <label><input type="radio" name="soil_condition" value="sandy"> <span data-key="sandy">Sandy</span></label>
+                            <label><input type="radio" name="soil_condition" value="loamy" checked> <span data-key="loamy">Loamy</span></label>
+                            <label><input type="radio" name="soil_condition" value="clay"> <span data-key="clay">Clay</span></label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label>💚 How fertile is your soil?</label>
+                        <label data-key="fertilityLabel">💚 How fertile is your soil?</label>
                         <div class="radio-group">
-                            <label><input type="radio" name="soil_fertility" value="low"> 🔴 Low</label>
-                            <label><input type="radio" name="soil_fertility" value="medium" checked> 🟡 Medium</label>
-                            <label><input type="radio" name="soil_fertility" value="high"> 🟢 High</label>
+                            <label><input type="radio" name="soil_fertility" value="low"> <span data-key="low">Low</span></label>
+                            <label><input type="radio" name="soil_fertility" value="medium" checked> <span data-key="medium">Medium</span></label>
+                            <label><input type="radio" name="soil_fertility" value="high"> <span data-key="high">High</span></label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label>🌾 How was your last harvest?</label>
+                        <label data-key="harvestLabel">🌾 How was your last harvest?</label>
                         <div class="radio-group">
-                            <label><input type="radio" name="last_harvest" value="poor"> 🔴 Poor</label>
-                            <label><input type="radio" name="last_harvest" value="medium" checked> 🟡 Medium</label>
-                            <label><input type="radio" name="last_harvest" value="good"> 🟢 Good</label>
+                            <label><input type="radio" name="last_harvest" value="poor"> <span data-key="poor">Poor</span></label>
+                            <label><input type="radio" name="last_harvest" value="medium" checked> <span data-key="medium">Medium</span></label>
+                            <label><input type="radio" name="last_harvest" value="good"> <span data-key="good">Good</span></label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label>📍 Enter your city/village</label>
-                        <input type="text" id="cityInput" value="Delhi" placeholder="e.g., Delhi, Mumbai">
+                        <label data-key="cityLabel">📍 Enter your city/village</label>
+                        <input type="text" id="cityInput" value="Delhi">
                     </div>
 
-                    <button onclick="getPrediction()" class="btn btn-primary">🌱 Get Recommendation</button>
-                    <button onclick="logout()" class="btn btn-secondary">Logout</button>
+                    <button onclick="getPrediction()" class="btn btn-primary" data-key="predictBtn">🌱 Predict Best Crop</button>
+                    <button onclick="logout()" class="btn btn-secondary" data-key="logout">Logout</button>
                 </div>
             </section>
 
             <section id="resultsScreen" class="screen hidden">
                 <div class="card">
-                    <h2>✅ Recommended Crop</h2>
+                    <h2 data-key="resTitle">✅ Recommended Crop</h2>
                     
                     <div class="crop-result">
                         <div class="crop-emoji" id="resultEmoji">🌾</div>
-                        <h3 id="resultCrop"></h3>
-                    </div>
+                        <h3 id="resultCrop"></h3> </div>
 
                     <div class="result-grid">
                         <div class="result-box">
-                            <h4>📊 Confidence</h4>
+                            <h4 data-key="confLabel">📊 Confidence Score</h4>
                             <div class="confidence-bar">
                                 <div id="confidenceBar" class="confidence-fill"></div>
                             </div>
@@ -187,25 +173,24 @@
                         </div>
 
                         <div class="result-box">
-                            <h4>💧 Recommended Fertilizer</h4>
+                            <h4 data-key="fertLabel">💧 Recommended Fertilizer</h4>
                             <p id="fertilizerName"></p>
-                            <p id="fertilizerDesc"></p>
                         </div>
 
                         <div class="result-box">
-                            <h4>🌤️ Weather Information</h4>
+                            <h4 data-key="weatherLabel">🌤️ Weather Information</h4>
                             <p id="weatherInfo"></p>
                         </div>
 
                         <div class="result-box">
-                            <h4>🔍 Key Factors</h4>
+                            <h4 data-key="factorsLabel">🔍 Impact Factors</h4>
                             <ul id="explanationList"></ul>
                         </div>
                     </div>
 
                     <div class="button-group">
-                        <button onclick="showScreen('farmerInputScreen')" class="btn btn-primary">🔄 Another Crop</button>
-                        <button onclick="logout()" class="btn btn-secondary">Logout</button>
+                        <button onclick="showScreen('farmerInputScreen')" class="btn btn-primary" data-key="getRecBtn">🔄 Another Crop</button>
+                        <button onclick="logout()" class="btn btn-secondary" data-key="logout">Logout</button>
                     </div>
                 </div>
             </section>

@@ -1,13 +1,58 @@
 const translations = {
     'en': {
+        // Navigation & Welcome
         'navLogin': 'Login',
         'navRegister': 'Register',
         'welcomeTitle': 'Smart Crop Recommendation System',
         'welcomeSub': 'AI-Powered Recommendations for Better Harvests',
         'getStarted': 'Get Started',
+        'logout': 'Logout',
+
+        // Auth Screens
         'phoneTitle': 'Phone Verification',
+        'phoneLabel': 'Enter Mobile Number',
         'sendOtp': 'Send OTP',
-        'verifyBtn': 'Verify & Register'
+        'otpLabel': 'Enter 6-Digit OTP',
+        'verifyBtn': 'Verify & Login',
+        'aadharLabel': 'Aadhar Number (12 digits)',
+        'nameLabel': 'Full Name',
+
+        // Officer Dashboard
+        'dashTitle': 'Officer Dashboard',
+        'addNewFarmer': 'Add New Farmer',
+        'myFarmers': 'My Farmers',
+        'addFarmerBtn': 'Add Farmer',
+        'getRecBtn': 'Get Recommendation',
+
+        // Input Form
+        'formTitle': 'Soil & Location Details',
+        'cityLabel': 'City/District',
+        'soilLabel': 'Soil Condition',
+        'fertilityLabel': 'Soil Fertility',
+        'harvestLabel': 'Last Harvest Quality',
+        'predictBtn': 'Predict Best Crop',
+        'sandy': 'Sandy', 'loamy': 'Loamy', 'clay': 'Clay',
+        'low': 'Low', 'medium': 'Medium', 'high': 'High',
+        'poor': 'Poor', 'good': 'Good',
+
+        // Results Section
+        'resTitle': 'Recommendation Result',
+        'confLabel': 'Confidence Score',
+        'fertLabel': 'Recommended Fertilizer',
+        'weatherLabel': 'Current Weather',
+        'factorsLabel': 'Impact Factors',
+
+        // Crops (All 22 Categories)
+        'crop_rice': 'Rice', 'crop_maize': 'Maize', 'crop_chickpea': 'Chickpea',
+        'crop_kidneybeans': 'Kidney Beans', 'crop_pigeonpeas': 'Pigeon Peas',
+        'crop_mothbeans': 'Moth Beans', 'crop_mungbean': 'Mung Bean',
+        'crop_blackgram': 'Black Gram', 'crop_lentil': 'Lentil',
+        'crop_pomegranate': 'Pomegranate', 'crop_banana': 'Banana',
+        'crop_mango': 'Mango', 'crop_grapes': 'Grapes',
+        'crop_watermelon': 'Watermelon', 'crop_muskmelon': 'Muskmelon',
+        'crop_apple': 'Apple', 'crop_orange': 'Orange',
+        'crop_papaya': 'Papaya', 'crop_coconut': 'Coconut',
+        'crop_cotton': 'Cotton', 'crop_jute': 'Jute', 'crop_coffee': 'Coffee'
     },
     'hi': {
         'navLogin': 'लॉगिन',
@@ -15,9 +60,48 @@ const translations = {
         'welcomeTitle': 'स्मार्ट फसल अनुशंसा प्रणाली',
         'welcomeSub': 'बेहतर फसल के लिए एआई-संचालित सिफारिशें',
         'getStarted': 'शुरू करें',
+        'logout': 'लॉगआउट',
+
         'phoneTitle': 'फ़ोन सत्यापन',
+        'phoneLabel': 'मोबाइल नंबर दर्ज करें',
         'sendOtp': 'ओटीपी भेजें',
-        'verifyBtn': 'सत्यापित करें और पंजीकरण करें'
+        'otpLabel': '6-अंकीय ओटीपी दर्ज करें',
+        'verifyBtn': 'सत्यापित करें और लॉगिन करें',
+        'aadharLabel': 'आधार नंबर (12 अंक)',
+        'nameLabel': 'पूरा नाम',
+
+        'dashTitle': 'अधिकारी डैशबोर्ड',
+        'addNewFarmer': 'नया किसान जोड़ें',
+        'myFarmers': 'मेरे किसान',
+        'addFarmerBtn': 'किसान जोड़ें',
+        'getRecBtn': 'अनुशंसा प्राप्त करें',
+
+        'formTitle': 'मिट्टी और स्थान का विवरण',
+        'cityLabel': 'शहर/जिला',
+        'soilLabel': 'मिट्टी की स्थिति',
+        'fertilityLabel': 'मिट्टी की उर्वरता',
+        'harvestLabel': 'पिछली फसल की गुणवत्ता',
+        'predictBtn': 'सबसे अच्छी फसल जानें',
+        'sandy': 'रेतीली', 'loamy': 'दोमट', 'clay': 'चिकनी',
+        'low': 'कम', 'medium': 'मध्यम', 'high': 'उच्च',
+        'poor': 'खराब', 'good': 'अच्छा',
+
+        'resTitle': 'अनुशंसा परिणाम',
+        'confLabel': 'आत्मविश्वास स्कोर',
+        'fertLabel': 'अनुशंसित उर्वरक',
+        'weatherLabel': 'वर्तमान मौसम',
+        'factorsLabel': 'प्रभाव कारक',
+
+        'crop_rice': 'चावल', 'crop_maize': 'मक्का', 'crop_chickpea': 'चना',
+        'crop_kidneybeans': 'राजमा', 'crop_pigeonpeas': 'अरहर दाल',
+        'crop_mothbeans': 'मोठ दाल', 'crop_mungbean': 'मूंग दाल',
+        'crop_blackgram': 'उड़द दाल', 'crop_lentil': 'मसूर दाल',
+        'crop_pomegranate': 'अनार', 'crop_banana': 'केला',
+        'crop_mango': 'आम', 'crop_grapes': 'अंगूर',
+        'crop_watermelon': 'तरबूज', 'crop_muskmelon': 'खरबूजा',
+        'crop_apple': 'सेब', 'crop_orange': 'संतरा',
+        'crop_papaya': 'पपीता', 'crop_coconut': 'नारियल',
+        'crop_cotton': 'कपास', 'crop_jute': 'जूट', 'crop_coffee': 'कॉफी'
     },
     'te': {
         'navLogin': 'లాగిన్',
@@ -25,30 +109,81 @@ const translations = {
         'welcomeTitle': 'స్మార్ట్ పంట సిఫార్సు వ్యవస్థ',
         'welcomeSub': 'మెరుగైన దిగుబడి కోసం AI సిఫార్సులు',
         'getStarted': 'ప్రారంభించండి',
+        'logout': 'లాగ్ అవుట్',
+
         'phoneTitle': 'ఫోన్ వెరిఫికేషన్',
+        'phoneLabel': 'మొబైల్ సంఖ్యను నమోదు చేయండి',
         'sendOtp': 'OTP పంపండి',
-        'verifyBtn': 'ధృవీకరించండి & నమోదు చేయండి'
+        'otpLabel': '6 అంకెల OTP ని నమోదు చేయండి',
+        'verifyBtn': 'ధృవీకరించండి & లాగిన్ చేయండి',
+        'aadharLabel': 'ఆధార్ సంఖ్య (12 అంకెలు)',
+        'nameLabel': 'పూర్తి పేరు',
+
+        'dashTitle': 'ఆఫీసర్ డాష్‌బోర్డ్',
+        'addNewFarmer': 'కొత్త రైతును చేర్చండి',
+        'myFarmers': 'నా రైతులు',
+        'addFarmerBtn': 'రైతును చేర్చు',
+        'getRecBtn': 'సిఫార్సు పొందండి',
+
+        'formTitle': 'నేల మరియు స్థాన వివరాలు',
+        'cityLabel': 'నగరం/జిల్లా',
+        'soilLabel': 'నేల పరిస్థితి',
+        'fertilityLabel': 'నేల సారవంతం',
+        'harvestLabel': 'గత పంట నాణ్యత',
+        'predictBtn': 'ఉత్తమ పంటను అంచనా వేయండి',
+        'sandy': 'ఇసుక నేల', 'loamy': 'దుంప నేల', 'clay': 'బంకమట్టి',
+        'low': 'తక్కువ', 'medium': 'మధ్యస్థం', 'high': 'ఎక్కువ',
+        'poor': 'తక్కువ నాణ్యత', 'good': 'మంచి నాణ్యత',
+
+        'resTitle': 'సిఫార్సు ఫలితం',
+        'confLabel': 'విశ్వాస శాతం',
+        'fertLabel': 'సిఫార్సు చేసిన ఎరువులు',
+        'weatherLabel': 'ప్రస్తుత వాతావరణం',
+        'factorsLabel': 'ప్రభావం చూపే అంశాలు',
+
+        'crop_rice': 'వరి', 'crop_maize': 'మొక్కజొన్న', 'crop_chickpea': 'శనగలు',
+        'crop_kidneybeans': 'రాజ్మా', 'crop_pigeonpeas': 'కందులు',
+        'crop_mothbeans': 'మొలకలు', 'crop_mungbean': 'పెసర్లు',
+        'crop_blackgram': 'మినుములు', 'crop_lentil': 'చిక్కుళ్ళు',
+        'crop_pomegranate': 'దానిమ్మ', 'crop_banana': 'అరటి',
+        'crop_mango': 'మామిడి', 'crop_grapes': 'ద్రాక్ష',
+        'crop_watermelon': 'పుచ్చకాయ', 'crop_muskmelon': 'ఖర్బూజా',
+        'crop_apple': 'ఆపిల్', 'crop_orange': 'నారింజ',
+        'crop_papaya': 'బొప్పాయి', 'crop_coconut': 'కొబ్బరి',
+        'crop_cotton': 'పత్తి', 'crop_jute': 'జనపనార', 'crop_coffee': 'కాఫీ'
     }
 };
 
 function changeLanguage(lang) {
-    // Save preference
+    // 1. Save the user's choice
     localStorage.setItem('preferredLanguage', lang);
     
-    // Loop through all elements with a data-key and change their text
+    // 2. Update all static text with data-key attributes
     document.querySelectorAll('[data-key]').forEach(element => {
         const key = element.getAttribute('data-key');
-        if (translations[lang][key]) {
-            element.innerText = translations[lang][key];
+        if (translations[lang] && translations[lang][key]) {
+            // If it's an input with a placeholder, update the placeholder
+            if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                element.placeholder = translations[lang][key];
+            } else {
+                element.innerText = translations[lang][key];
+            }
         }
     });
 
-    // Handle Placeholders separately
-    const phoneInput = document.getElementById('phoneInput');
-    if (lang === 'te') phoneInput.placeholder = "మొబైల్ సంఖ్యను నమోదు చేయండి";
-    else if (lang === 'hi') phoneInput.placeholder = "मोबाइल नंबर दर्ज करें";
-    else phoneInput.placeholder = "Enter mobile number";
+    // 3. Special Case: Update the Page Title
+    document.title = translations[lang]['welcomeTitle'];
 }
+
+// 4. Run this automatically when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+    const langSelect = document.getElementById('languageSelect');
+    if (langSelect) {
+        langSelect.value = savedLang;
+        changeLanguage(savedLang);
+    }
+});
 
 // Load saved language on page load
 window.onload = () => {
