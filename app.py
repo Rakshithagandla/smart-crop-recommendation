@@ -12,6 +12,7 @@ import jwt
 import secrets
 import string
 from functools import wraps
+from twilio.rest import Client
 
 load_dotenv()
 
@@ -105,22 +106,28 @@ def generate_otp():
     """Generate 6-digit OTP"""
     return ''.join(secrets.choice(string.digits) for _ in range(6))
 
+TWILIO_ACCOUNT_SID = 'AC307fa26fee0cb788f7b24e72f0ce337e' 
+TWILIO_AUTH_TOKEN = '202ff28388e46b1490958f6214796f73'
+TWILIO_PHONE_NUMBER = '+12605445133'
+
 def send_otp_sms(phone, otp):
-    """Send OTP via SMS (using mock for now)"""
+    """Send real OTP via Twilio SMS"""
     try:
-        # For production, use Twilio
-        # from twilio.rest import Client
-        # client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-        # message = client.messages.create(
-        #     body=f'Your Smart Crop Recommendation OTP is: {otp}',
-        #     from_=TWILIO_PHONE,
-        #     to=phone
-        # )
+        client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
         
-        print(f"📱 OTP for {phone}: {otp}")  # Mock SMS
+        # Format the number for India (+91)
+        # If the user enters 7569643048, it becomes +917569643048
+        formatted_phone = f"+91{phone}" 
+        
+        message = client.messages.create(
+            body=f"Your Smart Crop OTP is: {otp}. Valid for 5 minutes.",
+            from_=TWILIO_PHONE_NUMBER,
+            to=formatted_phone
+        )
+        print(f"✅ SMS sent successfully to {formatted_phone}")
         return True
     except Exception as e:
-        print(f"❌ SMS Error: {e}")
+        print(f"❌ Twilio Error: {e}")
         return False
 
 def log_audit(user_id, action):
@@ -593,3 +600,4 @@ def predict(current_user_id):
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=True, host='0.0.0.0', port=port)
+    
