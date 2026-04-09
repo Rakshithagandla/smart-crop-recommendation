@@ -6,7 +6,6 @@
     <title>🌾 Smart Crop Recommendation</title>
     
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-
     <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -55,6 +54,7 @@
                             <p data-key="illiterateDesc">Agricultural Officer will help</p>
                         </div>
                     </div>
+                    <button onclick="goBack()" class="btn btn-secondary" data-key="backBtn">Back</button>
                 </div>
             </section>
 
@@ -69,15 +69,17 @@
                     </div>
                     
                     <div id="otpStep2" class="hidden">
+                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 10px;">(Demo: Use 123456)</p>
                         <input type="text" id="otpInput" data-key="otpLabel" placeholder="Enter 6-digit OTP" maxlength="6">
                         
                         <div id="registrationFields">
                             <input type="text" id="nameInput" data-key="nameLabel" placeholder="Enter your name">
-                            <input type="text" id="aadharInput" data-key="aadharLabel" placeholder="Enter your 12-digit Aadhar" maxlength="12">
+                            <input type="text" id="aadharInput" data-key="aadharLabel" placeholder="Enter 12-digit Aadhaar" maxlength="12">
                         </div>
 
                         <button id="verifyBtn" onclick="verifyOTP()" class="btn btn-primary" data-key="verifyBtn">Verify & Register</button>
                         <button onclick="sendOTP()" class="btn btn-secondary" data-key="resendOtp">Resend OTP</button>
+                        <button onclick="goBack()" class="btn btn-secondary" data-key="backBtn">Back</button>
                     </div>
                 </div>
             </section>
@@ -102,7 +104,7 @@
                     <div class="card">
                         <h3 data-key="addNewFarmer">➕ Add New Farmer</h3>
                         <input type="text" id="farmerName" data-key="nameLabel" placeholder="Farmer Name">
-                        <input type="text" id="farmerAadhar" data-key="aadharLabel" placeholder="Farmer Aadhar" maxlength="12">
+                        <input type="text" id="farmerAadhar" data-key="aadharLabel" placeholder="Farmer Aadhaar" maxlength="12">
                         <input type="tel" id="farmerPhone" data-key="phoneLabel" placeholder="Mobile">
                         <button onclick="addFarmer()" class="btn btn-primary" data-key="addFarmerBtn">Add Farmer</button>
                     </div>
@@ -137,57 +139,35 @@
                     </div>
 
                     <div class="form-group">
-                        <label data-key="harvestLabel">🌾 How was your last harvest?</label>
-                        <div class="radio-group">
-                            <label><input type="radio" name="last_harvest" value="poor"> <span data-key="poor">Poor</span></label>
-                            <label><input type="radio" name="last_harvest" value="medium" checked> <span data-key="medium">Medium</span></label>
-                            <label><input type="radio" name="last_harvest" value="good"> <span data-key="good">Good</span></label>
+                        <label data-key="cityLabel">📍 Enter your city/village</label>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="text" id="cityInput" value="Delhi" style="flex: 1;">
+                            <button type="button" onclick="startVoiceInput()" class="btn-mic" title="Voice Input" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">🎤</button>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label data-key="cityLabel">📍 Enter your city/village</label>
-                        <input type="text" id="cityInput" value="Delhi">
-                    </div>
-
                     <button onclick="getPrediction()" class="btn btn-primary" data-key="predictBtn">🌱 Predict Best Crop</button>
-                    <button onclick="logout()" class="btn btn-secondary" data-key="logout">Logout</button>
+                    <button onclick="goBack()" class="btn btn-secondary" data-key="backBtn">Back</button>
                 </div>
             </section>
 
             <section id="resultsScreen" class="screen hidden">
                 <div class="card">
                     <h2 data-key="resTitle">✅ Recommended Crop</h2>
-                    
                     <div class="crop-result">
                         <div class="crop-emoji" id="resultEmoji">🌾</div>
-                        <h3 id="resultCrop"></h3> </div>
-
+                        <h3 id="resultCrop"></h3> 
+                    </div>
                     <div class="result-grid">
                         <div class="result-box">
                             <h4 data-key="confLabel">📊 Confidence Score</h4>
-                            <div class="confidence-bar">
-                                <div id="confidenceBar" class="confidence-fill"></div>
-                            </div>
                             <p id="confidenceText"></p>
                         </div>
-
                         <div class="result-box">
                             <h4 data-key="fertLabel">💧 Recommended Fertilizer</h4>
                             <p id="fertilizerName"></p>
                         </div>
-
-                        <div class="result-box">
-                            <h4 data-key="weatherLabel">🌤️ Weather Information</h4>
-                            <p id="weatherInfo"></p>
-                        </div>
-
-                        <div class="result-box">
-                            <h4 data-key="factorsLabel">🔍 Impact Factors</h4>
-                            <ul id="explanationList"></ul>
-                        </div>
                     </div>
-
                     <div class="button-group">
                         <button onclick="showScreen('farmerInputScreen')" class="btn btn-primary" data-key="getRecBtn">🔄 Another Crop</button>
                         <button onclick="logout()" class="btn btn-secondary" data-key="logout">Logout</button>
@@ -197,7 +177,6 @@
 
         </main>
     </div>
-
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

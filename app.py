@@ -194,7 +194,18 @@ def verify_otp():
     otp = data.get('otp')
     name = data.get('name')
     aadhar = data.get('aadhar')
-    
+    data = request.json
+    user_otp = data.get('otp')
+    phone = data.get('phone')
+
+    # --- MASTER OTP LOGIC ---
+    # If the user types 123456, we skip the real SMS check
+    if user_otp == "123456":
+        return jsonify({
+            "success": True, 
+            "message": "Verified using Master OTP",
+            "user_id": 1 # Or your logic to find/create the user
+        }), 200
     if not all([phone, otp, name, aadhar]):
         return jsonify({'success': False, 'error': 'Missing required fields'}), 400
     

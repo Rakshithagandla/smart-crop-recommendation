@@ -155,25 +155,52 @@ const translations = {
 };
 
 function changeLanguage(lang) {
-    // 1. Save the user's choice
+    // 1. Save the user's choice for future visits
     localStorage.setItem('preferredLanguage', lang);
     
-    // 2. Update all static text with data-key attributes
+    // 2. Update all static text with data-key attributes (Buttons, Labels, Headers)
     document.querySelectorAll('[data-key]').forEach(element => {
         const key = element.getAttribute('data-key');
         if (translations[lang] && translations[lang][key]) {
-            // If it's an input with a placeholder, update the placeholder
+            // Check if it's an input/textarea to update the placeholder
             if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
                 element.placeholder = translations[lang][key];
             } else {
+                // For all other elements, update the visible text
                 element.innerText = translations[lang][key];
             }
         }
     });
 
-    // 3. Special Case: Update the Page Title
-    document.title = translations[lang]['welcomeTitle'];
+    // 3. Dynamic Crop Translation (Crucial for your AI results)
+    const resultCrop = document.getElementById('resultCrop');
+    if (resultCrop && resultCrop.innerText !== "") {
+        // We use a custom 'data-raw' attribute to remember the original English name
+        const rawName = resultCrop.getAttribute('data-raw') || resultCrop.innerText;
+        const cropKey = `crop_${rawName.toLowerCase().replace(/\s+/g, '')}`;
+        
+        if (translations[lang][cropKey]) {
+            resultCrop.innerText = translations[lang][cropKey];
+            // Save the raw name so we can switch back and forth
+            resultCrop.setAttribute('data-raw', rawName);
+        }
+    }
+
+    // 4. Update the Browser Tab Title
+    if (translations[lang]['welcomeTitle']) {
+        document.title = translations[lang]['welcomeTitle'];
+    }
+
+    // 5. Update the Language Dropdown UI to match
+    const langSelect = document.getElementById('languageSelect');
+    if (langSelect) langSelect.value = lang;
 }
+
+// 6. AUTO-LOAD: Run this as soon as the site opens
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+    changeLanguage(savedLang);
+});
 
 // 4. Run this automatically when the page loads
 document.addEventListener('DOMContentLoaded', () => {
@@ -526,3 +553,60 @@ window.addEventListener('load', () => {
         showScreen('welcomeScreen');
     }
 });
+// --- NAVIGATION: BACK BUTTON LOGIC ---
+let screenHistory = ['welcomeScreen'];
+
+function showScreen(screenId) {
+    // Hide all screens
+    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+    // Show the target screen
+    document.getElementById(screenId).classList.remove('hidden');
+    
+    // Add to history stack
+    if (screenHistory[screenHistory.length - 1] !== screenId) {
+        screenHistory.push(screenId);
+    }
+}
+
+function goBack() {
+    if (screenHistory.length > 1) {
+        screenHistory.pop(); // Remove current screen
+        const previous = screenHistory[screenHistory.length - 1];
+        
+        document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+        document.getElementById(previous).classList.remove('hidden');
+    }
+}
+
+// --- VOICE INPUT: SPEECH-TO-TEXT ---
+function startVoiceInput() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("Voice input is not supported in this browser. Please use Chrome.");
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    const currentLang = document.getElementById('languageSelect').value;
+
+    // Map your dropdown values to Speech Recognition locales
+    if (currentLang === 'te') recognition.lang = 'te-IN';
+    else if (currentLang === 'hi') recognition.lang = 'hi-IN';
+    else recognition.lang = 'en-US';
+
+    recognition.start();
+
+    // Visual feedback (optional: change mic color)
+    const micBtn = document.querySelector('.btn-mic');
+    if (micBtn) micBtn.style.color = 'red';
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('cityInput').value = transcript;
+        if (micBtn) micBtn.style.color = ''; // Reset color
+    };
+
+    recognition.onerror = () => {
+        if (micBtn) micBtn.style.color = '';
+    };
+}
