@@ -191,31 +191,32 @@ def verify_otp():
     """Verify OTP and create account"""
     data = request.json
     phone = data.get('phone')
-    otp = data.get('otp')
+    user_otp = data.get('otp')
     name = data.get('name')
     aadhar = data.get('aadhar')
-    data = request.json
-    user_otp = data.get('otp')
-    phone = data.get('phone')
+
+    if not all([phone, user_otp, name, aadhar]):
+        return jsonify({'success': False, 'error': 'Missing required fields'}), 400
 
     # --- MASTER OTP LOGIC ---
-    # If the user types 123456, we skip the real SMS check
-    if user_otp == "123456":
-        return jsonify({
-            "success": True, 
-            "message": "Verified using Master OTP",
-            "user_id": 1 # Or your logic to find/create the user
-        }), 200
-    if not all([phone, otp, name, aadhar]):
-        return jsonify({'success': False, 'error': 'Missing required fields'}), 400
-    
-    otp_record = OTPVerification.query.filter_by(phone=phone).first()
-    if not otp_record or otp_record.otp != otp:
-        return jsonify({'success': False, 'error': 'Invalid OTP'}), 400
-    
-    if datetime.utcnow() > otp_record.expires_at:
-        return jsonify({'success': False, 'error': 'OTP expired'}), 400
-    
+    # Priority check: If user types 123456, bypass the database/Twilio check
+    is_master_otp = (user_otp == "123456")
+
+    if not is_master_otp:
+        # Standard validation for real OTPs
+        otp_record = OTPVerification.query.filter_by(phone=phone).first()
+        if not otp_record or otp_record.otp != user_otp:
+            return jsonify({'success': False, 'error': 'Invalid OTP'}), 400
+        
+        if datetime.utcnow() > otp_record.expires_at:
+            return jsonify({'success': False, 'error': 'OTP expired'}), 400
+
+    # --- REGISTRATION LOGIC (Shared for Master and Real OTP) ---
+    # Check if user already exists
+    existing_user = User.query.filter_by(phone=phone).first()
+    if existing_user:
+        return jsonify({'success': False, 'error': 'Phone number already registered. Please login.'}), 400
+
     email = f"farmer_{aadhar}@smartcrop.local"
     temp_password = secrets.token_urlsafe(12)
     
@@ -224,19 +225,17 @@ def verify_otp():
         role='literate_farmer', verified=True
     )
     user.set_password(temp_password)
+    db.session.add(user)
+    db.session.flush() # Get user.id before committing
     
     farmer = Farmer(
         name=name, aadhar=aadhar, phone=phone,
         literacy_status='literate', user_id=user.id
     )
-    
-    db.session.add(user)
     db.session.add(farmer)
     db.session.commit()
     
-    otp_record.verified = True
-    db.session.commit()
-    
+    # Generate Token
     token = jwt.encode({
         'user_id': user.id, 'role': user.role
     }, app.config['SECRET_KEY'], algorithm='HS256')
@@ -255,13 +254,25 @@ def login_verify():
     """Verify OTP for existing users"""
     data = request.json
     phone = data.get('phone')
-    otp = data.get('otp')
+    user_otp = data.get('otp')
+
+    if not phone or not user_otp:
+        return jsonify({'success': False, 'error': 'Missing phone or OTP'}), 400
+
+    # --- MASTER OTP LOGIC ---
+    is_master_otp = (user_otp == "123456")
+
+    if not is_master_otp:
+        # Standard validation for real OTPs
+        otp_record = OTPVerification.query.filter_by(phone=phone, otp=user_otp).first()
+        if not otp_record or datetime.utcnow() > otp_record.expires_at:
+            return jsonify({'success': False, 'error': 'Invalid or expired OTP'}), 400
     
-    otp_record = OTPVerification.query.filter_by(phone=phone, otp=otp).first()
-    if not otp_record or datetime.utcnow() > otp_record.expires_at:
-        return jsonify({'success': False, 'error': 'Invalid or expired OTP'}), 400
-    
+    # Both Master OTP and valid Real OTP reach here
     user = User.query.filter_by(phone=phone).first()
+    if not user:
+        return jsonify({'success': False, 'error': 'User not found. Please register first.'}), 404
+        
     farmer = Farmer.query.filter_by(phone=phone).first()
     
     token = jwt.encode({
