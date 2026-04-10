@@ -67,7 +67,7 @@ let currentUser = JSON.parse(localStorage.getItem('user') || '{}');
 let selectedFarmerId = null;
 let screenHistory = ['welcomeScreen'];
 
-// 3. CORE NAVIGATION ENGINE (Fixed Duplicate)
+// 3. CORE NAVIGATION ENGINE
 function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => {
         s.classList.remove('active');
@@ -78,6 +78,7 @@ function showScreen(screenId) {
     if (target) {
         target.classList.add('active');
         target.classList.remove('hidden');
+        // Push to history if it's a new screen
         if (screenHistory[screenHistory.length - 1] !== screenId) {
             screenHistory.push(screenId);
         }
@@ -86,14 +87,19 @@ function showScreen(screenId) {
 
 function goBack() {
     if (screenHistory.length > 1) {
-        screenHistory.pop();
+        screenHistory.pop(); // Remove current
         const prev = screenHistory[screenHistory.length - 1];
+        
         document.querySelectorAll('.screen').forEach(s => {
             s.classList.remove('active');
             s.classList.add('hidden');
         });
-        document.getElementById(prev).classList.add('active');
-        document.getElementById(prev).classList.remove('hidden');
+        
+        const target = document.getElementById(prev);
+        if (target) {
+            target.classList.add('active');
+            target.classList.remove('hidden');
+        }
     }
 }
 
@@ -121,8 +127,6 @@ function changeLanguage(lang) {
         }
     }
     if (translations[lang]['welcomeTitle']) document.title = translations[lang]['welcomeTitle'];
-    const langSelect = document.getElementById('languageSelect');
-    if (langSelect) langSelect.value = lang;
 }
 
 // 5. VOICE INPUT
@@ -136,8 +140,10 @@ function startVoiceInput() {
     const lang = document.getElementById('languageSelect').value;
     recognition.lang = (lang === 'te') ? 'te-IN' : (lang === 'hi' ? 'hi-IN' : 'en-US');
     recognition.start();
+
     const micBtn = document.querySelector('.btn-mic');
     if (micBtn) micBtn.style.color = 'red';
+
     recognition.onresult = (event) => {
         document.getElementById('cityInput').value = event.results[0][0].transcript;
         if (micBtn) micBtn.style.color = '';
@@ -152,8 +158,7 @@ function selectLiteracy(type) {
     else showScreen('officerLoginScreen');
 }
 function showLogin() { showScreen('officerLoginScreen'); }
-function showRegister() { showScreen('officerRegisterScreen'); }
-function showOfficerRegister() { showScreen('officerRegisterScreen'); }
+function showRegister() { showScreen('otpRegisterScreen'); }
 
 function startPredictionForFarmer(farmerId, farmerName) {
     selectedFarmerId = farmerId;
@@ -172,12 +177,13 @@ async function sendOTP() {
         });
         const data = await response.json();
         if (data.success) {
-            alert('✅ OTP sent!');
+            alert('✅ OTP sent! (Demo: Use 123456)');
             document.getElementById('otpStep1').classList.add('hidden');
             document.getElementById('otpStep2').classList.remove('hidden');
             if (data.is_registered) {
-                document.getElementById('nameInput').classList.add('hidden');
-                document.getElementById('aadharInput').classList.add('hidden');
+                document.getElementById('registrationFields').classList.add('hidden');
+            } else {
+                document.getElementById('registrationFields').classList.remove('hidden');
             }
         }
     } catch (e) { alert('❌ Connection error'); }
@@ -188,9 +194,10 @@ async function verifyOTP() {
     const otp = document.getElementById('otpInput').value;
     const name = document.getElementById('nameInput').value;
     const aadhar = document.getElementById('aadharInput').value;
-    const isLogin = document.getElementById('nameInput').classList.contains('hidden');
-    const endpoint = isLogin ? '/api/auth/login-verify' : '/api/auth/verify-otp';
-    const payload = isLogin ? { phone, otp } : { phone, otp, name, aadhar };
+    
+    const isRegistering = !document.getElementById('registrationFields').classList.contains('hidden');
+    const endpoint = isRegistering ? '/api/auth/verify-otp' : '/api/auth/login-verify';
+    const payload = isRegistering ? { phone, otp, name, aadhar } : { phone, otp };
 
     try {
         const response = await fetch(`${API_BASE_URL}${endpoint}`, {
@@ -254,11 +261,12 @@ async function loadFarmers() {
         list.innerHTML = '';
         data.farmers.forEach(f => {
             const div = document.createElement('div');
-            div.className = 'farmer-item';
+            div.className = 'farmer-item card';
+            div.style.marginBottom = '10px';
             div.innerHTML = `
                 <p><strong>👤 ${f.name}</strong></p>
-                <p>🆔 Aadhar: [Redacted]</p>
-                <button onclick="startPredictionForFarmer(${f.id}, '${f.name}')" class="btn btn-primary">🌱 Get Recommendation</button>
+                <p>📞 ${f.phone}</p>
+                <button onclick="startPredictionForFarmer(${f.id}, '${f.name}')" class="btn btn-primary" style="width:100%">🌱 Get Recommendation</button>
             `;
             list.appendChild(div);
         });
@@ -282,14 +290,22 @@ async function getPrediction() {
         });
         const data = await response.json();
         if (data.success) displayResults(data);
+        else alert('Error: ' + data.error);
     } catch (e) { alert('❌ Prediction error'); }
 }
 
 function displayResults(data) {
     document.getElementById('resultCrop').textContent = data.crop;
+    document.getElementById('resultCrop').setAttribute('data-raw', data.crop);
     document.getElementById('confidenceBar').style.width = `${data.confidence}%`;
     document.getElementById('confidenceText').textContent = `${data.confidence}% Confidence`;
     document.getElementById('fertilizerName').textContent = data.fertilizer.name;
+    document.getElementById('weatherInfo').textContent = `Temp: ${data.weather.temperature}°C | Loc: ${data.weather.city}`;
+    
+    // Refresh language for the new crop result
+    const lang = localStorage.getItem('preferredLanguage') || 'en';
+    changeLanguage(lang);
+    
     showScreen('resultsScreen');
 }
 
