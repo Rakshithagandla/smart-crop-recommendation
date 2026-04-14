@@ -29,6 +29,7 @@
 
         <main class="main-content">
             
+            <!-- WELCOME SCREEN -->
             <section id="welcomeScreen" class="screen active">
                 <div class="welcome-card">
                     <h1 data-key="welcomeTitle">🌾 Smart Crop Recommendation System</h1>
@@ -39,6 +40,7 @@
                 </div>
             </section>
 
+            <!-- LITERACY SELECTION SCREEN -->
             <section id="literacyScreen" class="screen hidden">
                 <div class="card">
                     <h2 data-key="literacyQuestion">Are you literate or illiterate?</h2>
@@ -58,6 +60,7 @@
                 </div>
             </section>
 
+            <!-- OTP / REGISTER SCREEN -->
             <section id="otpRegisterScreen" class="screen hidden">
                 <div class="card">
                     <h2 data-key="phoneTitle">🔐 Phone Verification</h2>
@@ -84,6 +87,7 @@
                 </div>
             </section>
 
+            <!-- OFFICER LOGIN SCREEN -->
             <section id="officerLoginScreen" class="screen hidden">
                 <div class="card">
                     <h2 data-key="officerTitle">🚜 Agricultural Officer</h2>
@@ -94,6 +98,7 @@
                 </div>
             </section>
 
+            <!-- OFFICER DASHBOARD -->
             <section id="officerDashboard" class="screen hidden">
                 <div class="dashboard-header">
                     <h2 data-key="dashTitle">🚜 Officer Dashboard</h2>
@@ -116,10 +121,12 @@
                 </div>
             </section>
 
+            <!-- FARMER INPUT / PREDICTION SCREEN -->
             <section id="farmerInputScreen" class="screen hidden">
                 <div class="card">
                     <h2 data-key="formTitle">🌱 Get Crop Recommendation</h2>
-                    
+
+                    <!-- Soil Condition -->
                     <div class="form-group">
                         <label data-key="soilLabel">📋 How is your soil?</label>
                         <div class="radio-group">
@@ -129,6 +136,7 @@
                         </div>
                     </div>
 
+                    <!-- Soil Fertility (FIXED: was duplicated before) -->
                     <div class="form-group">
                         <label data-key="fertilityLabel">💚 How fertile is your soil?</label>
                         <div class="radio-group">
@@ -138,6 +146,16 @@
                         </div>
                     </div>
 
+                    <!-- Last Harvest Quality -->
+                    <div class="form-group">
+                        <label data-key="harvestLabel">🌾 Last harvest quality?</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="last_harvest" value="poor"> <span data-key="poor">Poor</span></label>
+                            <label><input type="radio" name="last_harvest" value="good" checked> <span data-key="good">Good</span></label>
+                        </div>
+                    </div>
+
+                    <!-- City Input with Voice -->
                     <div class="form-group">
                         <label data-key="cityLabel">📍 Enter your city/village</label>
                         <div style="display: flex; gap: 10px; align-items: center;">
@@ -151,23 +169,47 @@
                 </div>
             </section>
 
+            <!-- RESULTS SCREEN (FIXED: added all missing elements) -->
             <section id="resultsScreen" class="screen hidden">
                 <div class="card">
                     <h2 data-key="resTitle">✅ Recommended Crop</h2>
+
+                    <!-- Crop Name + Emoji -->
                     <div class="crop-result">
                         <div class="crop-emoji" id="resultEmoji">🌾</div>
-                        <h3 id="resultCrop"></h3> 
+                        <h3 id="resultCrop"></h3>
                     </div>
+
                     <div class="result-grid">
+                        <!-- Confidence Score with bar -->
                         <div class="result-box">
                             <h4 data-key="confLabel">📊 Confidence Score</h4>
-                            <p id="confidenceText"></p>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" id="confidenceBar" style="width: 0%">
+                                    <span id="confidenceText">0%</span>
+                                </div>
+                            </div>
                         </div>
+
+                        <!-- Fertilizer -->
                         <div class="result-box">
                             <h4 data-key="fertLabel">💧 Recommended Fertilizer</h4>
                             <p id="fertilizerName"></p>
                         </div>
+
+                        <!-- Weather Info (FIXED: was missing from HTML) -->
+                        <div class="result-box">
+                            <h4 data-key="weatherLabel">🌤 Current Weather</h4>
+                            <p id="weatherInfo"></p>
+                        </div>
+
+                        <!-- Impact Factors (FIXED: was missing from HTML) -->
+                        <div class="result-box">
+                            <h4 data-key="factorsLabel">📈 Impact Factors</h4>
+                            <ul id="factorsList"></ul>
+                        </div>
                     </div>
+
                     <div class="button-group">
                         <button onclick="showScreen('farmerInputScreen')" class="btn btn-primary" data-key="getRecBtn">🔄 Another Crop</button>
                         <button onclick="logout()" class="btn btn-secondary" data-key="logout">Logout</button>

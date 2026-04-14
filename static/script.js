@@ -62,23 +62,21 @@ const translations = {
 // 2. CONFIG & STATE
 const API_BASE_URL = '';
 let currentUserToken = localStorage.getItem('token');
-let currentUserRole = localStorage.getItem('role');
-let currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+let currentUserRole  = localStorage.getItem('role');
+let currentUser      = JSON.parse(localStorage.getItem('user') || '{}');
 let selectedFarmerId = null;
-let screenHistory = ['welcomeScreen'];
+let screenHistory    = ['welcomeScreen'];
 
-// 3. CORE NAVIGATION ENGINE
+// 3. CORE NAVIGATION
 function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => {
         s.classList.remove('active');
         s.classList.add('hidden');
     });
-
     const target = document.getElementById(screenId);
     if (target) {
         target.classList.add('active');
         target.classList.remove('hidden');
-        // Push to history if it's a new screen
         if (screenHistory[screenHistory.length - 1] !== screenId) {
             screenHistory.push(screenId);
         }
@@ -87,14 +85,12 @@ function showScreen(screenId) {
 
 function goBack() {
     if (screenHistory.length > 1) {
-        screenHistory.pop(); // Remove current
+        screenHistory.pop();
         const prev = screenHistory[screenHistory.length - 1];
-        
         document.querySelectorAll('.screen').forEach(s => {
             s.classList.remove('active');
             s.classList.add('hidden');
         });
-        
         const target = document.getElementById(prev);
         if (target) {
             target.classList.add('active');
@@ -103,7 +99,7 @@ function goBack() {
     }
 }
 
-// 4. LANGUAGE LOGIC
+// 4. LANGUAGE
 function changeLanguage(lang) {
     localStorage.setItem('preferredLanguage', lang);
     document.querySelectorAll('[data-key]').forEach(element => {
@@ -118,7 +114,7 @@ function changeLanguage(lang) {
     });
 
     const resultCrop = document.getElementById('resultCrop');
-    if (resultCrop && resultCrop.innerText !== "") {
+    if (resultCrop && resultCrop.innerText !== '') {
         const rawName = resultCrop.getAttribute('data-raw') || resultCrop.innerText;
         const cropKey = `crop_${rawName.toLowerCase().replace(/\s+/g, '')}`;
         if (translations[lang][cropKey]) {
@@ -133,12 +129,12 @@ function changeLanguage(lang) {
 function startVoiceInput() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-        alert("Voice input not supported in this browser. Please use Chrome.");
+        alert('Voice input not supported. Please use Chrome.');
         return;
     }
     const recognition = new SpeechRecognition();
     const lang = document.getElementById('languageSelect').value;
-    recognition.lang = (lang === 'te') ? 'te-IN' : (lang === 'hi' ? 'hi-IN' : 'en-US');
+    recognition.lang = lang === 'te' ? 'te-IN' : lang === 'hi' ? 'hi-IN' : 'en-US';
     recognition.start();
 
     const micBtn = document.querySelector('.btn-mic');
@@ -153,26 +149,32 @@ function startVoiceInput() {
 
 // 6. UI FLOW HELPERS
 function showLiteracySelection() { showScreen('literacyScreen'); }
+
 function selectLiteracy(type) {
     if (type === 'literate') showScreen('otpRegisterScreen');
     else showScreen('officerLoginScreen');
 }
-function showLogin() { showScreen('officerLoginScreen'); }
+
+function showLogin()    { showScreen('officerLoginScreen'); }
 function showRegister() { showScreen('otpRegisterScreen'); }
 
 function startPredictionForFarmer(farmerId, farmerName) {
     selectedFarmerId = farmerId;
-    alert(`🌱 Starting recommendation for: ${farmerName}`);
     showScreen('farmerInputScreen');
 }
 
 // 7. AUTH & API CALLS
+
 async function sendOTP() {
-    const phone = document.getElementById('phoneInput').value;
-    if (!phone || phone.length !== 10) { alert('Enter valid 10-digit number'); return; }
+    const phone = document.getElementById('phoneInput').value.trim();
+    if (!phone || phone.length !== 10) {
+        alert('Enter a valid 10-digit mobile number');
+        return;
+    }
     try {
         const response = await fetch(`${API_BASE_URL}/api/auth/send-otp`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ phone })
         });
         const data = await response.json();
@@ -185,23 +187,28 @@ async function sendOTP() {
             } else {
                 document.getElementById('registrationFields').classList.remove('hidden');
             }
+        } else {
+            alert('❌ ' + data.error);
         }
-    } catch (e) { alert('❌ Connection error'); }
+    } catch (e) {
+        alert('❌ Connection error. Make sure the server is running.');
+    }
 }
 
 async function verifyOTP() {
-    const phone = document.getElementById('phoneInput').value;
-    const otp = document.getElementById('otpInput').value;
-    const name = document.getElementById('nameInput').value;
-    const aadhar = document.getElementById('aadharInput').value;
-    
+    const phone  = document.getElementById('phoneInput').value.trim();
+    const otp    = document.getElementById('otpInput').value.trim();
+    const name   = document.getElementById('nameInput').value.trim();
+    const aadhar = document.getElementById('aadharInput').value.trim();
+
     const isRegistering = !document.getElementById('registrationFields').classList.contains('hidden');
     const endpoint = isRegistering ? '/api/auth/verify-otp' : '/api/auth/login-verify';
-    const payload = isRegistering ? { phone, otp, name, aadhar } : { phone, otp };
+    const payload  = isRegistering ? { phone, otp, name, aadhar } : { phone, otp };
 
     try {
         const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
         const data = await response.json();
@@ -209,24 +216,33 @@ async function verifyOTP() {
             saveUserSession(data.token, 'literate_farmer', data.user);
             selectedFarmerId = data.user.farmer_id;
             showScreen('farmerInputScreen');
-        } else { alert('❌ Error: ' + data.error); }
-    } catch (e) { alert('❌ Connection error'); }
+        } else {
+            alert('❌ ' + data.error);
+        }
+    } catch (e) {
+        alert('❌ Connection error');
+    }
 }
 
 async function officerLogin() {
-    const email = document.getElementById('officerEmail').value;
+    const email    = document.getElementById('officerEmail').value.trim();
     const password = document.getElementById('officerPassword').value;
     try {
         const response = await fetch(`${API_BASE_URL}/api/auth/officer-login`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
         });
         const data = await response.json();
         if (data.success) {
             saveUserSession(data.token, 'officer', data.user);
             loadOfficerDashboard();
-        } else { alert('❌ Error: ' + data.error); }
-    } catch (e) { alert('❌ Connection error'); }
+        } else {
+            alert('❌ ' + data.error);
+        }
+    } catch (e) {
+        alert('❌ Connection error');
+    }
 }
 
 async function loadOfficerDashboard() {
@@ -235,20 +251,37 @@ async function loadOfficerDashboard() {
 }
 
 async function addFarmer() {
-    const name = document.getElementById('farmerName').value;
-    const aadhar = document.getElementById('farmerAadhar').value;
-    const phone = document.getElementById('farmerPhone').value;
+    const name   = document.getElementById('farmerName').value.trim();
+    const aadhar = document.getElementById('farmerAadhar').value.trim();
+    const phone  = document.getElementById('farmerPhone').value.trim();
+
+    if (!name || !aadhar || !phone) {
+        alert('Please fill in all farmer details');
+        return;
+    }
+
     try {
         const response = await fetch(`${API_BASE_URL}/api/officer/add-farmer`, {
-            method: 'POST', headers: {
+            method: 'POST',
+            headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${currentUserToken}`
             },
             body: JSON.stringify({ name, aadhar, phone })
         });
         const data = await response.json();
-        if (data.success) { loadFarmers(); }
-    } catch (e) { alert('❌ Connection error'); }
+        if (data.success) {
+            alert(`✅ ${name} added successfully!`);
+            document.getElementById('farmerName').value  = '';
+            document.getElementById('farmerAadhar').value = '';
+            document.getElementById('farmerPhone').value  = '';
+            loadFarmers();
+        } else {
+            alert('❌ ' + data.error);
+        }
+    } catch (e) {
+        alert('❌ Connection error');
+    }
 }
 
 async function loadFarmers() {
@@ -259,92 +292,144 @@ async function loadFarmers() {
         const data = await response.json();
         const list = document.getElementById('farmersList');
         list.innerHTML = '';
+
+        if (!data.farmers || data.farmers.length === 0) {
+            list.innerHTML = '<p style="color:#999; text-align:center;">No farmers added yet.</p>';
+            return;
+        }
+
         data.farmers.forEach(f => {
             const div = document.createElement('div');
             div.className = 'farmer-item card';
             div.style.marginBottom = '10px';
             div.innerHTML = `
                 <p><strong>👤 ${f.name}</strong></p>
-                <p>📞 ${f.phone}</p>
-                <button onclick="startPredictionForFarmer(${f.id}, '${f.name}')" class="btn btn-primary" style="width:100%">🌱 Get Recommendation</button>
+                <p>📞 ${f.phone || 'N/A'}</p>
+                <p style="font-size:0.8em; color:#888;">Recommendations: ${f.recommendations_count}</p>
+                <button onclick="startPredictionForFarmer(${f.id}, '${f.name}')" class="btn btn-primary" style="width:100%; margin-top:8px;">🌱 Get Recommendation</button>
             `;
             list.appendChild(div);
         });
-    } catch (e) { console.error(e); }
+    } catch (e) {
+        console.error('Error loading farmers:', e);
+    }
 }
+
 async function getPrediction() {
-    // 1. Force refresh the token from storage
-    const token = localStorage.getItem('token'); 
-    
+    const token = localStorage.getItem('token');
     if (!token) {
-        alert("Session expired. Please log in again.");
+        alert('Session expired. Please log in again.');
         showScreen('welcomeScreen');
         return;
     }
 
+    const city = document.getElementById('cityInput').value.trim() || 'Hyderabad';
+
     const formData = {
-        soil_condition: document.querySelector('input[name="soil_condition"]:checked')?.value || 'loamy',
-        soil_fertility: document.querySelector('input[name="soil_fertility"]:checked')?.value || 'medium',
-        city: document.getElementById('cityInput').value || 'Delhi',
-        water_level: 2, // Default mapping
-        last_harvest_status: 2
+        soil_condition:     document.querySelector('input[name="soil_condition"]:checked')?.value  || 'loamy',
+        soil_fertility:     document.querySelector('input[name="soil_fertility"]:checked')?.value   || 'medium',
+        last_harvest_status: document.querySelector('input[name="last_harvest"]:checked')?.value   || 'good',
+        city:               city,
+        water_level:        2,
+        farmer_id:          selectedFarmerId
     };
 
+    // Show loading state
+    const btn = document.querySelector('[data-key="predictBtn"]');
+    if (btn) { btn.textContent = '⏳ Predicting...'; btn.disabled = true; }
+
     try {
-        const response = await fetch(`/api/predict`, {
+        const response = await fetch('/api/predict', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` 
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(formData)
         });
 
         const data = await response.json();
-        
+
         if (data.success) {
             displayResults(data);
         } else {
-            // NEW: Handle expired tokens smoothly
             if (response.status === 401) {
-                alert("Your session has expired. Please log in again.");
-                localStorage.clear(); // Clear the bad token
-                location.reload();    // Refresh the page to show login
+                alert('Your session has expired. Please log in again.');
+                localStorage.clear();
+                location.reload();
             } else {
-                alert('Error: ' + data.error);
+                alert('❌ Error: ' + data.error);
             }
         }
     } catch (e) {
         alert('❌ Prediction error: ' + e);
+    } finally {
+        if (btn) { btn.textContent = '🌱 Predict Best Crop'; btn.disabled = false; }
     }
 }
+
+// 8. DISPLAY RESULTS (FIXED: now shows emoji, weather description, and factors list)
 function displayResults(data) {
+    // Crop name
     document.getElementById('resultCrop').textContent = data.crop;
     document.getElementById('resultCrop').setAttribute('data-raw', data.crop);
-    document.getElementById('confidenceBar').style.width = `${data.confidence}%`;
-    document.getElementById('confidenceText').textContent = `${data.confidence}% Confidence`;
+
+    // Emoji
+    document.getElementById('resultEmoji').textContent = data.emoji || '🌾';
+
+    // Confidence bar
+    const conf = data.confidence || 0;
+    const bar  = document.getElementById('confidenceBar');
+    const txt  = document.getElementById('confidenceText');
+    if (bar) bar.style.width = `${conf}%`;
+    if (txt) txt.textContent = `${conf}% Confidence`;
+
+    // Fertilizer
     document.getElementById('fertilizerName').textContent = data.fertilizer.name;
-    document.getElementById('weatherInfo').textContent = `Temp: ${data.weather.temperature}°C | Loc: ${data.weather.city}`;
-    
-    // Refresh language for the new crop result
+
+    // Weather (FIXED: now shows description too)
+    const w = data.weather;
+    document.getElementById('weatherInfo').textContent =
+        `🌡 ${w.temperature}°C  💧 ${w.humidity}%  📍 ${w.city}  ${w.description || ''}`;
+
+    // Impact factors (FIXED: was never rendered)
+    const factorsList = document.getElementById('factorsList');
+    if (factorsList && data.explanation) {
+        factorsList.innerHTML = '';
+        data.explanation.forEach(([factor, score]) => {
+            const li = document.createElement('li');
+            li.textContent = `${factor}: ${score}%`;
+            factorsList.appendChild(li);
+        });
+    }
+
+    // Apply current language translation to crop name
     const lang = localStorage.getItem('preferredLanguage') || 'en';
     changeLanguage(lang);
-    
+
     showScreen('resultsScreen');
 }
 
+// 9. SESSION HELPERS
 function saveUserSession(token, role, user) {
     localStorage.setItem('token', token);
     localStorage.setItem('role', role);
     localStorage.setItem('user', JSON.stringify(user));
-    currentUserToken = token; currentUserRole = role; currentUser = user;
+    currentUserToken = token;
+    currentUserRole  = role;
+    currentUser      = user;
 }
 
-function logout() { localStorage.clear(); location.reload(); }
+function logout() {
+    localStorage.clear();
+    location.reload();
+}
 
-// 8. INITIALIZATION
+// 10. INITIALIZATION
 document.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+    const langSelect = document.getElementById('languageSelect');
+    if (langSelect) langSelect.value = savedLang;
     changeLanguage(savedLang);
 
     if (currentUserToken && currentUserRole) {
