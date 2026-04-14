@@ -273,49 +273,40 @@ async function loadFarmers() {
     } catch (e) { console.error(e); }
 }
 async function getPrediction() {
-    // 1. Get values from the UI
-    const soilCondition = document.querySelector('input[name="soil_condition"]:checked')?.value || 'loamy';
-    const soilFertility = document.querySelector('input[name="soil_fertility"]:checked')?.value || 'medium';
-    const city = document.getElementById('cityInput').value || 'Delhi';
-
-    // 2. Map friendly text to the Integers your app.py expects
-    const waterLevelMap = { 'low': 1, 'medium': 2, 'high': 3 };
-    const harvestMap = { 'poor': 1, 'medium': 2, 'good': 3 };
+    // 1. Force refresh the token from storage
+    const token = localStorage.getItem('token'); 
+    
+    if (!token) {
+        alert("Session expired. Please log in again.");
+        showScreen('welcomeScreen');
+        return;
+    }
 
     const formData = {
-        soil_condition: soilCondition,
-        soil_fertility: soilFertility,
-        city: city,
-        // Match the exact keys your app.py predict route uses:
-        water_level: waterLevelMap[soilFertility] || 2, 
-        last_harvest_status: harvestMap[soilFertility] || 2,
-        farmer_id: selectedFarmerId
+        soil_condition: document.querySelector('input[name="soil_condition"]:checked')?.value || 'loamy',
+        soil_fertility: document.querySelector('input[name="soil_fertility"]:checked')?.value || 'medium',
+        city: document.getElementById('cityInput').value || 'Delhi',
+        water_level: 2, // Default mapping
+        last_harvest_status: 2
     };
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/predict`, {
-            method: 'POST', 
+        const response = await fetch(`/api/predict`, {
+            method: 'POST',
             headers: {
-                'Content-Type': 'application/json', 
-                'Authorization': `Bearer ${currentUserToken}`
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Ensure "Bearer " prefix is there
             },
             body: JSON.stringify(formData)
         });
 
         const data = await response.json();
-        
-        if (data.success) {
-            displayResults(data);
-        } else {
-            // This will tell us if it's a 'Token missing' or 'Model not found' error
-            alert('Server Error: ' + data.error);
-        }
-    } catch (e) { 
-        console.error(e);
-        alert('❌ Network error: Could not reach the server'); 
+        if (data.success) displayResults(data);
+        else alert('Error: ' + data.error);
+    } catch (e) {
+        alert('❌ Prediction error: ' + e);
     }
 }
-
 function displayResults(data) {
     document.getElementById('resultCrop').textContent = data.crop;
     document.getElementById('resultCrop').setAttribute('data-raw', data.crop);
