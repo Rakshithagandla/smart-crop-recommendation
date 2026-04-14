@@ -160,8 +160,8 @@ def login_verify():
     return jsonify({"success": False, "error": "Invalid OTP"}), 400
 
 @app.route('/api/predict', methods=['POST'])
-@token_required # Keep this to handle the 401/Auth correctly
-def predict(current_user_id):
+#@token_required # Keep this to handle the 401/Auth correctly
+def predict():
     try:
         data = request.json
         if not data:
