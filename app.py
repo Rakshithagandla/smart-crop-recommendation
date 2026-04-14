@@ -150,8 +150,7 @@ def login_verify():
     return jsonify({"success": False, "error": "Invalid OTP"}), 400
 
 @app.route('/api/predict', methods=['POST'])
-@token_required
-def predict(current_user_id):
+def predict():
     try:
         data = request.json
         # Extract Farmer-Friendly Integers
