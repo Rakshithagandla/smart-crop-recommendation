@@ -137,56 +137,83 @@ def verify_otp():
 @app.route('/api/auth/login-verify', methods=['POST'])
 def login_verify():
     data = request.json
-    phone, otp = data.get('phone'), data.get('otp')
+    phone = data.get('phone')
+    otp = data.get('otp')
 
+    # MASTER OTP BYPASS
     if otp == "123456":
         user = User.query.filter_by(phone=phone).first()
         if user:
-            farmer = Farmer.query.filter_by(user_id=user.id).first()
-            token = jwt.encode({'user_id': user.id, 'role': user.role, 'exp': datetime.utcnow() + timedelta(hours=24)}, app.config['SECRET_KEY'], algorithm='HS256')
-            return jsonify({"success": True, "token": token, "user": {"id": user.id, "name": user.name, "role": user.role, "farmer_id": farmer.id if farmer else user.id}}), 200
+            # Create a token that lasts 24 hours
+            token = jwt.encode({
+                'user_id': user.id,
+                'role': user.role,
+                'exp': datetime.utcnow() + timedelta(hours=24)
+            }, app.config['SECRET_KEY'], algorithm='HS256')
+            
+            return jsonify({
+                "success": True, 
+                "token": token, 
+                "user": {"id": user.id, "name": user.name, "role": user.role, "farmer_id": user.id}
+            }), 200
         return jsonify({"success": False, "error": "User not found"}), 404
-
     return jsonify({"success": False, "error": "Invalid OTP"}), 400
 
 @app.route('/api/predict', methods=['POST'])
-def predict():
+@token_required # Keep this to handle the 401/Auth correctly
+def predict(current_user_id):
     try:
         data = request.json
-        # Extract Farmer-Friendly Integers
-        water_level = int(data.get('water_level', 2))  # 1:Low, 2:Medium, 3:High
-        harvest_status = int(data.get('last_harvest_status', 2)) # 1:Poor, 2:Avg, 3:Good
-        
-        # Mapping Friendly inputs to scientific N-P-K (Background Logic)
+        if not data:
+            return jsonify({'success': False, 'error': 'No data provided'}), 400
+
+        # 1. Get Farmer-Friendly Inputs
+        # We use .get() with defaults so the code doesn't crash if a field is missing
+        soil_type = data.get('soil_condition', 'loamy').lower()
+        water_level = int(data.get('water_level', 2)) 
+        city = data.get('city', 'Nizamabad')
+
+        # 2. Map Friendly inputs to scientific N-P-K (For your ML Model)
         soil_map = {
             'sandy': [20, 15, 15, 6.0], 
             'loamy': [60, 40, 40, 7.0], 
             'clay': [90, 50, 50, 7.5]
         }
-        n, p, k, ph = soil_map.get(data.get('soil_condition', 'loamy'), [50, 30, 30, 6.5])
+        n, p, k, ph = soil_map.get(soil_type, [50, 30, 30, 6.5])
         
-        # Map Water Level to Rainfall
+        # Map Water Level to Rainfall (mm)
         rainfall = {1: 400, 2: 800, 3: 1200}.get(water_level, 600)
         
-        # Build features for ML model
-        # [N, P, K, Temperature, Humidity, pH, Rainfall]
-        features = np.array([[n, p, k, 28, 70, ph, rainfall]])
-        
+        # 3. AI Model Prediction
+        # Format: [N, P, K, Temperature, Humidity, pH, Rainfall]
         if rf_model:
-            prediction = rf_model.predict(features)[0]
+            features = np.array([[n, p, k, 28, 70, ph, rainfall]])
+            prediction_raw = rf_model.predict(features)[0]
+            prediction = str(prediction_raw).title()
         else:
+            # Fallback if the .pkl file didn't load
             prediction = "Rice" if rainfall > 1000 else "Maize"
 
+        # 4. Return the response
         return jsonify({
             'success': True,
-            'crop': prediction.title(),
-            'fertilizer': {'name': 'Urea + DAP', 'n': n, 'p': p, 'k': k},
-            'weather': {'temperature': 28, 'humidity': 70, 'city': data.get('city', 'Nizamabad')},
+            'crop': prediction,
+            'fertilizer': {
+                'name': 'Urea + DAP' if prediction == "Rice" else 'NPK 19-19-19',
+                'n': n, 'p': p, 'k': k
+            },
+            'weather': {
+                'temperature': 28, 
+                'humidity': 70, 
+                'city': city
+            },
             'confidence': 94,
             'explanation': [['Soil Health', 75], ['Water Supply', 25]]
         }), 200
+
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)}), 400
+        print(f"Prediction Error: {str(e)}")
+        return jsonify({'success': False, 'error': 'Server processed error: ' + str(e)}), 400
 
 @app.route('/api/auth/officer-login', methods=['POST'])
 def officer_login():

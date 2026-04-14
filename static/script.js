@@ -295,14 +295,25 @@ async function getPrediction() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Ensure "Bearer " prefix is there
+                'Authorization': `Bearer ${token}` 
             },
             body: JSON.stringify(formData)
         });
 
         const data = await response.json();
-        if (data.success) displayResults(data);
-        else alert('Error: ' + data.error);
+        
+        if (data.success) {
+            displayResults(data);
+        } else {
+            // NEW: Handle expired tokens smoothly
+            if (response.status === 401) {
+                alert("Your session has expired. Please log in again.");
+                localStorage.clear(); // Clear the bad token
+                location.reload();    // Refresh the page to show login
+            } else {
+                alert('Error: ' + data.error);
+            }
+        }
     } catch (e) {
         alert('❌ Prediction error: ' + e);
     }
