@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════
 const T = {
 en: {
-  appName:'CropAI',
+  appName:'CropAI 🌾',
   welcomeTitle:'AI-Based Crop Prediction & Fertilizer Recommendation System',
   welcomeSub:'Empowering farmers with intelligent, data-driven crop guidance',
   getStarted:'Get Started',
@@ -74,6 +74,9 @@ en: {
   crop_muskmelon:'Muskmelon', crop_apple:'Apple', crop_orange:'Orange', crop_papaya:'Papaya',
   crop_coconut:'Coconut', crop_cotton:'Cotton', crop_jute:'Jute', crop_coffee:'Coffee',
   // Voice literacy keywords
+  confHigh:'Very high — the AI is very confident this crop suits your soil and weather conditions.',
+  confMed:'Moderate confidence — this crop is likely suitable. Consider local expert advice too.',
+  confLow:'Lower confidence — multiple crops may suit your land. Consult your agricultural officer.',
   voice_literate: ['literate','read','write','educated','farmer'],
   voice_illiterate: ['illiterate','officer','help','cannot','cant'],
   // Radio voice keywords
@@ -82,7 +85,7 @@ en: {
   voice_high:['high'], voice_poor:['poor','bad'], voice_good:['good'],
 },
 hi: {
-  appName:'CropAI',
+  appName:'फसल AI 🌾',
   welcomeTitle:'AI-आधारित फसल पूर्वानुमान और उर्वरक अनुशंसा प्रणाली',
   welcomeSub:'बेहतर फसल के लिए बुद्धिमान डेटा-आधारित मार्गदर्शन',
   getStarted:'शुरू करें',
@@ -152,6 +155,9 @@ hi: {
   crop_banana:'केला', crop_mango:'आम', crop_grapes:'अंगूर', crop_watermelon:'तरबूज',
   crop_muskmelon:'खरबूजा', crop_apple:'सेब', crop_orange:'संतरा', crop_papaya:'पपीता',
   crop_coconut:'नारियल', crop_cotton:'कपास', crop_jute:'जूट', crop_coffee:'कॉफी',
+  confHigh:'बहुत अधिक — AI को यकीन है यह फसल आपकी मिट्टी और मौसम के लिए उपयुक्त है।',
+  confMed:'मध्यम विश्वास — यह फसल संभवतः उपयुक्त है। स्थानीय विशेषज्ञ से भी सलाह लें।',
+  confLow:'कम विश्वास — कई फसलें उपयुक्त हो सकती हैं। कृषि अधिकारी से संपर्क करें।',
   voice_literate:['साक्षर','पढ़','लिख'],
   voice_illiterate:['निरक्षर','अधिकारी','मदद'],
   voice_sandy:['रेतीली','रेत'], voice_loamy:['दोमट'], voice_clay:['चिकनी'],
@@ -159,7 +165,7 @@ hi: {
   voice_poor:['खराब'], voice_good:['अच्छी','अच्छा'],
 },
 te: {
-  appName:'CropAI',
+  appName:'పంట AI 🌾',
   welcomeTitle:'AI ఆధారిత పంట అంచనా & ఎరువుల సిఫార్సు వ్యవస్థ',
   welcomeSub:'తెలివైన డేటా ఆధారిత పంట మార్గదర్శనంతో రైతులను శక్తివంతం చేయడం',
   getStarted:'ప్రారంభించండి',
@@ -229,6 +235,9 @@ te: {
   crop_banana:'అరటి', crop_mango:'మామిడి', crop_grapes:'ద్రాక్ష', crop_watermelon:'పుచ్చకాయ',
   crop_muskmelon:'ఖర్బూజా', crop_apple:'ఆపిల్', crop_orange:'నారింజ', crop_papaya:'బొప్పాయి',
   crop_coconut:'కొబ్బరి', crop_cotton:'పత్తి', crop_jute:'జనపనార', crop_coffee:'కాఫీ',
+  confHigh:'చాలా అధిక నమ్మకం — AI మీ నేల మరియు వాతావరణానికి ఈ పంట సరైనదని నిర్ధారించింది.',
+  confMed:'మధ్యస్థ నమ్మకం — ఈ పంట సరిగ్గా ఉండవచ్చు. స్థానిక నిపుణుల సలహా కూడా తీసుకోండి.',
+  confLow:'తక్కువ నమ్మకం — అనేక పంటలు సరిపోవచ్చు. వ్యవసాయ అధికారిని సంప్రదించండి.',
   voice_literate:['అక్షరాస్యుడు','చదువు','రాయి'],
   voice_illiterate:['నిరక్షరాస్యుడు','అధికారి','సహాయం'],
   voice_sandy:['ఇసుక'], voice_loamy:['దుంప'], voice_clay:['బంకమట్టి'],
@@ -341,6 +350,10 @@ function changeLanguage(lang) {
         const key = el.getAttribute('data-key-ph');
         if (dict[key]) el.placeholder = dict[key];
     });
+
+    // Nav brand
+    const brandEl = document.querySelector(".nav-brand");
+    if (brandEl && dict.appName) brandEl.textContent = dict.appName;
 
     // Page title
     document.title = dict.welcomeTitle || 'AI Crop Prediction';
@@ -662,6 +675,33 @@ async function getPrediction() {
     finally { if(btn){btn.textContent=(T[currentLang]||T.en).predictBtn||'🌱 Predict Best Crop'; btn.disabled=false;} }
 }
 
+
+// ── Crop images (Wikimedia Commons free images) ──
+const CROP_IMAGES = {
+  'rice':        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/White_rice.jpg/320px-White_rice.jpg',
+  'maize':       'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Camponotus_flavomarginatus_ant.jpg/320px-Camponotus_flavomarginatus_ant.jpg',
+  'maize':       'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Corn_flint.jpg/320px-Corn_flint.jpg',
+  'chickpea':    'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Chickpeas.jpg/320px-Chickpeas.jpg',
+  'kidneybeans': 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Kidney_beans.jpg/320px-Kidney_beans.jpg',
+  'pigeonpeas':  'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Cajanus_cajan_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-175.jpg/320px-Cajanus_cajan_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-175.jpg',
+  'mungbean':    'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Mung_bean_seeds.jpg/320px-Mung_bean_seeds.jpg',
+  'blackgram':   'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Urad_beans.jpg/320px-Urad_beans.jpg',
+  'lentil':      'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Lentil_soup.jpg/320px-Lentil_soup.jpg',
+  'pomegranate': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Pomegranate_fruit_-_whole.jpg/320px-Pomegranate_fruit_-_whole.jpg',
+  'banana':      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Banana_Fruit_800x533.jpg/320px-Banana-Banana_Fruit_800x533.jpg',
+  'mango':       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Hapus_Mango.jpg/320px-Hapus_Mango.jpg',
+  'grapes':      'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Kyoho-grape.jpg/320px-Kyoho-grape.jpg',
+  'watermelon':  'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Single_watermelon.jpg/320px-Single_watermelon.jpg',
+  'muskmelon':   'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/CSIRO_ScienceImage_9785.jpg/320px-CSIRO_ScienceImage_9785.jpg',
+  'apple':       'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Red_Apple.jpg/320px-Red_Apple.jpg',
+  'orange':      'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Oranges_and_orange_juice.jpg/320px-Oranges_and_orange_juice.jpg',
+  'papaya':      'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Papaya-Ripe.jpg/320px-Papaya-Ripe.jpg',
+  'coconut':     'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Coconut_on_white.jpg/320px-Coconut_on_white.jpg',
+  'cotton':      'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Cotton_flowers_and_bolls.jpg/320px-Cotton_flowers_and_bolls.jpg',
+  'jute':        'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Jute_Crop_in_West_Bengal.jpg/320px-Jute_Crop_in_West_Bengal.jpg',
+  'coffee':      'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/A_small_cup_of_coffee.JPG/320px-A_small_cup_of_coffee.JPG',
+};
+
 function displayResults(data) {
     const lang=currentLang;
     const dict=T[lang]||T.en;
@@ -674,10 +714,33 @@ function displayResults(data) {
 
     document.getElementById('resultEmoji').textContent=data.emoji||'🌾';
 
-    // Confidence
+    // Crop image
+    const imgEl = document.getElementById('resultCropImage');
+    if (imgEl) {
+        const imgUrl = CROP_IMAGES[data.crop.toLowerCase().replace(/\s+/g,'')] || '';
+        if (imgUrl) {
+            imgEl.src = imgUrl;
+            imgEl.alt = data.crop;
+            imgEl.style.display = 'block';
+            imgEl.onerror = () => { imgEl.style.display='none'; };
+        } else {
+            imgEl.style.display = 'none';
+        }
+    }
+
+    // Confidence — with explanation
     const bar=document.getElementById('confidenceBar'),txt=document.getElementById('confidenceText');
     if(bar) bar.style.width=`${data.confidence}%`;
     if(txt) txt.textContent=`${data.confidence}%`;
+    // Confidence explanation text
+    const confExp = document.getElementById('confidenceExplain');
+    if (confExp) {
+        const d2 = T[lang]||T.en;
+        let level = data.confidence >= 85 ? (d2.confHigh||'Very high — the model is very confident this crop suits your soil and weather.') :
+                    data.confidence >= 65 ? (d2.confMed||'Moderate — this crop is likely suitable, but consider local expert advice too.') :
+                                            (d2.confLow||'Low — multiple crops may suit. Consult your agricultural officer.');
+        confExp.textContent = level;
+    }
 
     // Fertilizer + explanation
     document.getElementById('fertilizerName').textContent=data.fertilizer.name;

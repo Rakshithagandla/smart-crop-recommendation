@@ -18,7 +18,7 @@
 
     <!-- NAVBAR — hidden on welcome/literacy screens -->
     <nav class="navbar" id="navbar">
-        <div class="nav-brand">🌾 <span data-key="appName">CropAI</span></div>
+        <div class="nav-brand" data-key="appName">CropAI 🌾</div>
         <div class="nav-right">
             <select id="languageSelect" onchange="changeLanguage(this.value)" class="lang-dropdown">
                 <option value="en">English</option>
@@ -397,6 +397,7 @@
                 <div class="crop-result">
                     <div class="crop-emoji" id="resultEmoji">🌾</div>
                     <h3 id="resultCrop"></h3>
+                    <img id="resultCropImage" src="" alt="" class="crop-photo" style="display:none">
                 </div>
 
                 <div class="result-grid">
@@ -407,6 +408,7 @@
                                 <span id="confidenceText">0%</span>
                             </div>
                         </div>
+                        <p id="confidenceExplain" class="conf-explain"></p>
                     </div>
 
                     <div class="result-box">
