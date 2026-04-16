@@ -3,28 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌾 Smart Crop Recommendation</title>
+    <title>AI Crop Prediction & Fertilizer Recommendation</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CropAI">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/icon-192.png') }}">
+    <meta name="theme-color" content="#2e7d32">
 </head>
 <body>
 <div class="container">
 
-    <!-- NAVBAR -->
+    <!-- NAVBAR — hidden on welcome/literacy screens -->
     <nav class="navbar" id="navbar">
-        <div class="nav-brand">🌾 Smart Crop</div>
+        <div class="nav-brand">🌾 <span data-key="appName">CropAI</span></div>
         <div class="nav-right">
             <select id="languageSelect" onchange="changeLanguage(this.value)" class="lang-dropdown">
                 <option value="en">English</option>
                 <option value="hi">हिन्दी</option>
                 <option value="te">తెలుగు</option>
             </select>
-            <div class="nav-links">
-                <a href="#" onclick="showScreen('farmerLoginScreen')" data-key="navLogin">Login</a>
-                <a href="#" onclick="showScreen('farmerRegisterScreen')" data-key="navRegister">Register</a>
-            </div>
         </div>
     </nav>
 
@@ -35,31 +35,44 @@
         ══════════════════════════════════════════ -->
         <section id="welcomeScreen" class="screen active">
             <div class="welcome-card">
-                <h1 data-key="welcomeTitle">🌾 Smart Crop Recommendation System</h1>
-                <p data-key="welcomeSub">AI-Powered Recommendations for Better Harvests</p>
+                <div class="welcome-logo">🌾</div>
+                <h1 data-key="welcomeTitle">AI-Based Crop Prediction &amp; Fertilizer Recommendation System</h1>
+                <p data-key="welcomeSub">Empowering farmers with intelligent, data-driven crop guidance</p>
                 <button onclick="showScreen('literacyScreen')" class="btn btn-primary btn-large" data-key="getStarted">Get Started</button>
             </div>
         </section>
 
         <!-- ══════════════════════════════════════════
              SCREEN 2: LITERACY SELECTION
+             (Voice-enabled: says options aloud, user can speak)
         ══════════════════════════════════════════ -->
         <section id="literacyScreen" class="screen hidden">
             <div class="card">
-                <h2>Who are you?</h2>
+                <h2 data-key="literacyQ">Who are you?</h2>
+                <p class="literacy-hint" data-key="literacySay">Tap a card below, or press 🎤 and say "literate" or "illiterate"</p>
+
+                <div style="text-align:center; margin:10px 0 20px;">
+                    <button class="btn-mic large-mic" onclick="startLiteracyVoice()" title="Speak your choice" data-key="speakChoice">
+                        🎤 Speak Your Choice
+                    </button>
+                    <button class="btn-speak" onclick="readLiteracyOptions()" title="Listen to options">
+                        🔊 <span data-key="hearOptions">Hear Options</span>
+                    </button>
+                </div>
+
                 <div class="literacy-options">
-                    <div class="option-box" onclick="showScreen('farmerLoginScreen')">
+                    <div class="option-box" onclick="selectLiteracy('literate')">
                         <div class="option-icon">📖</div>
-                        <h3>Literate Farmer</h3>
-                        <p>I can read and write — login myself</p>
+                        <h3 data-key="literateTitle">Literate Farmer</h3>
+                        <p data-key="literateDesc">I can read &amp; write — I will login myself</p>
                     </div>
-                    <div class="option-box" onclick="showScreen('officerLoginScreen')">
+                    <div class="option-box" onclick="selectLiteracy('illiterate')">
                         <div class="option-icon">👥</div>
-                        <h3>Agricultural Officer</h3>
-                        <p>I help illiterate farmers</p>
+                        <h3 data-key="illiterateTitle">Need Officer Help</h3>
+                        <p data-key="illiterateDesc">Agricultural Officer will assist me</p>
                     </div>
                 </div>
-                <button onclick="goBack()" class="btn btn-secondary">← Back</button>
+                <button onclick="goBack()" class="btn btn-secondary" style="width:100%; margin-top:10px;">← <span data-key="back">Back</span></button>
             </div>
         </section>
 
@@ -68,45 +81,46 @@
         ══════════════════════════════════════════ -->
         <section id="farmerRegisterScreen" class="screen hidden">
             <div class="card">
-                <h2>🌱 Farmer Registration</h2>
+                <h2 data-key="regTitle">🌱 Farmer Registration</h2>
 
                 <div class="form-group">
-                    <label>👤 Full Name</label>
-                    <div class="input-voice-row">
-                        <input type="text" id="regName" placeholder="Enter your full name">
-                        <button type="button" class="btn-mic" onclick="startVoice('regName', 'text')" title="Speak your name">🎤</button>
+                    <label data-key="nameLabel">👤 Full Name</label>
+                    <div class="input-row">
+                        <input type="text" id="regName" data-key-ph="namePh" placeholder="Enter your full name">
+                        <button class="btn-mic" onclick="startVoice('regName','text')" title="Speak name">🎤</button>
+                        <button class="btn-speak" onclick="speakField('regName')" title="Read back">🔊</button>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>🪪 Aadhaar Number (12 digits)</label>
-                    <div class="input-voice-row">
-                        <input type="text" id="regAadhar" placeholder="Enter 12-digit Aadhaar" maxlength="12" inputmode="numeric">
-                        <button type="button" class="btn-mic" onclick="startVoice('regAadhar', 'numeric')" title="Speak Aadhaar number">🎤</button>
+                    <label data-key="aadharLabel">🪪 Aadhaar Number (12 digits)</label>
+                    <div class="input-row">
+                        <input type="text" id="regAadhar" data-key-ph="aadharPh" placeholder="Enter 12-digit Aadhaar" maxlength="12" inputmode="numeric">
+                        <button class="btn-mic" onclick="startVoice('regAadhar','numeric')" title="Speak Aadhaar">🎤</button>
+                        <button class="btn-speak" onclick="speakField('regAadhar')" title="Read back">🔊</button>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>🔒 Create Password (min 6 chars)</label>
-                    <div class="input-voice-row">
-                        <input type="password" id="regPassword" placeholder="Create a password">
-                        <button type="button" class="btn-eye" onclick="togglePassword('regPassword')" title="Show/hide">👁</button>
+                    <label data-key="passwordLabel">🔒 Create Password</label>
+                    <div class="input-row">
+                        <input type="password" id="regPassword" data-key-ph="passwordPh" placeholder="Minimum 6 characters">
+                        <button class="btn-eye" onclick="togglePwd('regPassword')">👁</button>
                     </div>
+                    <small class="hint" data-key="passwordHint">⚠ Do not speak your password aloud — type it for security</small>
                 </div>
 
                 <div class="form-group">
-                    <label>🔒 Confirm Password</label>
-                    <div class="input-voice-row">
-                        <input type="password" id="regConfirm" placeholder="Repeat your password">
-                        <button type="button" class="btn-eye" onclick="togglePassword('regConfirm')" title="Show/hide">👁</button>
+                    <label data-key="confirmLabel">🔒 Confirm Password</label>
+                    <div class="input-row">
+                        <input type="password" id="regConfirm" data-key-ph="confirmPh" placeholder="Repeat password">
+                        <button class="btn-eye" onclick="togglePwd('regConfirm')">👁</button>
                     </div>
                 </div>
 
-                <button onclick="farmerRegister()" class="btn btn-primary" style="width:100%">✅ Register</button>
-                <p style="text-align:center; margin-top:15px; color:#666; font-size:0.9em;">
-                    Already registered? <a href="#" onclick="showScreen('farmerLoginScreen')" style="color:#2e7d32;">Login here</a>
-                </p>
-                <button onclick="goBack()" class="btn btn-secondary" style="margin-top:10px">← Back</button>
+                <button onclick="farmerRegister()" class="btn btn-primary" style="width:100%" data-key="registerBtn">✅ Register</button>
+                <p class="auth-switch" data-key="hasAccount">Already registered? <a href="#" onclick="showScreen('farmerLoginScreen')" data-key="loginLink">Login here</a></p>
+                <button onclick="goBack()" class="btn btn-secondary" style="width:100%; margin-top:6px">← <span data-key="back">Back</span></button>
             </div>
         </section>
 
@@ -115,31 +129,31 @@
         ══════════════════════════════════════════ -->
         <section id="farmerLoginScreen" class="screen hidden">
             <div class="card">
-                <h2>🔐 Farmer Login</h2>
+                <h2 data-key="loginTitle">🔐 Farmer Login</h2>
 
                 <div class="form-group">
-                    <label>🪪 Aadhaar Number</label>
-                    <div class="input-voice-row">
-                        <input type="text" id="loginAadhar" placeholder="Enter 12-digit Aadhaar" maxlength="12" inputmode="numeric">
-                        <button type="button" class="btn-mic" onclick="startVoice('loginAadhar', 'numeric')" title="Speak Aadhaar">🎤</button>
+                    <label data-key="aadharLabel">🪪 Aadhaar Number</label>
+                    <div class="input-row">
+                        <input type="text" id="loginAadhar" data-key-ph="aadharPh" placeholder="12-digit Aadhaar" maxlength="12" inputmode="numeric">
+                        <button class="btn-mic" onclick="startVoice('loginAadhar','numeric')">🎤</button>
+                        <button class="btn-speak" onclick="speakField('loginAadhar')">🔊</button>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>🔒 Password</label>
-                    <div class="input-voice-row">
-                        <input type="password" id="loginPassword" placeholder="Enter your password">
-                        <button type="button" class="btn-eye" onclick="togglePassword('loginPassword')" title="Show/hide">👁</button>
+                    <label data-key="passwordLabel">🔒 Password</label>
+                    <div class="input-row">
+                        <input type="password" id="loginPassword" data-key-ph="passwordPh" placeholder="Your password">
+                        <button class="btn-eye" onclick="togglePwd('loginPassword')">👁</button>
                     </div>
                 </div>
 
-                <button onclick="farmerLogin()" class="btn btn-primary" style="width:100%">🚀 Login</button>
-
-                <div style="display:flex; justify-content:space-between; margin-top:15px; font-size:0.9em;">
-                    <a href="#" onclick="showScreen('farmerRegisterScreen')" style="color:#2e7d32;">New farmer? Register</a>
-                    <a href="#" onclick="showScreen('forgotPasswordScreen')" style="color:#e65100;">Forgot Password?</a>
+                <button onclick="farmerLogin()" class="btn btn-primary" style="width:100%" data-key="loginBtn">🚀 Login</button>
+                <div class="auth-links">
+                    <a href="#" onclick="showScreen('farmerRegisterScreen')" data-key="newFarmer">New? Register</a>
+                    <a href="#" onclick="showScreen('forgotPasswordScreen')" data-key="forgotPwd" style="color:#e65100">Forgot Password?</a>
                 </div>
-                <button onclick="goBack()" class="btn btn-secondary" style="margin-top:10px; width:100%">← Back</button>
+                <button onclick="goBack()" class="btn btn-secondary" style="width:100%; margin-top:6px">← <span data-key="back">Back</span></button>
             </div>
         </section>
 
@@ -148,35 +162,34 @@
         ══════════════════════════════════════════ -->
         <section id="forgotPasswordScreen" class="screen hidden">
             <div class="card">
-                <h2>🔑 Reset Password</h2>
-                <p style="color:#666; margin-bottom:20px; font-size:0.95em;">Enter your Aadhaar number and create a new password.</p>
+                <h2 data-key="forgotTitle">🔑 Reset Password</h2>
+                <p style="color:#666; margin-bottom:20px; font-size:0.92em" data-key="forgotDesc">Enter your Aadhaar and set a new password.</p>
 
                 <div class="form-group">
-                    <label>🪪 Aadhaar Number</label>
-                    <div class="input-voice-row">
-                        <input type="text" id="forgotAadhar" placeholder="Enter 12-digit Aadhaar" maxlength="12" inputmode="numeric">
-                        <button type="button" class="btn-mic" onclick="startVoice('forgotAadhar', 'numeric')" title="Speak Aadhaar">🎤</button>
+                    <label data-key="aadharLabel">🪪 Aadhaar Number</label>
+                    <div class="input-row">
+                        <input type="text" id="forgotAadhar" placeholder="12-digit Aadhaar" maxlength="12" inputmode="numeric">
+                        <button class="btn-mic" onclick="startVoice('forgotAadhar','numeric')">🎤</button>
+                        <button class="btn-speak" onclick="speakField('forgotAadhar')">🔊</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label data-key="newPwdLabel">🔒 New Password</label>
+                    <div class="input-row">
+                        <input type="password" id="forgotNew" placeholder="Min 6 characters">
+                        <button class="btn-eye" onclick="togglePwd('forgotNew')">👁</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label data-key="confirmLabel">🔒 Confirm New Password</label>
+                    <div class="input-row">
+                        <input type="password" id="forgotConfirm" placeholder="Repeat new password">
+                        <button class="btn-eye" onclick="togglePwd('forgotConfirm')">👁</button>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>🔒 New Password</label>
-                    <div class="input-voice-row">
-                        <input type="password" id="forgotNew" placeholder="New password (min 6 chars)">
-                        <button type="button" class="btn-eye" onclick="togglePassword('forgotNew')" title="Show/hide">👁</button>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>🔒 Confirm New Password</label>
-                    <div class="input-voice-row">
-                        <input type="password" id="forgotConfirm" placeholder="Confirm new password">
-                        <button type="button" class="btn-eye" onclick="togglePassword('forgotConfirm')" title="Show/hide">👁</button>
-                    </div>
-                </div>
-
-                <button onclick="resetPassword()" class="btn btn-primary" style="width:100%">✅ Update Password</button>
-                <button onclick="goBack()" class="btn btn-secondary" style="margin-top:10px; width:100%">← Back</button>
+                <button onclick="resetPassword()" class="btn btn-primary" style="width:100%" data-key="updatePwdBtn">✅ Update Password</button>
+                <button onclick="goBack()" class="btn btn-secondary" style="width:100%; margin-top:6px">← <span data-key="back">Back</span></button>
             </div>
         </section>
 
@@ -185,80 +198,75 @@
         ══════════════════════════════════════════ -->
         <section id="officerLoginScreen" class="screen hidden">
             <div class="card">
-                <h2>🚜 Officer Login</h2>
+                <h2 data-key="officerLoginTitle">🚜 Officer Login</h2>
 
                 <div class="form-group">
-                    <label>📧 Email</label>
-                    <div class="input-voice-row">
-                        <input type="email" id="officerEmail" placeholder="officer@example.com">
-                        <button type="button" class="btn-mic" onclick="startVoice('officerEmail', 'email')" title="Speak email">🎤</button>
+                    <label data-key="emailLabel">📧 Email / Phone</label>
+                    <div class="input-row">
+                        <input type="text" id="officerEmail" placeholder="Email or phone number">
+                        <button class="btn-mic" onclick="startVoice('officerEmail','text')">🎤</button>
+                        <button class="btn-speak" onclick="speakField('officerEmail')">🔊</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label data-key="passwordLabel">🔒 Password</label>
+                    <div class="input-row">
+                        <input type="password" id="officerPassword" placeholder="Password">
+                        <button class="btn-eye" onclick="togglePwd('officerPassword')">👁</button>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>🔒 Password</label>
-                    <div class="input-voice-row">
-                        <input type="password" id="officerPassword" placeholder="Enter password">
-                        <button type="button" class="btn-eye" onclick="togglePassword('officerPassword')" title="Show/hide">👁</button>
-                    </div>
-                </div>
-
-                <button onclick="officerLogin()" class="btn btn-primary" style="width:100%">🚀 Login</button>
-
-                <p style="text-align:center; margin-top:15px; color:#666; font-size:0.9em;">
-                    New officer? <a href="#" onclick="showScreen('officerRegisterScreen')" style="color:#2e7d32;">Register here</a>
-                </p>
-                <button onclick="goBack()" class="btn btn-secondary" style="margin-top:10px; width:100%">← Back</button>
+                <button onclick="officerLogin()" class="btn btn-primary" style="width:100%" data-key="loginBtn">🚀 Login</button>
+                <p class="auth-switch">New officer? <a href="#" onclick="showScreen('officerRegisterScreen')" data-key="officerRegLink">Register here</a></p>
+                <button onclick="goBack()" class="btn btn-secondary" style="width:100%; margin-top:6px">← <span data-key="back">Back</span></button>
             </div>
         </section>
 
         <!-- ══════════════════════════════════════════
-             SCREEN 7: OFFICER REGISTER (NEW)
+             SCREEN 7: OFFICER REGISTER
         ══════════════════════════════════════════ -->
         <section id="officerRegisterScreen" class="screen hidden">
             <div class="card">
-                <h2>🚜 Officer Registration</h2>
-                <div class="info-box" style="background:#e8f5e9; border-left:4px solid #2e7d32; padding:12px; border-radius:6px; margin-bottom:20px; font-size:0.9em;">
-                    ℹ️ You need an <strong>Officer Registration Code</strong> from your Agriculture Department. Default code: <strong>AGRI2024</strong>
+                <h2 data-key="officerRegTitle">🚜 Officer Registration</h2>
+                <div class="info-box" data-key="officerRegInfo">
+                    ℹ️ You need a <strong>department registration code</strong>. Default: <strong>AGRI2024</strong>
                 </div>
 
                 <div class="form-group">
-                    <label>👤 Full Name</label>
-                    <div class="input-voice-row">
+                    <label data-key="nameLabel">👤 Full Name</label>
+                    <div class="input-row">
                         <input type="text" id="offRegName" placeholder="Your full name">
-                        <button type="button" class="btn-mic" onclick="startVoice('offRegName', 'text')" title="Speak name">🎤</button>
+                        <button class="btn-mic" onclick="startVoice('offRegName','text')">🎤</button>
+                        <button class="btn-speak" onclick="speakField('offRegName')">🔊</button>
                     </div>
                 </div>
-
                 <div class="form-group">
-                    <label>📧 Official Email</label>
-                    <div class="input-voice-row">
-                        <input type="email" id="offRegEmail" placeholder="your.email@agri.gov.in">
-                        <button type="button" class="btn-mic" onclick="startVoice('offRegEmail', 'email')" title="Speak email">🎤</button>
+                    <label data-key="emailOrPhoneLabel">📧 Email or Phone</label>
+                    <div class="input-row">
+                        <input type="text" id="offRegEmail" placeholder="Email or phone number">
+                        <button class="btn-mic" onclick="startVoice('offRegEmail','text')">🎤</button>
+                        <button class="btn-speak" onclick="speakField('offRegEmail')">🔊</button>
                     </div>
                 </div>
-
                 <div class="form-group">
-                    <label>🔒 Password (min 6 chars)</label>
-                    <div class="input-voice-row">
-                        <input type="password" id="offRegPassword" placeholder="Create password">
-                        <button type="button" class="btn-eye" onclick="togglePassword('offRegPassword')" title="Show/hide">👁</button>
+                    <label data-key="passwordLabel">🔒 Password</label>
+                    <div class="input-row">
+                        <input type="password" id="offRegPassword" placeholder="Min 6 characters">
+                        <button class="btn-eye" onclick="togglePwd('offRegPassword')">👁</button>
                     </div>
                 </div>
-
                 <div class="form-group">
-                    <label>🔑 Officer Registration Code</label>
-                    <div class="input-voice-row">
-                        <input type="text" id="offRegCode" placeholder="Enter code from your department">
-                        <button type="button" class="btn-mic" onclick="startVoice('offRegCode', 'text')" title="Speak code">🎤</button>
+                    <label data-key="deptCodeLabel">🔑 Department Registration Code</label>
+                    <div class="input-row">
+                        <input type="text" id="offRegCode" placeholder="Code from your department">
+                        <button class="btn-mic" onclick="startVoice('offRegCode','text')">🎤</button>
+                        <button class="btn-speak" onclick="speakField('offRegCode')">🔊</button>
                     </div>
                 </div>
 
-                <button onclick="officerRegister()" class="btn btn-primary" style="width:100%">✅ Register as Officer</button>
-                <p style="text-align:center; margin-top:15px; font-size:0.9em; color:#666;">
-                    Already registered? <a href="#" onclick="showScreen('officerLoginScreen')" style="color:#2e7d32;">Login here</a>
-                </p>
-                <button onclick="goBack()" class="btn btn-secondary" style="margin-top:10px; width:100%">← Back</button>
+                <button onclick="officerRegister()" class="btn btn-primary" style="width:100%" data-key="registerBtn">✅ Register as Officer</button>
+                <p class="auth-switch">Already registered? <a href="#" onclick="showScreen('officerLoginScreen')" data-key="loginLink">Login here</a></p>
+                <button onclick="goBack()" class="btn btn-secondary" style="width:100%; margin-top:6px">← <span data-key="back">Back</span></button>
             </div>
         </section>
 
@@ -268,36 +276,37 @@
         <section id="officerDashboard" class="screen hidden">
             <div class="dashboard-header">
                 <h2 data-key="dashTitle">🚜 Officer Dashboard</h2>
-                <div style="display:flex; gap:10px;">
-                    <button onclick="showScreen('feedbackScreen'); loadFeedback()" class="btn btn-secondary">💬 Reviews</button>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <button onclick="showScreen('feedbackScreen'); loadFeedback()" class="btn btn-secondary">💬 <span data-key="reviews">Reviews</span></button>
                     <button onclick="logout()" class="btn btn-secondary" data-key="logout">Logout</button>
                 </div>
             </div>
-
             <div class="dashboard-grid">
                 <div class="card">
                     <h3 data-key="addNewFarmer">➕ Add New Farmer</h3>
                     <div class="form-group">
-                        <div class="input-voice-row">
-                            <input type="text" id="farmerName" placeholder="Farmer Name">
-                            <button type="button" class="btn-mic" onclick="startVoice('farmerName','text')" title="Speak name">🎤</button>
+                        <div class="input-row">
+                            <input type="text" id="farmerName" data-key-ph="namePh" placeholder="Farmer Name">
+                            <button class="btn-mic" onclick="startVoice('farmerName','text')">🎤</button>
+                            <button class="btn-speak" onclick="speakField('farmerName')">🔊</button>
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="input-voice-row">
-                            <input type="text" id="farmerAadhar" placeholder="12-digit Aadhaar" maxlength="12" inputmode="numeric">
-                            <button type="button" class="btn-mic" onclick="startVoice('farmerAadhar','numeric')" title="Speak Aadhaar">🎤</button>
+                        <div class="input-row">
+                            <input type="text" id="farmerAadhar" data-key-ph="aadharPh" placeholder="12-digit Aadhaar" maxlength="12" inputmode="numeric">
+                            <button class="btn-mic" onclick="startVoice('farmerAadhar','numeric')">🎤</button>
+                            <button class="btn-speak" onclick="speakField('farmerAadhar')">🔊</button>
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="input-voice-row">
-                            <input type="tel" id="farmerPhone" placeholder="Mobile number">
-                            <button type="button" class="btn-mic" onclick="startVoice('farmerPhone','numeric')" title="Speak number">🎤</button>
+                        <div class="input-row">
+                            <input type="tel" id="farmerPhone" data-key-ph="phonePh" placeholder="Mobile number">
+                            <button class="btn-mic" onclick="startVoice('farmerPhone','numeric')">🎤</button>
+                            <button class="btn-speak" onclick="speakField('farmerPhone')">🔊</button>
                         </div>
                     </div>
                     <button onclick="addFarmer()" class="btn btn-primary" style="width:100%" data-key="addFarmerBtn">Add Farmer</button>
                 </div>
-
                 <div class="card">
                     <h3 data-key="myFarmers">👨‍🌾 My Farmers</h3>
                     <div id="farmersList"></div>
@@ -307,13 +316,21 @@
 
         <!-- ══════════════════════════════════════════
              SCREEN 9: FARMER INPUT / PREDICTION
+             (Voice for all inputs including radio buttons)
         ══════════════════════════════════════════ -->
         <section id="farmerInputScreen" class="screen hidden">
             <div class="card">
-                <h2 data-key="formTitle">🌱 Get Crop Recommendation</h2>
+                <h2 data-key="formTitle">🌱 Crop Prediction</h2>
 
+                <!-- Soil Condition -->
                 <div class="form-group">
-                    <label data-key="soilLabel">📋 How is your soil?</label>
+                    <div class="label-row">
+                        <label data-key="soilLabel">📋 Soil Type</label>
+                        <div style="display:flex; gap:6px;">
+                            <button class="btn-mic small-btn" onclick="startVoiceRadio('soil_condition', ['sandy','loamy','clay'])" title="Say sandy, loamy, or clay">🎤</button>
+                            <button class="btn-speak small-btn" onclick="speakRadio('soil_condition')" title="Read current selection">🔊</button>
+                        </div>
+                    </div>
                     <div class="radio-group">
                         <label><input type="radio" name="soil_condition" value="sandy"> <span data-key="sandy">Sandy</span></label>
                         <label><input type="radio" name="soil_condition" value="loamy" checked> <span data-key="loamy">Loamy</span></label>
@@ -321,8 +338,15 @@
                     </div>
                 </div>
 
+                <!-- Soil Fertility -->
                 <div class="form-group">
-                    <label data-key="fertilityLabel">💚 How fertile is your soil?</label>
+                    <div class="label-row">
+                        <label data-key="fertilityLabel">💚 Soil Fertility</label>
+                        <div style="display:flex; gap:6px;">
+                            <button class="btn-mic small-btn" onclick="startVoiceRadio('soil_fertility', ['low','medium','high'])" title="Say low, medium, or high">🎤</button>
+                            <button class="btn-speak small-btn" onclick="speakRadio('soil_fertility')" title="Read current selection">🔊</button>
+                        </div>
+                    </div>
                     <div class="radio-group">
                         <label><input type="radio" name="soil_fertility" value="low"> <span data-key="low">Low</span></label>
                         <label><input type="radio" name="soil_fertility" value="medium" checked> <span data-key="medium">Medium</span></label>
@@ -330,27 +354,36 @@
                     </div>
                 </div>
 
+                <!-- Last Harvest -->
                 <div class="form-group">
-                    <label data-key="harvestLabel">🌾 Last harvest quality?</label>
+                    <div class="label-row">
+                        <label data-key="harvestLabel">🌾 Last Harvest Quality</label>
+                        <div style="display:flex; gap:6px;">
+                            <button class="btn-mic small-btn" onclick="startVoiceRadio('last_harvest', ['poor','good'])" title="Say poor or good">🎤</button>
+                            <button class="btn-speak small-btn" onclick="speakRadio('last_harvest')" title="Read current selection">🔊</button>
+                        </div>
+                    </div>
                     <div class="radio-group">
                         <label><input type="radio" name="last_harvest" value="poor"> <span data-key="poor">Poor</span></label>
                         <label><input type="radio" name="last_harvest" value="good" checked> <span data-key="good">Good</span></label>
                     </div>
                 </div>
 
+                <!-- City Input -->
                 <div class="form-group">
-                    <label data-key="cityLabel">📍 Your city / village</label>
-                    <div class="input-voice-row">
-                        <input type="text" id="cityInput" value="Hyderabad" style="flex:1;">
-                        <button type="button" class="btn-mic" onclick="startVoice('cityInput','text')" title="Speak city name">🎤</button>
+                    <label data-key="cityLabel">📍 Your City / Village</label>
+                    <div class="input-row">
+                        <input type="text" id="cityInput" value="Hyderabad" style="flex:1">
+                        <button class="btn-mic" onclick="startVoice('cityInput','text')">🎤</button>
+                        <button class="btn-speak" onclick="speakField('cityInput')">🔊</button>
                     </div>
                 </div>
 
                 <div class="button-group">
                     <button onclick="getPrediction()" class="btn btn-primary" data-key="predictBtn">🌱 Predict Best Crop</button>
-                    <button onclick="showScreen('feedbackScreen'); loadFeedback()" class="btn btn-secondary">💬 View Reviews</button>
+                    <button onclick="showScreen('feedbackScreen'); loadFeedback()" class="btn btn-secondary">💬 <span data-key="reviews">Reviews</span></button>
                 </div>
-                <button onclick="goBack()" class="btn btn-secondary" style="margin-top:10px; width:100%">← Back</button>
+                <button onclick="goBack()" class="btn btn-secondary" style="width:100%; margin-top:10px">← <span data-key="back">Back</span></button>
             </div>
         </section>
 
@@ -359,7 +392,7 @@
         ══════════════════════════════════════════ -->
         <section id="resultsScreen" class="screen hidden">
             <div class="card">
-                <h2 data-key="resTitle">✅ Recommended Crop</h2>
+                <h2 data-key="resTitle">✅ Recommendation Result</h2>
 
                 <div class="crop-result">
                     <div class="crop-emoji" id="resultEmoji">🌾</div>
@@ -375,47 +408,56 @@
                             </div>
                         </div>
                     </div>
-                    <div class="result-box">
-                        <h4 data-key="fertLabel">💧 Recommended Fertilizer</h4>
-                        <p id="fertilizerName"></p>
-                    </div>
+
                     <div class="result-box">
                         <h4 data-key="weatherLabel">🌤 Current Weather</h4>
                         <p id="weatherInfo"></p>
                     </div>
+
+                    <!-- Fertilizer box with TTS speaker -->
+                    <div class="result-box fertilizer-box">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <h4 data-key="fertLabel">💧 Recommended Fertilizer</h4>
+                            <button class="btn-speak" onclick="speakFertilizer()" title="Read fertilizer info aloud">🔊</button>
+                        </div>
+                        <p id="fertilizerName" style="font-weight:600; color:#2e7d32; margin-bottom:8px;"></p>
+                        <div id="fertilizerExplanation" class="fertilizer-explain"></div>
+                    </div>
+
                     <div class="result-box">
                         <h4 data-key="factorsLabel">📈 Impact Factors</h4>
                         <ul id="factorsList"></ul>
                     </div>
                 </div>
 
-                <div class="button-group" style="margin-top:20px;">
-                    <button onclick="showScreen('farmerInputScreen')" class="btn btn-primary" data-key="getRecBtn">🔄 New Recommendation</button>
-                    <button onclick="showFeedbackForm()" class="btn btn-secondary">✍️ Share Your Experience</button>
-                    <button onclick="showScreen('feedbackScreen'); loadFeedback()" class="btn btn-secondary">💬 Read Reviews</button>
+                <div class="button-group" style="margin-top:20px; flex-wrap:wrap;">
+                    <button onclick="speakAllResults()" class="btn btn-speak-big">🔊 <span data-key="readResults">Read Results Aloud</span></button>
+                    <button onclick="showScreen('farmerInputScreen')" class="btn btn-primary" data-key="getRecBtn">🔄 New Prediction</button>
+                    <button onclick="showFeedbackForm()" class="btn btn-secondary">✍️ <span data-key="shareExp">Share Experience</span></button>
                 </div>
-                <button onclick="logout()" class="btn btn-secondary" style="margin-top:10px; width:100%" data-key="logout">Logout</button>
+                <button onclick="logout()" class="btn btn-secondary" style="width:100%; margin-top:8px" data-key="logout">Logout</button>
             </div>
         </section>
 
         <!-- ══════════════════════════════════════════
-             SCREEN 11: FEEDBACK SUBMIT FORM
+             SCREEN 11: FEEDBACK FORM
         ══════════════════════════════════════════ -->
         <section id="feedbackFormScreen" class="screen hidden">
             <div class="card">
-                <h2>✍️ Share Your Experience</h2>
-                <p style="color:#666; margin-bottom:20px; font-size:0.95em;">Your review helps other farmers make better decisions!</p>
+                <h2 data-key="feedbackTitle">✍️ Share Your Experience</h2>
+                <p style="color:#666; margin-bottom:20px; font-size:0.93em" data-key="feedbackSubtitle">Your review helps other farmers make better decisions!</p>
 
                 <div class="form-group">
-                    <label>🌾 Crop you grew</label>
-                    <div class="input-voice-row">
+                    <label data-key="cropGrown">🌾 Crop You Grew</label>
+                    <div class="input-row">
                         <input type="text" id="fbCrop" placeholder="e.g. Rice, Maize, Cotton">
-                        <button type="button" class="btn-mic" onclick="startVoice('fbCrop','text')" title="Speak crop name">🎤</button>
+                        <button class="btn-mic" onclick="startVoice('fbCrop','text')">🎤</button>
+                        <button class="btn-speak" onclick="speakField('fbCrop')">🔊</button>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>⭐ Your Rating</label>
+                    <label data-key="ratingLabel">⭐ Your Rating</label>
                     <div class="star-rating" id="starRating">
                         <span class="star" data-val="1" onclick="setRating(1)">★</span>
                         <span class="star" data-val="2" onclick="setRating(2)">★</span>
@@ -427,17 +469,18 @@
                 </div>
 
                 <div class="form-group">
-                    <label>📍 Your Location</label>
-                    <div class="input-voice-row">
+                    <label data-key="locationLabel">📍 Your Location</label>
+                    <div class="input-row">
                         <input type="text" id="fbLocation" placeholder="Village / District / State">
-                        <button type="button" class="btn-mic" onclick="startVoice('fbLocation','text')" title="Speak location">🎤</button>
+                        <button class="btn-mic" onclick="startVoice('fbLocation','text')">🎤</button>
+                        <button class="btn-speak" onclick="speakField('fbLocation')">🔊</button>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>🌦 Season</label>
-                    <select id="fbSeason" style="width:100%; padding:12px; border:2px solid #a8e6a1; border-radius:8px; font-size:1em;">
-                        <option value="">Select season</option>
+                    <label data-key="seasonLabel">🌦 Season</label>
+                    <select id="fbSeason" class="full-select">
+                        <option value="" data-key="selectSeason">Select season</option>
                         <option value="Kharif (Jun-Oct)">Kharif (Jun-Oct)</option>
                         <option value="Rabi (Oct-Mar)">Rabi (Oct-Mar)</option>
                         <option value="Zaid (Mar-Jun)">Zaid (Mar-Jun)</option>
@@ -445,41 +488,38 @@
                 </div>
 
                 <div class="form-group">
-                    <label>💬 Your Experience</label>
-                    <div class="input-voice-row" style="align-items:flex-start;">
-                        <textarea id="fbComment" placeholder="How was your yield? Was the recommendation helpful? Any tips for other farmers?" rows="4" style="flex:1; padding:12px; border:2px solid #a8e6a1; border-radius:8px; font-size:1em; resize:vertical;"></textarea>
-                        <button type="button" class="btn-mic" onclick="startVoice('fbComment','text')" title="Speak your review" style="margin-top:0">🎤</button>
+                    <label data-key="commentLabel">💬 Your Experience</label>
+                    <div class="input-row" style="align-items:flex-start">
+                        <textarea id="fbComment" placeholder="How was your yield? Was the recommendation helpful?" rows="4" class="full-textarea"></textarea>
+                        <div style="display:flex; flex-direction:column; gap:6px;">
+                            <button class="btn-mic" onclick="startVoice('fbComment','text')">🎤</button>
+                            <button class="btn-speak" onclick="speakField('fbComment')">🔊</button>
+                        </div>
                     </div>
                 </div>
 
-                <button onclick="submitFeedback()" class="btn btn-primary" style="width:100%">📤 Submit Review</button>
-                <button onclick="goBack()" class="btn btn-secondary" style="margin-top:10px; width:100%">← Back</button>
+                <button onclick="submitFeedback()" class="btn btn-primary" style="width:100%" data-key="submitReview">📤 Submit Review</button>
+                <button onclick="goBack()" class="btn btn-secondary" style="width:100%; margin-top:8px">← <span data-key="back">Back</span></button>
             </div>
         </section>
 
         <!-- ══════════════════════════════════════════
-             SCREEN 12: FEEDBACK BROWSE / REVIEWS
+             SCREEN 12: BROWSE REVIEWS
         ══════════════════════════════════════════ -->
         <section id="feedbackScreen" class="screen hidden">
             <div class="card">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
-                    <h2 style="margin:0;">💬 Farmer Reviews</h2>
-                    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-                        <select id="cropFilter" onchange="loadFeedback()" style="padding:8px 12px; border:2px solid #a8e6a1; border-radius:8px; font-size:0.9em;">
-                            <option value="">All Crops</option>
+                <div class="reviews-header">
+                    <h2 style="margin:0" data-key="reviewsTitle">💬 Farmer Reviews</h2>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                        <select id="cropFilter" onchange="loadFeedback()" class="filter-select">
+                            <option value="" data-key="allCrops">All Crops</option>
                         </select>
-                        <button onclick="showFeedbackForm()" class="btn btn-primary" style="padding:8px 16px; font-size:0.9em;">✍️ Write Review</button>
-                        <button onclick="goBack()" class="btn btn-secondary" style="padding:8px 16px; font-size:0.9em;">← Back</button>
+                        <button onclick="showFeedbackForm()" class="btn btn-primary" style="padding:8px 14px; font-size:0.88em" data-key="writeReview">✍️ Write Review</button>
+                        <button onclick="goBack()" class="btn btn-secondary" style="padding:8px 14px; font-size:0.88em">← <span data-key="back">Back</span></button>
                     </div>
                 </div>
-
-                <!-- Summary Stats -->
-                <div id="feedbackStats" class="feedback-stats"></div>
-
-                <!-- Reviews List -->
-                <div id="feedbackList"></div>
-
-                <!-- Pagination -->
+                <div id="feedbackStats" style="margin-top:16px;"></div>
+                <div id="feedbackList" style="margin-top:16px;"></div>
                 <div id="feedbackPagination" style="text-align:center; margin-top:20px;"></div>
             </div>
         </section>
