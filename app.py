@@ -261,5 +261,14 @@ def seed_officer():
     u.set_password('officer123'); db.session.add(u); db.session.commit()
     return jsonify({'message':'Created: officer@smartcrop.local / officer123'}),201
 
+# ──── KEEP-ALIVE (prevents Render free tier spin-down) ────
+@app.route('/ping')
+def ping():
+    return jsonify({'status': 'alive', 'time': datetime.utcnow().isoformat()}), 200
+
+@app.route('/health')
+def health():
+    return jsonify({'status': 'ok'}), 200
+
 if __name__=='__main__':
     app.run(debug=True,host='0.0.0.0',port=int(os.environ.get('PORT',5000)))

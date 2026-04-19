@@ -14,6 +14,12 @@
     <meta name="theme-color" content="#2e7d32">
 </head>
 <body>
+<div id="loadingOverlay" class="loading-overlay hidden">
+  <div class="loading-box">
+    <div class="spinner"></div>
+    <p id="loadingMsg">Predicting best crop...</p>
+  </div>
+</div>
 <div class="container">
 
     <!-- NAVBAR — hidden on welcome/literacy screens -->
@@ -278,6 +284,7 @@
                 <h2 data-key="dashTitle">🚜 Officer Dashboard</h2>
                 <div style="display:flex; gap:8px; flex-wrap:wrap;">
                     <button onclick="showScreen('feedbackScreen'); loadFeedback()" class="btn btn-secondary">💬 <span data-key="reviews">Reviews</span></button>
+                    <button id="installAppBtn" onclick="triggerInstall()" class="btn btn-install" style="display:none">📲 <span data-key="installApp">Install App</span></button>
                     <button onclick="logout()" class="btn btn-secondary" data-key="logout">Logout</button>
                 </div>
             </div>
@@ -382,6 +389,7 @@
                 <div class="button-group">
                     <button onclick="getPrediction()" class="btn btn-primary" data-key="predictBtn">🌱 Predict Best Crop</button>
                     <button onclick="showScreen('feedbackScreen'); loadFeedback()" class="btn btn-secondary">💬 <span data-key="reviews">Reviews</span></button>
+                    <button id="installAppBtn2" onclick="triggerInstall()" class="btn btn-install" style="display:none">📲 <span data-key="installApp">Install App</span></button>
                 </div>
                 <button onclick="goBack()" class="btn btn-secondary" style="width:100%; margin-top:10px">← <span data-key="back">Back</span></button>
             </div>
@@ -529,5 +537,14 @@
     </main>
 </div>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(r => console.log('SW registered'))
+        .catch(e => console.log('SW error:', e));
+    });
+  }
+</script>
 </body>
 </html>

@@ -74,6 +74,7 @@ en: {
   crop_muskmelon:'Muskmelon', crop_apple:'Apple', crop_orange:'Orange', crop_papaya:'Papaya',
   crop_coconut:'Coconut', crop_cotton:'Cotton', crop_jute:'Jute', crop_coffee:'Coffee',
   // Voice literacy keywords
+  installApp:'📲 Install App',
   confHigh:'Very high — the AI is very confident this crop suits your soil and weather conditions.',
   confMed:'Moderate confidence — this crop is likely suitable. Consider local expert advice too.',
   confLow:'Lower confidence — multiple crops may suit your land. Consult your agricultural officer.',
@@ -155,6 +156,7 @@ hi: {
   crop_banana:'केला', crop_mango:'आम', crop_grapes:'अंगूर', crop_watermelon:'तरबूज',
   crop_muskmelon:'खरबूजा', crop_apple:'सेब', crop_orange:'संतरा', crop_papaya:'पपीता',
   crop_coconut:'नारियल', crop_cotton:'कपास', crop_jute:'जूट', crop_coffee:'कॉफी',
+  installApp:'📲 ऐप इंस्टॉल करें',
   confHigh:'बहुत अधिक — AI को यकीन है यह फसल आपकी मिट्टी और मौसम के लिए उपयुक्त है।',
   confMed:'मध्यम विश्वास — यह फसल संभवतः उपयुक्त है। स्थानीय विशेषज्ञ से भी सलाह लें।',
   confLow:'कम विश्वास — कई फसलें उपयुक्त हो सकती हैं। कृषि अधिकारी से संपर्क करें।',
@@ -235,6 +237,7 @@ te: {
   crop_banana:'అరటి', crop_mango:'మామిడి', crop_grapes:'ద్రాక్ష', crop_watermelon:'పుచ్చకాయ',
   crop_muskmelon:'ఖర్బూజా', crop_apple:'ఆపిల్', crop_orange:'నారింజ', crop_papaya:'బొప్పాయి',
   crop_coconut:'కొబ్బరి', crop_cotton:'పత్తి', crop_jute:'జనపనార', crop_coffee:'కాఫీ',
+  installApp:'📲 యాప్ ఇన్‌స్టాల్ చేయండి',
   confHigh:'చాలా అధిక నమ్మకం — AI మీ నేల మరియు వాతావరణానికి ఈ పంట సరైనదని నిర్ధారించింది.',
   confMed:'మధ్యస్థ నమ్మకం — ఈ పంట సరిగ్గా ఉండవచ్చు. స్థానిక నిపుణుల సలహా కూడా తీసుకోండి.',
   confLow:'తక్కువ నమ్మకం — అనేక పంటలు సరిపోవచ్చు. వ్యవసాయ అధికారిని సంప్రదించండి.',
@@ -413,10 +416,17 @@ function readLiteracyOptions() {
 function speakAllResults() {
     const crop    = document.getElementById('resultCrop')?.textContent || '';
     const conf    = document.getElementById('confidenceText')?.textContent || '';
+    const confExp = document.getElementById('confidenceExplain')?.textContent || '';
     const weather = document.getElementById('weatherInfo')?.textContent || '';
     const fert    = document.getElementById('fertilizerName')?.textContent || '';
     const fertExp = currentFertilizerText || '';
-    const full    = `Recommended crop: ${crop}. Confidence: ${conf}. Weather: ${weather}. Fertilizer: ${fert}. ${fertExp}`;
+    const dict    = T[currentLang] || T.en;
+    // Build language-aware sentence
+    const full = currentLang === 'te'
+        ? `సిఫార్సు చేసిన పంట: ${crop}. నమ్మకం: ${conf}. ${confExp} వాతావరణం: ${weather}. ఎరువు: ${fert}. ${fertExp}`
+        : currentLang === 'hi'
+        ? `अनुशंसित फसल: ${crop}. विश्वास: ${conf}. ${confExp} मौसम: ${weather}. उर्वरक: ${fert}. ${fertExp}`
+        : `Recommended crop: ${crop}. Confidence: ${conf}. ${confExp} Weather: ${weather}. Fertilizer: ${fert}. ${fertExp}`;
     speak(full, currentLang);
 }
 
@@ -651,11 +661,24 @@ function startForFarmer(id, name) { selectedFarmerId=id; showScreen('farmerInput
 // ═══════════════════════════════════════════════════════════════
 // 11. PREDICTION
 // ═══════════════════════════════════════════════════════════════
+function showLoading(msg) {
+    const overlay = document.getElementById('loadingOverlay');
+    const msgEl   = document.getElementById('loadingMsg');
+    const dict    = T[currentLang] || T.en;
+    if (overlay) overlay.classList.remove('hidden');
+    if (msgEl)   msgEl.textContent = msg || (dict.predictBtn || 'Predicting...');
+}
+function hideLoading() {
+    const overlay = document.getElementById('loadingOverlay');
+    if (overlay) overlay.classList.add('hidden');
+}
+
 async function getPrediction() {
     const token=localStorage.getItem('token');
     if (!token) { alert('Session expired. Please login.'); showScreen('welcomeScreen'); return; }
+    showLoading();
     const btn=document.querySelector('[data-key="predictBtn"]');
-    if (btn) { btn.textContent='⏳ Predicting...'; btn.disabled=true; }
+    if (btn) { btn.disabled=true; }
     try {
         const r=await fetch('/api/predict',{method:'POST',
             headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},
@@ -672,15 +695,15 @@ async function getPrediction() {
         else if (r.status===401) { alert('Session expired.'); localStorage.clear(); location.reload(); }
         else alert('❌ '+d.error);
     } catch(e) { alert('❌ Error: '+e); }
-    finally { if(btn){btn.textContent=(T[currentLang]||T.en).predictBtn||'🌱 Predict Best Crop'; btn.disabled=false;} }
+    finally { hideLoading(); if(btn){btn.textContent=(T[currentLang]||T.en).predictBtn||'🌱 Predict Best Crop'; btn.disabled=false;} }
 }
 
 
 // ── Crop images (Wikimedia Commons free images) ──
 const CROP_IMAGES = {
   'rice':        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/White_rice.jpg/320px-White_rice.jpg',
-  'maize':       'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Camponotus_flavomarginatus_ant.jpg/320px-Camponotus_flavomarginatus_ant.jpg',
   'maize':       'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Corn_flint.jpg/320px-Corn_flint.jpg',
+  'mothbeans':   'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Mung_bean_seeds.jpg/320px-Mung_bean_seeds.jpg',
   'chickpea':    'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Chickpeas.jpg/320px-Chickpeas.jpg',
   'kidneybeans': 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Kidney_beans.jpg/320px-Kidney_beans.jpg',
   'pigeonpeas':  'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Cajanus_cajan_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-175.jpg/320px-Cajanus_cajan_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-175.jpg',
@@ -863,18 +886,50 @@ document.addEventListener('DOMContentLoaded', () => {
         else showScreen('farmerInputScreen');
     } else showScreen('welcomeScreen');
 
-    // PWA install banner
+    // PWA install prompt — show button in dashboard & input screen
     window.addEventListener('beforeinstallprompt', e => {
         e.preventDefault();
-        const banner=document.createElement('div');
-        banner.className='install-banner';
-        banner.innerHTML=`📲 Add to Home Screen for app-like experience <button onclick="installApp(event)" class="btn btn-primary" style="padding:6px 14px;font-size:0.85em;margin-left:10px">Install</button> <button onclick="this.parentElement.remove()" style="background:none;border:none;cursor:pointer;margin-left:8px;font-size:1.2em;">✕</button>`;
-        document.body.prepend(banner);
-        window._deferredInstall=e;
+        window._deferredInstall = e;
+        // Show all install buttons
+        ['installAppBtn','installAppBtn2'].forEach(id => {
+            const btn = document.getElementById(id);
+            if (btn) btn.style.display = 'inline-flex';
+        });
     });
+
+    // If already installed as PWA, hide install buttons
+    window.addEventListener('appinstalled', () => {
+        ['installAppBtn','installAppBtn2'].forEach(id => {
+            const btn = document.getElementById(id);
+            if (btn) btn.style.display = 'none';
+        });
+        console.log('PWA installed successfully');
+    });
+
+    // Keep-alive: ping server every 10 minutes to prevent Render spin-down
+    setInterval(() => {
+        fetch('/ping').catch(() => {});
+    }, 10 * 60 * 1000);
 });
 
-function installApp(e) {
-    e.target.closest('.install-banner')?.remove();
-    window._deferredInstall?.prompt();
+function triggerInstall() {
+    if (window._deferredInstall) {
+        window._deferredInstall.prompt();
+        window._deferredInstall.userChoice.then(result => {
+            if (result.outcome === 'accepted') {
+                ['installAppBtn','installAppBtn2'].forEach(id => {
+                    const btn = document.getElementById(id);
+                    if (btn) btn.style.display = 'none';
+                });
+            }
+            window._deferredInstall = null;
+        });
+    } else {
+        // Fallback instructions for iOS or already-installed
+        alert('📲 To install:
+
+Android: Tap the menu (⋮) in Chrome → "Add to Home screen"
+
+iOS Safari: Tap Share (⬆) → "Add to Home Screen"');
+    }
 }

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CropAI — Loading</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+    min-height: 100vh; display: flex; align-items: center;
+    justify-content: center; flex-direction: column; color: white;
+  }
+  .logo { font-size: 5em; margin-bottom: 20px; animation: bounce 1.5s ease-in-out infinite; }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-15px); }
+  }
+  h1 { font-size: clamp(1.2em,4vw,1.8em); font-weight:700; margin-bottom:8px; text-align:center; padding:0 20px; }
+  p  { font-size: 1em; opacity: 0.85; margin-bottom: 40px; text-align:center; padding:0 20px; }
+  .loader {
+    display: flex; gap: 10px; margin-bottom: 30px;
+  }
+  .dot {
+    width: 14px; height: 14px; background: rgba(255,255,255,0.9);
+    border-radius: 50%; animation: pulse 1.4s ease-in-out infinite;
+  }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes pulse {
+    0%,80%,100% { transform:scale(0.6); opacity:0.4; }
+    40%          { transform:scale(1);   opacity:1; }
+  }
+  .status {
+    font-size:0.88em; opacity:0.7; letter-spacing:1px;
+    text-transform:uppercase; margin-bottom:50px;
+    animation: fade 2s ease-in-out infinite;
+  }
+  @keyframes fade { 0%,100%{opacity:0.4} 50%{opacity:1} }
+  .tips {
+    background: rgba(255,255,255,0.12); border-radius: 12px;
+    padding: 18px 24px; max-width: 340px; margin: 0 20px;
+    font-size: 0.88em; line-height: 1.7; text-align:center;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .tips strong { display:block; margin-bottom:8px; font-size:1em; }
+  .install-hint {
+    margin-top: 30px; font-size: 0.82em; opacity: 0.65; text-align:center;
+    padding: 0 20px;
+  }
+</style>
+</head>
+<body>
+  <div class="logo">🌾</div>
+  <h1>AI Crop Prediction &amp; Fertilizer Recommendation</h1>
+  <p>Starting up your farming assistant...</p>
+  <div class="loader">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+  <div class="status" id="statusText">Waking up service...</div>
+  <div class="tips">
+    <strong>💡 Did you know?</strong>
+    Our AI analyses soil type, fertility, weather &amp; rainfall to recommend the best crop — in English, Hindi or Telugu.
+  </div>
+  <p class="install-hint">📲 After loading, tap "Add to Home Screen" to use as an app!</p>
+
+  <script>
+    const messages = [
+      'Waking up service...', 'Loading AI model...', 'Connecting to database...',
+      'Fetching weather data...', 'Almost ready...'
+    ];
+    let i = 0;
+    const el = document.getElementById('statusText');
+    setInterval(() => {
+      i = (i + 1) % messages.length;
+      el.textContent = messages[i];
+    }, 2500);
+
+    // Auto-redirect once server responds
+    function checkAlive() {
+      fetch('/ping')
+        .then(r => { if(r.ok) window.location.href = '/'; })
+        .catch(() => {});
+    }
+    // Check every 3 seconds
+    setInterval(checkAlive, 3000);
+    // First check after 4 seconds
+    setTimeout(checkAlive, 4000);
+  </script>
+</body>
+</html>
