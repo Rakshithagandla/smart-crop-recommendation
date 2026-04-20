@@ -15,7 +15,7 @@ import os
 from datetime import datetime
 
 # ── CHANGE THIS to your Render URL ──
-APP_URL = os.getenv('APP_URL', 'https://your-app-name.onrender.com')
+APP_URL = os.getenv('APP_URL', 'https://smart-crop-recommendation-55se.onrender.com')
 
 def ping():
     try:
