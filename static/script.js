@@ -322,8 +322,15 @@ function goBack() {
     if (screenHistory.length > 1) {
         screenHistory.pop();
         const prev = screenHistory[screenHistory.length-1];
-        document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.classList.add('hidden'); });
-        document.getElementById(prev)?.classList.replace('hidden','active');
+        document.querySelectorAll('.screen').forEach(s => {
+            s.classList.remove('active');
+            s.classList.add('hidden');
+        });
+        const prevEl = document.getElementById(prev);
+        if (prevEl) {
+            prevEl.classList.remove('hidden');
+            prevEl.classList.add('active');
+        }
     }
 }
 
@@ -335,7 +342,7 @@ function changeLanguage(lang) {
     localStorage.setItem('preferredLanguage', lang);
     const dict = T[lang] || T.en;
 
-    // data-key elements (text content)
+    // Translate ALL elements regardless of screen visibility
     document.querySelectorAll('[data-key]').forEach(el => {
         const key = el.getAttribute('data-key');
         if (!dict[key]) return;
@@ -348,7 +355,6 @@ function changeLanguage(lang) {
         }
     });
 
-    // data-key-ph elements (placeholder-only)
     document.querySelectorAll('[data-key-ph]').forEach(el => {
         const key = el.getAttribute('data-key-ph');
         if (dict[key]) el.placeholder = dict[key];
@@ -879,7 +885,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const lang=localStorage.getItem('preferredLanguage')||'en';
     const sel=document.getElementById('languageSelect');
     if(sel) sel.value=lang;
+    // Apply language after a short delay to ensure DOM is ready
     changeLanguage(lang);
+    setTimeout(() => changeLanguage(lang), 100);
 
     if(currentUserToken&&currentUserRole){
         if(currentUserRole==='officer') loadOfficerDashboard();
@@ -927,7 +935,6 @@ function triggerInstall() {
     } else {
         // Fallback instructions for iOS or already-installed
         alert('📲 To install:
-
 Android: Tap the menu (⋮) in Chrome → "Add to Home screen"
 
 iOS Safari: Tap Share (⬆) → "Add to Home Screen"');

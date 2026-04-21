@@ -1,4 +1,4 @@
-const CACHE = 'cropai-v2';
+const CACHE = 'cropai-v3';
 const STATIC = [
   '/',
   '/static/styles.css',
