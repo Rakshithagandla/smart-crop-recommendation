@@ -78,6 +78,12 @@ en: {
   confHigh:'Very high — the AI is very confident this crop suits your soil and weather conditions.',
   confMed:'Moderate confidence — this crop is likely suitable. Consider local expert advice too.',
   confLow:'Lower confidence — multiple crops may suit your land. Consult your agricultural officer.',
+  newOfficer:'New officer?',
+  emailOrPhonePh:'Email or phone number',
+  cropGrownPh:'e.g. Rice, Maize, Cotton',
+  deptCodePh:'Code from your department',
+  locationPh:'Village / District / State',
+  commentPh:'How was your yield? Was the recommendation helpful? Any tips for other farmers?',
   voice_literate: ['literate','read','write','educated','farmer'],
   voice_illiterate: ['illiterate','officer','help','cannot','cant'],
   // Radio voice keywords
@@ -160,6 +166,12 @@ hi: {
   confHigh:'बहुत अधिक — AI को यकीन है यह फसल आपकी मिट्टी और मौसम के लिए उपयुक्त है।',
   confMed:'मध्यम विश्वास — यह फसल संभवतः उपयुक्त है। स्थानीय विशेषज्ञ से भी सलाह लें।',
   confLow:'कम विश्वास — कई फसलें उपयुक्त हो सकती हैं। कृषि अधिकारी से संपर्क करें।',
+  newOfficer:'नए अधिकारी?',
+  emailOrPhonePh:'ईमेल या फोन नंबर',
+  cropGrownPh:'जैसे: चावल, मक्का, कपास',
+  deptCodePh:'विभाग कोड दर्ज करें',
+  locationPh:'गाँव / जिला / राज्य',
+  commentPh:'आपकी फसल कैसी रही? क्या सुझाव मिला सही था? अन्य किसानों के लिए सुझाव?',
   voice_literate:['साक्षर','पढ़','लिख'],
   voice_illiterate:['निरक्षर','अधिकारी','मदद'],
   voice_sandy:['रेतीली','रेत'], voice_loamy:['दोमट'], voice_clay:['चिकनी'],
@@ -241,6 +253,12 @@ te: {
   confHigh:'చాలా అధిక నమ్మకం — AI మీ నేల మరియు వాతావరణానికి ఈ పంట సరైనదని నిర్ధారించింది.',
   confMed:'మధ్యస్థ నమ్మకం — ఈ పంట సరిగ్గా ఉండవచ్చు. స్థానిక నిపుణుల సలహా కూడా తీసుకోండి.',
   confLow:'తక్కువ నమ్మకం — అనేక పంటలు సరిపోవచ్చు. వ్యవసాయ అధికారిని సంప్రదించండి.',
+  newOfficer:'కొత్త అధికారి?',
+  emailOrPhonePh:'ఇమెయిల్ లేదా ఫోన్ నంబర్',
+  cropGrownPh:'ఉదా: వరి, మొక్కజొన్న, పత్తి',
+  deptCodePh:'విభాగ కోడ్ నమోదు చేయండి',
+  locationPh:'గ్రామం / జిల్లా / రాష్ట్రం',
+  commentPh:'మీ పంట ఎలా ఉంది? సిఫార్సు సరైనదా? ఇతర రైతులకు సూచనలు?',
   voice_literate:['అక్షరాస్యుడు','చదువు','రాయి'],
   voice_illiterate:['నిరక్షరాస్యుడు','అధికారి','సహాయం'],
   voice_sandy:['ఇసుక'], voice_loamy:['దుంప'], voice_clay:['బంకమట్టి'],
@@ -934,6 +952,6 @@ function triggerInstall() {
         });
     } else {
         // Fallback instructions for iOS or already-installed
-        alert('📲 To install: Android: Tap the menu (⋮) in Chrome → "Add to Home screen"iOS Safari: Tap Share (⬆) → "Add to Home Screen"');
+        alert('📲 To install:Android: Tap the menu (⋮) in Chrome → "Add to Home screen"iOS Safari: Tap Share (⬆) → "Add to Home Screen"');
     }
 }

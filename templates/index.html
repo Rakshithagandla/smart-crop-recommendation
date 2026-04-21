@@ -174,7 +174,7 @@
                 <div class="form-group">
                     <label data-key="aadharLabel">🪪 Aadhaar Number</label>
                     <div class="input-row">
-                        <input type="text" id="forgotAadhar" placeholder="12-digit Aadhaar" maxlength="12" inputmode="numeric">
+                        <input type="text" id="forgotAadhar" data-key-ph="aadharPh" placeholder="12-digit Aadhaar" maxlength="12" inputmode="numeric">
                         <button class="btn-mic" onclick="startVoice('forgotAadhar','numeric')">🎤</button>
                         <button class="btn-speak" onclick="speakField('forgotAadhar')">🔊</button>
                     </div>
@@ -182,14 +182,14 @@
                 <div class="form-group">
                     <label data-key="newPwdLabel">🔒 New Password</label>
                     <div class="input-row">
-                        <input type="password" id="forgotNew" placeholder="Min 6 characters">
+                        <input type="password" id="forgotNew" data-key-ph="passwordPh" placeholder="Min 6 characters">
                         <button class="btn-eye" onclick="togglePwd('forgotNew')">👁</button>
                     </div>
                 </div>
                 <div class="form-group">
                     <label data-key="confirmLabel">🔒 Confirm New Password</label>
                     <div class="input-row">
-                        <input type="password" id="forgotConfirm" placeholder="Repeat new password">
+                        <input type="password" id="forgotConfirm" data-key-ph="confirmPh" placeholder="Repeat new password">
                         <button class="btn-eye" onclick="togglePwd('forgotConfirm')">👁</button>
                     </div>
                 </div>
@@ -209,7 +209,7 @@
                 <div class="form-group">
                     <label data-key="emailLabel">📧 Email / Phone</label>
                     <div class="input-row">
-                        <input type="text" id="officerEmail" placeholder="Email or phone number">
+                        <input type="text" id="officerEmail" data-key-ph="emailOrPhonePh" placeholder="Email or phone number">
                         <button class="btn-mic" onclick="startVoice('officerEmail','text')">🎤</button>
                         <button class="btn-speak" onclick="speakField('officerEmail')">🔊</button>
                     </div>
@@ -217,13 +217,13 @@
                 <div class="form-group">
                     <label data-key="passwordLabel">🔒 Password</label>
                     <div class="input-row">
-                        <input type="password" id="officerPassword" placeholder="Password">
+                        <input type="password" id="officerPassword" data-key-ph="passwordPh" placeholder="Password">
                         <button class="btn-eye" onclick="togglePwd('officerPassword')">👁</button>
                     </div>
                 </div>
 
                 <button onclick="officerLogin()" class="btn btn-primary" style="width:100%" data-key="loginBtn">🚀 Login</button>
-                <p class="auth-switch">New officer? <a href="#" onclick="showScreen('officerRegisterScreen')" data-key="officerRegLink">Register here</a></p>
+                <p class="auth-switch"><span data-key="newOfficer">New officer?</span> <a href="#" onclick="showScreen('officerRegisterScreen')" data-key="officerRegLink">Register here</a></p>
                 <button onclick="goBack()" class="btn btn-secondary" style="width:100%; margin-top:6px">← <span data-key="back">Back</span></button>
             </div>
         </section>
@@ -241,7 +241,7 @@
                 <div class="form-group">
                     <label data-key="nameLabel">👤 Full Name</label>
                     <div class="input-row">
-                        <input type="text" id="offRegName" placeholder="Your full name">
+                        <input type="text" id="offRegName" data-key-ph="namePh" placeholder="Your full name">
                         <button class="btn-mic" onclick="startVoice('offRegName','text')">🎤</button>
                         <button class="btn-speak" onclick="speakField('offRegName')">🔊</button>
                     </div>
@@ -249,7 +249,7 @@
                 <div class="form-group">
                     <label data-key="emailOrPhoneLabel">📧 Email or Phone</label>
                     <div class="input-row">
-                        <input type="text" id="offRegEmail" placeholder="Email or phone number">
+                        <input type="text" id="offRegEmail" data-key-ph="emailOrPhonePh" placeholder="Email or phone number">
                         <button class="btn-mic" onclick="startVoice('offRegEmail','text')">🎤</button>
                         <button class="btn-speak" onclick="speakField('offRegEmail')">🔊</button>
                     </div>
@@ -257,14 +257,14 @@
                 <div class="form-group">
                     <label data-key="passwordLabel">🔒 Password</label>
                     <div class="input-row">
-                        <input type="password" id="offRegPassword" placeholder="Min 6 characters">
+                        <input type="password" id="offRegPassword" data-key-ph="passwordPh" placeholder="Min 6 characters">
                         <button class="btn-eye" onclick="togglePwd('offRegPassword')">👁</button>
                     </div>
                 </div>
                 <div class="form-group">
                     <label data-key="deptCodeLabel">🔑 Department Registration Code</label>
                     <div class="input-row">
-                        <input type="text" id="offRegCode" placeholder="Code from your department">
+                        <input type="text" id="offRegCode" data-key-ph="deptCodePh" placeholder="Code from your department">
                         <button class="btn-mic" onclick="startVoice('offRegCode','text')">🎤</button>
                         <button class="btn-speak" onclick="speakField('offRegCode')">🔊</button>
                     </div>
@@ -460,7 +460,7 @@
                 <div class="form-group">
                     <label data-key="cropGrown">🌾 Crop You Grew</label>
                     <div class="input-row">
-                        <input type="text" id="fbCrop" placeholder="e.g. Rice, Maize, Cotton">
+                        <input type="text" id="fbCrop" data-key-ph="cropGrownPh" placeholder="e.g. Rice, Maize, Cotton">
                         <button class="btn-mic" onclick="startVoice('fbCrop','text')">🎤</button>
                         <button class="btn-speak" onclick="speakField('fbCrop')">🔊</button>
                     </div>
@@ -481,7 +481,7 @@
                 <div class="form-group">
                     <label data-key="locationLabel">📍 Your Location</label>
                     <div class="input-row">
-                        <input type="text" id="fbLocation" placeholder="Village / District / State">
+                        <input type="text" id="fbLocation" data-key-ph="locationPh" placeholder="Village / District / State">
                         <button class="btn-mic" onclick="startVoice('fbLocation','text')">🎤</button>
                         <button class="btn-speak" onclick="speakField('fbLocation')">🔊</button>
                     </div>
@@ -500,7 +500,7 @@
                 <div class="form-group">
                     <label data-key="commentLabel">💬 Your Experience</label>
                     <div class="input-row" style="align-items:flex-start">
-                        <textarea id="fbComment" placeholder="How was your yield? Was the recommendation helpful?" rows="4" class="full-textarea"></textarea>
+                        <textarea id="fbComment" data-key-ph="commentPh" placeholder="How was your yield? Was the recommendation helpful?" rows="4" class="full-textarea"></textarea>
                         <div style="display:flex; flex-direction:column; gap:6px;">
                             <button class="btn-mic" onclick="startVoice('fbComment','text')">🎤</button>
                             <button class="btn-speak" onclick="speakField('fbComment')">🔊</button>

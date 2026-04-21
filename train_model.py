@@ -5,6 +5,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
 import joblib
 import os
+from sklearn.metrics import classification_report, accuracy_score
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 print("🌾 Starting Model Training...")
 
@@ -43,13 +47,44 @@ rf_model = RandomForestClassifier(
 rf_model.fit(X_train, y_train)
 
 # Evaluate
+# Evaluate
 y_pred = rf_model.predict(X_test)
+
+# Basic accuracy
 accuracy = accuracy_score(y_test, y_pred)
 print(f"\n✅ Model Accuracy: {accuracy * 100:.2f}%")
 
-# Save model
-model_path = 'model/crop_rf_model.pkl'
-joblib.dump(rf_model, model_path)
-print(f"💾 Model saved to: {model_path}")
+# Classification report
+report = classification_report(y_test, y_pred, output_dict=True)
+print(classification_report(y_test, y_pred))
 
-print("\n✅ Training complete!")
+# 📊 Create overall performance table (for PPT)
+import pandas as pd
+
+performance_table = pd.DataFrame({
+    "Model": ["Random Forest"],
+    "Accuracy": [accuracy],
+    "Precision": [report['weighted avg']['precision']],
+    "Recall": [report['weighted avg']['recall']],
+    "F1-Score": [report['weighted avg']['f1-score']]
+})
+
+print("\n📊 Performance Table:")
+print(performance_table)
+
+# 💾 Save table as CSV (optional for report/PPT)
+performance_table.to_csv("model/performance_table.csv", index=False)
+
+# 📉 Confusion Matrix (saved as image for PPT)
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
+
+cm = confusion_matrix(y_test, y_pred, labels=rf_model.classes_)
+
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=rf_model.classes_)
+disp.plot(xticks_rotation=90)
+
+plt.title("Confusion Matrix - Crop Recommendation")
+plt.tight_layout()
+plt.savefig("model/confusion_matrix.png", dpi=300)
+plt.close()
