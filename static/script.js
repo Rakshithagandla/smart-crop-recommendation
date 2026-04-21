@@ -934,9 +934,6 @@ function triggerInstall() {
         });
     } else {
         // Fallback instructions for iOS or already-installed
-        alert('📲 To install:
-Android: Tap the menu (⋮) in Chrome → "Add to Home screen"
-
-iOS Safari: Tap Share (⬆) → "Add to Home Screen"');
+        alert('📲 To install: Android: Tap the menu (⋮) in Chrome → "Add to Home screen"iOS Safari: Tap Share (⬆) → "Add to Home Screen"');
     }
 }
