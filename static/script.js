@@ -81,6 +81,15 @@ en: {
   newOfficer:'New officer?',
   emailOrPhonePh:'Email or phone number',
   cropGrownPh:'e.g. Rice, Maize, Cotton',
+  kharif:'Kharif (Jun-Oct)', rabi:'Rabi (Oct-Mar)', zaid:'Zaid (Mar-Jun)',
+  seasonInputLabel:'🌦 Season (Optional)',
+  factor_Nitrogen:'Nitrogen', factor_Phosphorus:'Phosphorus',
+  factor_Potassium:'Potassium', factor_Temperature:'Temperature',
+  factor_Humidity:'Humidity', factor_pH:'pH', factor_Rainfall:'Rainfall',
+  factor_SoilHealth:'Soil Health',
+  cityPh:'Your city / village',
+  translateBtn:'🌐 Translate', translateClose:'✕ Original',
+  alreadyReg:'Already registered?', alreadyOfficer:'Already registered?',
   deptCodePh:'Code from your department',
   locationPh:'Village / District / State',
   commentPh:'How was your yield? Was the recommendation helpful? Any tips for other farmers?',
@@ -169,6 +178,15 @@ hi: {
   newOfficer:'नए अधिकारी?',
   emailOrPhonePh:'ईमेल या फोन नंबर',
   cropGrownPh:'जैसे: चावल, मक्का, कपास',
+  kharif:'खरीफ (जून-अक्टूबर)', rabi:'रबी (अक्टूबर-मार्च)', zaid:'जायद (मार्च-जून)',
+  seasonInputLabel:'🌦 मौसम (वैकल्पिक)',
+  factor_Nitrogen:'नाइट्रोजन', factor_Phosphorus:'फास्फोरस',
+  factor_Potassium:'पोटेशियम', factor_Temperature:'तापमान',
+  factor_Humidity:'आर्द्रता', factor_pH:'पीएच', factor_Rainfall:'वर्षा',
+  factor_SoilHealth:'मिट्टी का स्वास्थ्य',
+  cityPh:'आपका शहर / गाँव',
+  translateBtn:'🌐 अनुवाद करें', translateClose:'✕ मूल',
+  alreadyReg:'पहले से पंजीकृत हैं?', alreadyOfficer:'पहले से पंजीकृत हैं?',
   deptCodePh:'विभाग कोड दर्ज करें',
   locationPh:'गाँव / जिला / राज्य',
   commentPh:'आपकी फसल कैसी रही? क्या सुझाव मिला सही था? अन्य किसानों के लिए सुझाव?',
@@ -256,6 +274,15 @@ te: {
   newOfficer:'కొత్త అధికారి?',
   emailOrPhonePh:'ఇమెయిల్ లేదా ఫోన్ నంబర్',
   cropGrownPh:'ఉదా: వరి, మొక్కజొన్న, పత్తి',
+  kharif:'ఖరీఫ్ (జూన్-అక్టోబర్)', rabi:'రబీ (అక్టోబర్-మార్చి)', zaid:'జాయిద్ (మార్చి-జూన్)',
+  seasonInputLabel:'🌦 సీజన్ (ఐచ్ఛికం)',
+  factor_Nitrogen:'నైట్రోజన్', factor_Phosphorus:'ఫాస్పరస్',
+  factor_Potassium:'పొటాషియం', factor_Temperature:'ఉష్ణోగ్రత',
+  factor_Humidity:'తేమ', factor_pH:'పీహెచ్', factor_Rainfall:'వర్షపాతం',
+  factor_SoilHealth:'నేల ఆరోగ్యం',
+  cityPh:'మీ నగరం / గ్రామం',
+  translateBtn:'🌐 అనువదించు', translateClose:'✕ అసలు',
+  alreadyReg:'ఇప్పటికే నమోదు అయ్యారా?', alreadyOfficer:'ఇప్పటికే నమోదు అయ్యారా?',
   deptCodePh:'విభాగ కోడ్ నమోదు చేయండి',
   locationPh:'గ్రామం / జిల్లా / రాష్ట్రం',
   commentPh:'మీ పంట ఎలా ఉంది? సిఫార్సు సరైనదా? ఇతర రైతులకు సూచనలు?',
@@ -391,6 +418,38 @@ function changeLanguage(lang) {
         const raw = rc.getAttribute('data-raw');
         const ck  = `crop_${raw.toLowerCase().replace(/\s+/g,'')}`;
         if (dict[ck]) rc.textContent = dict[ck];
+    }
+
+    // Translate season dropdowns (both feedback and input page)
+    ['fbSeason','inputSeason'].forEach(id => {
+        const sel = document.getElementById(id);
+        if (!sel) return;
+        const opts = sel.querySelectorAll('option');
+        opts.forEach(opt => {
+            const v = opt.value;
+            if (!v) { opt.textContent = dict.selectSeason || 'Select season'; return; }
+            if (v.startsWith('Kharif')) opt.textContent = dict.kharif || v;
+            else if (v.startsWith('Rabi'))   opt.textContent = dict.rabi  || v;
+            else if (v.startsWith('Zaid'))   opt.textContent = dict.zaid  || v;
+        });
+    });
+
+    // Translate input season label
+    const seasonInputLbl = document.getElementById('seasonInputLabel');
+    if (seasonInputLbl && dict.seasonInputLabel) seasonInputLbl.textContent = dict.seasonInputLabel;
+
+    // Re-translate impact factors using stored data-en attribute
+    const factList = document.getElementById('factorsList');
+    if (factList && factList.children.length > 0) {
+        Array.from(factList.children).forEach(li => {
+            const engName = li.getAttribute('data-en');
+            const val     = li.getAttribute('data-val');
+            if (engName && val) {
+                const tkey = 'factor_' + engName.replace(/\s+/g,'');
+                const translated = dict[tkey] || engName;
+                li.textContent = `${translated}: ${val}%`;
+            }
+        });
     }
 }
 
@@ -711,7 +770,8 @@ async function getPrediction() {
                 soil_fertility:  document.querySelector('input[name="soil_fertility"]:checked')?.value||'medium',
                 last_harvest_status: document.querySelector('input[name="last_harvest"]:checked')?.value||'good',
                 city:            document.getElementById('cityInput').value.trim()||'Hyderabad',
-                water_level:     2, farmer_id: selectedFarmerId
+                water_level:     2, farmer_id: selectedFarmerId,
+                season: document.getElementById('inputSeason')?.value || ''
             })
         });
         const d=await r.json();
@@ -804,7 +864,16 @@ function displayResults(data) {
     const fl=document.getElementById('factorsList');
     if(fl&&data.explanation){
         fl.innerHTML='';
-        data.explanation.forEach(([f,s])=>{const li=document.createElement('li');li.textContent=`${f}: ${s}%`;fl.appendChild(li);});
+        const dict2=T[currentLang]||T.en;
+        data.explanation.forEach(([f,s])=>{
+            const li=document.createElement('li');
+            const tkey='factor_'+f.replace(/\s+/g,'');
+            const fname=dict2[tkey]||f;
+            li.textContent=`${fname}: ${s}%`;
+            li.setAttribute('data-en',f);
+            li.setAttribute('data-val',String(s));
+            fl.appendChild(li);
+        });
     }
 
     showScreen('resultsScreen');
@@ -821,6 +890,10 @@ function setRating(v) {
 function showFeedbackForm() {
     const el=document.getElementById('fbCrop');
     if(el&&lastCropResult) el.value=lastCropResult;
+    // Pre-fill season from the input page selection
+    const inputSeason = document.getElementById('inputSeason')?.value || '';
+    const fbSeasonEl  = document.getElementById('fbSeason');
+    if (fbSeasonEl && inputSeason) fbSeasonEl.value = inputSeason;
     selectedRating=0;
     document.querySelectorAll('.star').forEach(s=>s.classList.remove('active'));
     showScreen('feedbackFormScreen');
@@ -899,6 +972,42 @@ async function loadFeedback(page=1) {
 // ═══════════════════════════════════════════════════════════════
 // 13. INIT
 // ═══════════════════════════════════════════════════════════════
+// Translate review comment using browser built-in or fallback
+async function translateReview(idx, originalText, btn) {
+    const commentEl = document.getElementById(`review-comment-${idx}`);
+    if (!commentEl) return;
+
+    // If already translated, revert to original
+    if (btn.getAttribute('data-translated') === '1') {
+        commentEl.innerHTML = `"${commentEl.getAttribute('data-original')}"`;
+        btn.setAttribute('data-translated','0');
+        const dict=T[currentLang]||T.en;
+        btn.textContent = dict.translateBtn||'🌐 Translate';
+        return;
+    }
+
+    btn.textContent = '⏳';
+    const targetLang = currentLang === 'hi' ? 'hi' : currentLang === 'te' ? 'te' : 'en';
+    
+    try {
+        // Use MyMemory free translation API (no key needed)
+        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(originalText)}&langpair=en|${targetLang}`;
+        const resp = await fetch(url);
+        const data = await resp.json();
+        const translated = data.responseData?.translatedText || originalText;
+        commentEl.innerHTML = `"${translated}"`;
+        btn.setAttribute('data-translated','1');
+        const dict=T[currentLang]||T.en;
+        btn.textContent = dict.translateClose||'✕ Original';
+    } catch(e) {
+        btn.textContent = '❌';
+        setTimeout(()=>{
+            const dict=T[currentLang]||T.en;
+            btn.textContent=dict.translateBtn||'🌐 Translate';
+        },1500);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const lang=localStorage.getItem('preferredLanguage')||'en';
     const sel=document.getElementById('languageSelect');

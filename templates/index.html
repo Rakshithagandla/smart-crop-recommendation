@@ -125,7 +125,7 @@
                 </div>
 
                 <button onclick="farmerRegister()" class="btn btn-primary" style="width:100%" data-key="registerBtn">✅ Register</button>
-                <p class="auth-switch" data-key="hasAccount">Already registered? <a href="#" onclick="showScreen('farmerLoginScreen')" data-key="loginLink">Login here</a></p>
+                <p class="auth-switch"><span data-key="alreadyReg">Already registered?</span> <a href="#" onclick="showScreen('farmerLoginScreen')" data-key="loginLink">Login here</a></p>
                 <button onclick="goBack()" class="btn btn-secondary" style="width:100%; margin-top:6px">← <span data-key="back">Back</span></button>
             </div>
         </section>
@@ -271,7 +271,7 @@
                 </div>
 
                 <button onclick="officerRegister()" class="btn btn-primary" style="width:100%" data-key="registerBtn">✅ Register as Officer</button>
-                <p class="auth-switch">Already registered? <a href="#" onclick="showScreen('officerLoginScreen')" data-key="loginLink">Login here</a></p>
+                <p class="auth-switch"><span data-key="alreadyOfficer">Already registered?</span> <a href="#" onclick="showScreen('officerLoginScreen')" data-key="loginLink">Login here</a></p>
                 <button onclick="goBack()" class="btn btn-secondary" style="width:100%; margin-top:6px">← <span data-key="back">Back</span></button>
             </div>
         </section>
@@ -380,13 +380,24 @@
                 <div class="form-group">
                     <label data-key="cityLabel">📍 Your City / Village</label>
                     <div class="input-row">
-                        <input type="text" id="cityInput" value="Hyderabad" style="flex:1">
+                        <input type="text" id="cityInput" data-key-ph="cityPh" placeholder="Your city / village" style="flex:1">
                         <button class="btn-mic" onclick="startVoice('cityInput','text')">🎤</button>
                         <button class="btn-speak" onclick="speakField('cityInput')">🔊</button>
                     </div>
                 </div>
 
                 <div class="button-group">
+                    <!-- Season selection on input page -->
+                    <div class="form-group">
+                        <label id="seasonInputLabel" data-key="seasonInputLabel">🌦 Season (Optional)</label>
+                        <select id="inputSeason" class="full-select">
+                            <option value="" data-key="selectSeason">Select season</option>
+                            <option value="Kharif (Jun-Oct)" data-key="kharif">Kharif (Jun-Oct)</option>
+                            <option value="Rabi (Oct-Mar)" data-key="rabi">Rabi (Oct-Mar)</option>
+                            <option value="Zaid (Mar-Jun)" data-key="zaid">Zaid (Mar-Jun)</option>
+                        </select>
+                    </div>
+
                     <button onclick="getPrediction()" class="btn btn-primary" data-key="predictBtn">🌱 Predict Best Crop</button>
                     <button onclick="showScreen('feedbackScreen'); loadFeedback()" class="btn btn-secondary">💬 <span data-key="reviews">Reviews</span></button>
                     <button id="installAppBtn2" onclick="triggerInstall()" class="btn btn-install" style="display:none">📲 <span data-key="installApp">Install App</span></button>
@@ -491,9 +502,9 @@
                     <label data-key="seasonLabel">🌦 Season</label>
                     <select id="fbSeason" class="full-select">
                         <option value="" data-key="selectSeason">Select season</option>
-                        <option value="Kharif (Jun-Oct)">Kharif (Jun-Oct)</option>
-                        <option value="Rabi (Oct-Mar)">Rabi (Oct-Mar)</option>
-                        <option value="Zaid (Mar-Jun)">Zaid (Mar-Jun)</option>
+                        <option value="Kharif (Jun-Oct)" data-key="kharif">Kharif (Jun-Oct)</option>
+                        <option value="Rabi (Oct-Mar)" data-key="rabi">Rabi (Oct-Mar)</option>
+                        <option value="Zaid (Mar-Jun)" data-key="zaid">Zaid (Mar-Jun)</option>
                     </select>
                 </div>
 

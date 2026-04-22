@@ -354,3 +354,11 @@ input:focus,textarea:focus,select:focus {
     transition: all 0.25s; box-shadow: 0 3px 10px rgba(21,101,192,0.35);
 }
 .btn-install:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(21,101,192,0.45); }
+
+/* ─── Translate button ─── */
+.btn-translate {
+    background:#fff8e1; border:2px solid #ffe082; border-radius:6px;
+    font-size:0.85rem; cursor:pointer; padding:4px 10px;
+    transition:all .2s; color:#5d4037; font-weight:600;
+}
+.btn-translate:hover { background:#fff176; border-color:#f9a825; }
