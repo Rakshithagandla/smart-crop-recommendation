@@ -451,6 +451,24 @@ function changeLanguage(lang) {
             }
         });
     }
+    // Re-translate confidence explanation
+    const confExp = document.getElementById('confidenceExplain');
+    if (confExp) {
+        const confKey = confExp.getAttribute('data-conf-key');
+        if (confKey && dict[confKey]) confExp.textContent = dict[confKey];
+    }
+
+    // Re-translate fertilizer explanation
+    const fertNameEl = document.getElementById('fertilizerName');
+    const expEl = document.getElementById('fertilizerExplanation');
+    if (fertNameEl && expEl) {
+        const rawFert = fertNameEl.getAttribute('data-fert-raw');
+        if (rawFert) {
+            const newExp = getFertExplanation(rawFert, lang);
+            currentFertilizerText = newExp;
+            expEl.textContent = newExp;
+        }
+    }
 }
 
 function selectLiteracy(type) {
@@ -757,8 +775,42 @@ function hideLoading() {
 }
 
 async function getPrediction() {
-    const token=localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (!token) { alert('Session expired. Please login.'); showScreen('welcomeScreen'); return; }
+
+    const dict = T[currentLang] || T.en;
+
+    // Validate all inputs before calling API
+    const soilCond = document.querySelector('input[name="soil_condition"]:checked');
+    const soilFert = document.querySelector('input[name="soil_fertility"]:checked');
+    const lastHarv = document.querySelector('input[name="last_harvest"]:checked');
+    const city     = document.getElementById('cityInput').value.trim();
+
+    if (!soilCond) {
+        alert(currentLang === 'hi' ? '⚠ कृपया मिट्टी का प्रकार चुनें' :
+              currentLang === 'te' ? '⚠ దయచేసి నేల రకాన్ని ఎంచుకోండి' :
+              '⚠ Please select a Soil Type');
+        return;
+    }
+    if (!soilFert) {
+        alert(currentLang === 'hi' ? '⚠ कृपया मिट्टी की उर्वरता चुनें' :
+              currentLang === 'te' ? '⚠ దయచేసి నేల సారాన్ని ఎంచుకోండి' :
+              '⚠ Please select Soil Fertility');
+        return;
+    }
+    if (!lastHarv) {
+        alert(currentLang === 'hi' ? '⚠ कृपया पिछली फसल की गुणवत्ता चुनें' :
+              currentLang === 'te' ? '⚠ దయచేసి గత పంట నాణ్యతను ఎంచుకోండి' :
+              '⚠ Please select Last Harvest Quality');
+        return;
+    }
+    if (!city) {
+        alert(currentLang === 'hi' ? '⚠ कृपया अपना शहर / गाँव दर्ज करें' :
+              currentLang === 'te' ? '⚠ దయచేసి మీ నగరం / గ్రామం నమోదు చేయండి' :
+              '⚠ Please enter your City / Village');
+        return;
+    }
+
     showLoading();
     const btn=document.querySelector('[data-key="predictBtn"]');
     if (btn) { btn.disabled=true; }
@@ -843,18 +895,20 @@ function displayResults(data) {
     const confExp = document.getElementById('confidenceExplain');
     if (confExp) {
         const d2 = T[lang]||T.en;
-        let level = data.confidence >= 85 ? (d2.confHigh||'Very high — the model is very confident this crop suits your soil and weather.') :
-                    data.confidence >= 65 ? (d2.confMed||'Moderate — this crop is likely suitable, but consider local expert advice too.') :
-                                            (d2.confLow||'Low — multiple crops may suit. Consult your agricultural officer.');
-        confExp.textContent = level;
+       const confKey = data.confidence >= 85 ? 'confHigh' :
+                    data.confidence >= 65 ? 'confMed' : 'confLow';
+    confExp.setAttribute('data-conf-key', confKey);
+    confExp.textContent = d2[confKey] || level;
     }
 
     // Fertilizer + explanation
-    document.getElementById('fertilizerName').textContent=data.fertilizer.name;
-    const fertExp=getFertExplanation(data.fertilizer.name, lang);
-    currentFertilizerText=fertExp;
-    const expEl=document.getElementById('fertilizerExplanation');
-    if(expEl) expEl.textContent=fertExp;
+    const fertNameEl = document.getElementById('fertilizerName');
+    fertNameEl.textContent = data.fertilizer.name;
+    fertNameEl.setAttribute('data-fert-raw', data.fertilizer.name);
+    const fertExp = getFertExplanation(data.fertilizer.name, lang);
+    currentFertilizerText = fertExp;
+    const expEl = document.getElementById('fertilizerExplanation');
+    if (expEl) expEl.textContent = fertExp;
 
     // Weather
     const w=data.weather;
@@ -1064,3 +1118,4 @@ function triggerInstall() {
         alert('📲 To install:Android: Tap the menu (⋮) in Chrome → "Add to Home screen"iOS Safari: Tap Share (⬆) → "Add to Home Screen"');
     }
 }
+
