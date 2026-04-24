@@ -73,7 +73,6 @@ en: {
   crop_banana:'Banana', crop_mango:'Mango', crop_grapes:'Grapes', crop_watermelon:'Watermelon',
   crop_muskmelon:'Muskmelon', crop_apple:'Apple', crop_orange:'Orange', crop_papaya:'Papaya',
   crop_coconut:'Coconut', crop_cotton:'Cotton', crop_jute:'Jute', crop_coffee:'Coffee',
-  // Voice literacy keywords
   installApp:'📲 Install App',
   confHigh:'Very high — the AI is very confident this crop suits your soil and weather conditions.',
   confMed:'Moderate confidence — this crop is likely suitable. Consider local expert advice too.',
@@ -95,7 +94,6 @@ en: {
   commentPh:'How was your yield? Was the recommendation helpful? Any tips for other farmers?',
   voice_literate: ['literate','read','write','educated','farmer'],
   voice_illiterate: ['illiterate','officer','help','cannot','cant'],
-  // Radio voice keywords
   voice_sandy:['sandy','sand'], voice_loamy:['loamy','loam','foam'],
   voice_clay:['clay','black'], voice_low:['low'], voice_medium:['medium','middle'],
   voice_high:['high'], voice_poor:['poor','bad'], voice_good:['good'],
@@ -293,40 +291,42 @@ te: {
   voice_poor:['తక్కువ నాణ్యత'], voice_good:['మంచి'],
 }};
 
-// Fertilizer explanations (language-aware)
+// ═══════════════════════════════════════════════════════════════
+// FERTILIZER EXPLANATIONS
+// ═══════════════════════════════════════════════════════════════
 const FERT_EXPLAIN = {
 en: {
-  'urea':       'Urea supplies Nitrogen (N) — the key nutrient for leaf growth and green colour. Rice needs high nitrogen for dense paddy production.',
-  'dap':        'DAP (Di-Ammonium Phosphate) provides Phosphorus which develops strong roots and helps the plant absorb water efficiently.',
-  'npk':        'NPK is a balanced fertilizer providing Nitrogen (growth), Phosphorus (roots), and Potassium (disease resistance) equally.',
-  'potash':     'Potash (Potassium Chloride) strengthens stems, improves fruit quality, and helps the crop resist drought and disease.',
-  'ssp':        'SSP (Single Super Phosphate) provides Phosphorus and Sulphur. Ideal for pulses like chickpea and lentil to fix atmospheric nitrogen.',
-  'zinc':       'Zinc Sulphate corrects zinc deficiency in soils, which causes stunted growth. Especially important for maize and rice.',
-  'calcium':    'Calcium Nitrate strengthens cell walls in fruits, prevents blossom-end rot, and improves shelf life. Critical for grapes.',
-  'magnesium':  'Magnesium is the centre of chlorophyll (the green pigment). Banana needs magnesium for large, healthy leaves.',
-  'default':    'This balanced fertilizer provides all three major nutrients — Nitrogen for growth, Phosphorus for roots, and Potassium for strength.'
+  'urea':      'Urea supplies Nitrogen (N) — the key nutrient for leaf growth and green colour. Rice needs high nitrogen for dense paddy production.',
+  'dap':       'DAP (Di-Ammonium Phosphate) provides Phosphorus which develops strong roots and helps the plant absorb water efficiently.',
+  'npk':       'NPK is a balanced fertilizer providing Nitrogen (growth), Phosphorus (roots), and Potassium (disease resistance) equally.',
+  'potash':    'Potash (Potassium Chloride) strengthens stems, improves fruit quality, and helps the crop resist drought and disease.',
+  'ssp':       'SSP (Single Super Phosphate) provides Phosphorus and Sulphur. Ideal for pulses like chickpea and lentil to fix atmospheric nitrogen.',
+  'zinc':      'Zinc Sulphate corrects zinc deficiency in soils, which causes stunted growth. Especially important for maize and rice.',
+  'calcium':   'Calcium Nitrate strengthens cell walls in fruits, prevents blossom-end rot, and improves shelf life. Critical for grapes.',
+  'magnesium': 'Magnesium is the centre of chlorophyll (the green pigment). Banana needs magnesium for large, healthy leaves.',
+  'default':   'This balanced fertilizer provides all three major nutrients — Nitrogen for growth, Phosphorus for roots, and Potassium for strength.'
 },
 hi: {
-  'urea':       'यूरिया नाइट्रोजन (N) देता है — पत्तियों की वृद्धि और हरे रंग के लिए मुख्य पोषक तत्व। चावल को घने उत्पादन के लिए अधिक नाइट्रोजन चाहिए।',
-  'dap':        'डीएपी फास्फोरस देता है जो मजबूत जड़ें बनाता है और पौधे को पानी सोखने में मदद करता है।',
-  'npk':        'एनपीके संतुलित उर्वरक है जो नाइट्रोजन (विकास), फास्फोरस (जड़ें) और पोटेशियम (रोग प्रतिरोधक) देता है।',
-  'potash':     'पोटाश तने को मजबूत करता है, फल की गुणवत्ता सुधारता है और फसल को सूखे व बीमारी से बचाता है।',
-  'ssp':        'एसएसपी फास्फोरस और सल्फर देता है। चने और मसूर जैसी दालों के लिए आदर्श।',
-  'zinc':       'जिंक सल्फेट मिट्टी में जिंक की कमी को दूर करता है जो विकास रोकती है। मक्का और चावल के लिए महत्वपूर्ण।',
-  'calcium':    'कैल्शियम नाइट्रेट फलों की कोशिका दीवारें मजबूत करता है और शेल्फ लाइफ बढ़ाता है। अंगूर के लिए जरूरी।',
-  'magnesium':  'मैग्नीशियम क्लोरोफिल का केंद्र है। केले को बड़े, स्वस्थ पत्तों के लिए मैग्नीशियम चाहिए।',
-  'default':    'यह संतुलित उर्वरक सभी तीन मुख्य पोषक तत्व देता है — वृद्धि के लिए नाइट्रोजन, जड़ों के लिए फास्फोरस और मजबूती के लिए पोटेशियम।'
+  'urea':      'यूरिया नाइट्रोजन (N) देता है — पत्तियों की वृद्धि और हरे रंग के लिए मुख्य पोषक तत्व।',
+  'dap':       'डीएपी फास्फोरस देता है जो मजबूत जड़ें बनाता है और पौधे को पानी सोखने में मदद करता है।',
+  'npk':       'एनपीके संतुलित उर्वरक है जो नाइट्रोजन (विकास), फास्फोरस (जड़ें) और पोटेशियम (रोग प्रतिरोधक) देता है।',
+  'potash':    'पोटाश तने को मजबूत करता है, फल की गुणवत्ता सुधारता है और फसल को सूखे व बीमारी से बचाता है।',
+  'ssp':       'एसएसपी फास्फोरस और सल्फर देता है। चने और मसूर जैसी दालों के लिए आदर्श।',
+  'zinc':      'जिंक सल्फेट मिट्टी में जिंक की कमी को दूर करता है। मक्का और चावल के लिए महत्वपूर्ण।',
+  'calcium':   'कैल्शियम नाइट्रेट फलों की कोशिका दीवारें मजबूत करता है। अंगूर के लिए जरूरी।',
+  'magnesium': 'मैग्नीशियम क्लोरोफिल का केंद्र है। केले को बड़े, स्वस्थ पत्तों के लिए मैग्नीशियम चाहिए।',
+  'default':   'यह संतुलित उर्वरक सभी तीन मुख्य पोषक तत्व देता है — नाइट्रोजन, फास्फोरस और पोटेशियम।'
 },
 te: {
-  'urea':       'యూరియా నైట్రోజన్ (N) అందిస్తుంది — ఆకుల పెరుగుదల మరియు ఆకుపచ్చ రంగుకు ముఖ్యమైన పోషకం. వరికి అధిక నైట్రోజన్ అవసరం.',
-  'dap':        'DAP ఫాస్పరస్ అందిస్తుంది, ఇది బలమైన వేర్లు అభివృద్ధి చేస్తుంది మరియు మొక్క నీటిని సమర్థంగా గ్రహించేలా చేస్తుంది.',
-  'npk':        'NPK సమతుల్య ఎరువు — నైట్రోజన్ (పెరుగుదల), ఫాస్పరస్ (వేర్లు), పొటాషియం (వ్యాధి నిరోధకత) అందిస్తుంది.',
-  'potash':     'పొటాష్ కాండాలను బలపరుస్తుంది, పండ్ల నాణ్యతను మెరుగుపరుస్తుంది మరియు పంటను కరువు నుండి రక్షిస్తుంది.',
-  'ssp':        'SSP ఫాస్పరస్ మరియు సల్ఫర్ అందిస్తుంది. శనగలు మరియు మసూర్ వంటి పప్పుధాన్యాలకు అనువైనది.',
-  'zinc':       'జింక్ సల్ఫేట్ నేలలో జింక్ లోపాన్ని సరిచేస్తుంది. మొక్కజొన్న మరియు వరికి చాలా ముఖ్యమైనది.',
-  'calcium':    'కాల్షియం నైట్రేట్ పండ్ల కణ గోడలను బలపరుస్తుంది మరియు నిల్వ జీవితాన్ని మెరుగుపరుస్తుంది. ద్రాక్షకు అవసరం.',
-  'magnesium':  'మెగ్నీషియం క్లోరోఫిల్ కేంద్రం. అరటికి పెద్ద, ఆరోగ్యకరమైన ఆకుల కోసం మెగ్నీషియం అవసరం.',
-  'default':    'ఈ సమతుల్య ఎరువు మూడు ప్రధాన పోషకాలు అందిస్తుంది — పెరుగుదలకు నైట్రోజన్, వేర్లకు ఫాస్పరస్, బలానికి పొటాషియం.'
+  'urea':      'యూరియా నైట్రోజన్ (N) అందిస్తుంది — ఆకుల పెరుగుదల మరియు ఆకుపచ్చ రంగుకు ముఖ్యమైన పోషకం.',
+  'dap':       'DAP ఫాస్పరస్ అందిస్తుంది, ఇది బలమైన వేర్లు అభివృద్ధి చేస్తుంది.',
+  'npk':       'NPK సమతుల్య ఎరువు — నైట్రోజన్, ఫాస్పరస్, పొటాషియం అందిస్తుంది.',
+  'potash':    'పొటాష్ కాండాలను బలపరుస్తుంది మరియు పంటను కరువు నుండి రక్షిస్తుంది.',
+  'ssp':       'SSP ఫాస్పరస్ మరియు సల్ఫర్ అందిస్తుంది. శనగలకు అనువైనది.',
+  'zinc':      'జింక్ సల్ఫేట్ నేలలో జింక్ లోపాన్ని సరిచేస్తుంది. మొక్కజొన్నకు ముఖ్యం.',
+  'calcium':   'కాల్షియం నైట్రేట్ పండ్ల కణ గోడలను బలపరుస్తుంది. ద్రాక్షకు అవసరం.',
+  'magnesium': 'మెగ్నీషియం క్లోరోఫిల్ కేంద్రం. అరటికి ఆరోగ్యకరమైన ఆకుల కోసం అవసరం.',
+  'default':   'ఈ సమతుల్య ఎరువు మూడు ప్రధాన పోషకాలు అందిస్తుంది — నైట్రోజన్, ఫాస్పరస్, పొటాషియం.'
 }};
 
 function getFertExplanation(fertName, lang) {
@@ -367,34 +367,25 @@ function goBack() {
     if (screenHistory.length > 1) {
         screenHistory.pop();
         const prev = screenHistory[screenHistory.length-1];
-        document.querySelectorAll('.screen').forEach(s => {
-            s.classList.remove('active');
-            s.classList.add('hidden');
-        });
+        document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.classList.add('hidden'); });
         const prevEl = document.getElementById(prev);
-        if (prevEl) {
-            prevEl.classList.remove('hidden');
-            prevEl.classList.add('active');
-        }
+        if (prevEl) { prevEl.classList.remove('hidden'); prevEl.classList.add('active'); }
     }
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 4. LANGUAGE — full page translation every switch
+// 4. LANGUAGE — FIX: re-translates confidence + fertilizer too
 // ═══════════════════════════════════════════════════════════════
 function changeLanguage(lang) {
     currentLang = lang;
     localStorage.setItem('preferredLanguage', lang);
     const dict = T[lang] || T.en;
 
-    // Translate ALL elements regardless of screen visibility
     document.querySelectorAll('[data-key]').forEach(el => {
         const key = el.getAttribute('data-key');
         if (!dict[key]) return;
         if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
             el.placeholder = dict[key];
-        } else if (el.tagName === 'OPTION') {
-            el.textContent = dict[key];
         } else {
             el.textContent = dict[key];
         }
@@ -405,40 +396,35 @@ function changeLanguage(lang) {
         if (dict[key]) el.placeholder = dict[key];
     });
 
-    // Nav brand
-    const brandEl = document.querySelector(".nav-brand");
+    const brandEl = document.querySelector('.nav-brand');
     if (brandEl && dict.appName) brandEl.textContent = dict.appName;
-
-    // Page title
     document.title = dict.welcomeTitle || 'AI Crop Prediction';
 
     // Translate crop result if visible
     const rc = document.getElementById('resultCrop');
     if (rc && rc.getAttribute('data-raw')) {
         const raw = rc.getAttribute('data-raw');
-        const ck  = `crop_${raw.toLowerCase().replace(/\s+/g,'')}`;
+        const ck = `crop_${raw.toLowerCase().replace(/\s+/g,'')}`;
         if (dict[ck]) rc.textContent = dict[ck];
     }
 
-    // Translate season dropdowns (both feedback and input page)
+    // Translate season dropdowns
     ['fbSeason','inputSeason'].forEach(id => {
         const sel = document.getElementById(id);
         if (!sel) return;
-        const opts = sel.querySelectorAll('option');
-        opts.forEach(opt => {
+        sel.querySelectorAll('option').forEach(opt => {
             const v = opt.value;
             if (!v) { opt.textContent = dict.selectSeason || 'Select season'; return; }
             if (v.startsWith('Kharif')) opt.textContent = dict.kharif || v;
-            else if (v.startsWith('Rabi'))   opt.textContent = dict.rabi  || v;
-            else if (v.startsWith('Zaid'))   opt.textContent = dict.zaid  || v;
+            else if (v.startsWith('Rabi')) opt.textContent = dict.rabi || v;
+            else if (v.startsWith('Zaid')) opt.textContent = dict.zaid || v;
         });
     });
 
-    // Translate input season label
     const seasonInputLbl = document.getElementById('seasonInputLabel');
     if (seasonInputLbl && dict.seasonInputLabel) seasonInputLbl.textContent = dict.seasonInputLabel;
 
-    // Re-translate impact factors using stored data-en attribute
+    // Translate impact factors
     const factList = document.getElementById('factorsList');
     if (factList && factList.children.length > 0) {
         Array.from(factList.children).forEach(li => {
@@ -446,38 +432,38 @@ function changeLanguage(lang) {
             const val     = li.getAttribute('data-val');
             if (engName && val) {
                 const tkey = 'factor_' + engName.replace(/\s+/g,'');
-                const translated = dict[tkey] || engName;
-                li.textContent = `${translated}: ${val}%`;
+                li.textContent = `${dict[tkey] || engName}: ${val}%`;
             }
         });
     }
-    // Re-translate confidence explanation
+
+    // ── FIX 1: Re-translate confidence explanation ──
     const confExp = document.getElementById('confidenceExplain');
     if (confExp) {
         const confKey = confExp.getAttribute('data-conf-key');
         if (confKey && dict[confKey]) confExp.textContent = dict[confKey];
     }
 
-    // Re-translate fertilizer explanation
+    // ── FIX 2: Re-translate fertilizer explanation ──
     const fertNameEl = document.getElementById('fertilizerName');
-    const expEl = document.getElementById('fertilizerExplanation');
-    if (fertNameEl && expEl) {
+    const fertExpEl  = document.getElementById('fertilizerExplanation');
+    if (fertNameEl && fertExpEl) {
         const rawFert = fertNameEl.getAttribute('data-fert-raw');
         if (rawFert) {
             const newExp = getFertExplanation(rawFert, lang);
             currentFertilizerText = newExp;
-            expEl.textContent = newExp;
+            fertExpEl.textContent = newExp;
         }
     }
 }
 
 function selectLiteracy(type) {
-    if (type === 'literate')   showScreen('farmerLoginScreen');
-    else                       showScreen('officerLoginScreen');
+    if (type === 'literate') showScreen('farmerLoginScreen');
+    else                      showScreen('officerLoginScreen');
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 5. TEXT-TO-SPEECH helpers
+// 5. TEXT-TO-SPEECH
 // ═══════════════════════════════════════════════════════════════
 function getLang() { return currentLang; }
 
@@ -489,7 +475,6 @@ function speak(text, lang) {
     window.speechSynthesis.speak(utter);
 }
 
-/** 🔊 button next to any input — reads back what's been typed */
 function speakField(inputId) {
     const el = document.getElementById(inputId);
     if (!el) return;
@@ -498,7 +483,6 @@ function speakField(inputId) {
     speak(val, getLang());
 }
 
-/** 🔊 for radio groups — says "currently selected: Loamy" */
 function speakRadio(radioName) {
     const checked = document.querySelector(`input[name="${radioName}"]:checked`);
     if (!checked) return;
@@ -506,14 +490,11 @@ function speakRadio(radioName) {
     speak(label, getLang());
 }
 
-/** Read options on the literacy screen */
 function readLiteracyOptions() {
     const dict = T[currentLang] || T.en;
-    const msg = `${dict.literateTitle}: ${dict.literateDesc}. ${dict.illiterateTitle}: ${dict.illiterateDesc}.`;
-    speak(msg, currentLang);
+    speak(`${dict.literateTitle}: ${dict.literateDesc}. ${dict.illiterateTitle}: ${dict.illiterateDesc}.`, currentLang);
 }
 
-/** Read all results on results screen */
 function speakAllResults() {
     const crop    = document.getElementById('resultCrop')?.textContent || '';
     const conf    = document.getElementById('confidenceText')?.textContent || '';
@@ -521,8 +502,6 @@ function speakAllResults() {
     const weather = document.getElementById('weatherInfo')?.textContent || '';
     const fert    = document.getElementById('fertilizerName')?.textContent || '';
     const fertExp = currentFertilizerText || '';
-    const dict    = T[currentLang] || T.en;
-    // Build language-aware sentence
     const full = currentLang === 'te'
         ? `సిఫార్సు చేసిన పంట: ${crop}. నమ్మకం: ${conf}. ${confExp} వాతావరణం: ${weather}. ఎరువు: ${fert}. ${fertExp}`
         : currentLang === 'hi'
@@ -531,7 +510,6 @@ function speakAllResults() {
     speak(full, currentLang);
 }
 
-/** Read fertilizer name + explanation */
 function speakFertilizer() {
     const name = document.getElementById('fertilizerName')?.textContent || '';
     const exp  = currentFertilizerText || '';
@@ -544,45 +522,34 @@ function speakFertilizer() {
 function startVoice(inputId, type='text') {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SR) { alert('Voice not supported — use Chrome.'); return; }
-
     const rec    = new SR();
     const langCode = currentLang === 'te' ? 'te-IN' : currentLang === 'hi' ? 'hi-IN' : 'en-IN';
     rec.lang     = langCode;
     rec.interimResults = false;
-
     const el     = document.getElementById(inputId);
     const parent = el?.closest('.input-row') || el?.parentElement;
     const mic    = parent?.querySelector('.btn-mic');
     if (mic) { mic.textContent = '🔴'; mic.disabled = true; }
-
     rec.start();
     rec.onresult = e => {
         let t = e.results[0][0].transcript;
         if (type === 'numeric') t = t.replace(/\D/g,'');
-        if (el) {
-            el.value = (el.tagName === 'TEXTAREA' && el.value) ? el.value + ' ' + t : t;
-        }
-        // Auto read back after voice capture
+        if (el) el.value = (el.tagName === 'TEXTAREA' && el.value) ? el.value + ' ' + t : t;
         setTimeout(() => speakField(inputId), 300);
     };
     rec.onend = () => { if (mic) { mic.textContent = '🎤'; mic.disabled = false; } };
     rec.onerror = () => { if (mic) { mic.textContent = '🎤'; mic.disabled = false; } };
 }
 
-/** Voice for radio buttons — say "loamy", "sandy", "clay", etc. */
 function startVoiceRadio(radioName, options) {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SR) { alert('Voice not supported — use Chrome.'); return; }
-
     const dict = T[currentLang] || T.en;
     const rec  = new SR();
     rec.lang   = currentLang === 'te' ? 'te-IN' : currentLang === 'hi' ? 'hi-IN' : 'en-IN';
     rec.interimResults = false;
-
-    // Brief instruction
     const hints = options.map(o => dict[o] || o).join(', ');
     speak(`Please say one of: ${hints}`, currentLang);
-
     setTimeout(() => {
         rec.start();
         rec.onresult = e => {
@@ -590,13 +557,18 @@ function startVoiceRadio(radioName, options) {
             let matched = null;
             for (const opt of options) {
                 const keywords = dict[`voice_${opt}`] || [opt];
-                if (keywords.some(kw => said.includes(kw.toLowerCase()))) {
-                    matched = opt; break;
-                }
+                if (keywords.some(kw => said.includes(kw.toLowerCase()))) { matched = opt; break; }
             }
             if (matched) {
                 const radio = document.querySelector(`input[name="${radioName}"][value="${matched}"]`);
-                if (radio) { radio.checked = true; speakRadio(radioName); }
+                if (radio) {
+                    radio.checked = true;
+                    speakRadio(radioName);
+                    // Trigger harvest detail if needed
+                    if (radioName === 'last_harvest' && typeof onHarvestChange === 'function') {
+                        onHarvestChange(radio);
+                    }
+                }
             } else {
                 speak(`Sorry, I heard "${said}". Please try again.`, currentLang);
             }
@@ -605,17 +577,13 @@ function startVoiceRadio(radioName, options) {
     }, 1500);
 }
 
-/** Voice selection on literacy screen */
 function startLiteracyVoice() {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SR) { alert('Voice not supported — use Chrome.'); return; }
-
     const dict = T[currentLang] || T.en;
     speak(`${dict.literateTitle} or ${dict.illiterateTitle}?`, currentLang);
-
     const rec = new SR();
     rec.lang  = currentLang === 'te' ? 'te-IN' : currentLang === 'hi' ? 'hi-IN' : 'en-IN';
-
     setTimeout(() => {
         rec.start();
         rec.onresult = e => {
@@ -644,7 +612,8 @@ function togglePwd(id) {
     if (el) el.type = el.type === 'password' ? 'text' : 'password';
 }
 function saveSession(token, role, user) {
-    localStorage.setItem('token', token); localStorage.setItem('role', role);
+    localStorage.setItem('token', token);
+    localStorage.setItem('role', role);
     localStorage.setItem('user', JSON.stringify(user));
     currentUserToken = token; currentUserRole = role; currentUser = user;
 }
@@ -654,11 +623,11 @@ function logout() { localStorage.clear(); location.reload(); }
 // 8. FARMER AUTH
 // ═══════════════════════════════════════════════════════════════
 async function farmerRegister() {
-    const name=document.getElementById('regName').value.trim(),
-          aadhar=document.getElementById('regAadhar').value.trim(),
-          pwd=document.getElementById('regPassword').value,
-          conf=document.getElementById('regConfirm').value;
-    if (!name||!aadhar||!pwd)    { alert('Please fill all fields'); return; }
+    const name   = document.getElementById('regName').value.trim();
+    const aadhar = document.getElementById('regAadhar').value.trim();
+    const pwd    = document.getElementById('regPassword').value;
+    const conf   = document.getElementById('regConfirm').value;
+    if (!name||!aadhar||!pwd)   { alert('Please fill all fields'); return; }
     if (pwd !== conf)            { alert('Passwords do not match'); return; }
     if (pwd.length < 6)          { alert('Password must be at least 6 characters'); return; }
     try {
@@ -670,26 +639,26 @@ async function farmerRegister() {
 }
 
 async function farmerLogin() {
-    const aadhar=document.getElementById('loginAadhar').value.trim(),
-          pwd=document.getElementById('loginPassword').value;
+    const aadhar = document.getElementById('loginAadhar').value.trim();
+    const pwd    = document.getElementById('loginPassword').value;
     if (!aadhar||!pwd) { alert('Enter Aadhaar and password'); return; }
     try {
-        const r=await fetch('/api/auth/farmer-login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({aadhar,password:pwd})});
-        const d=await r.json();
+        const r = await fetch('/api/auth/farmer-login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({aadhar,password:pwd})});
+        const d = await r.json();
         if (d.success) { saveSession(d.token,'literate_farmer',d.user); selectedFarmerId=d.user.farmer_id; showScreen('farmerInputScreen'); }
         else alert('❌ '+d.error);
     } catch(e) { alert('❌ Connection error'); }
 }
 
 async function resetPassword() {
-    const aadhar=document.getElementById('forgotAadhar').value.trim(),
-          np=document.getElementById('forgotNew').value,
-          cp=document.getElementById('forgotConfirm').value;
+    const aadhar = document.getElementById('forgotAadhar').value.trim();
+    const np = document.getElementById('forgotNew').value;
+    const cp = document.getElementById('forgotConfirm').value;
     if (!aadhar||!np) { alert('Fill all fields'); return; }
     if (np !== cp)    { alert('Passwords do not match'); return; }
     try {
-        const r=await fetch('/api/auth/farmer-forgot-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({aadhar,new_password:np,confirm_password:cp})});
-        const d=await r.json();
+        const r = await fetch('/api/auth/farmer-forgot-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({aadhar,new_password:np,confirm_password:cp})});
+        const d = await r.json();
         if (d.success) { alert('✅ '+d.message); showScreen('farmerLoginScreen'); }
         else alert('❌ '+d.error);
     } catch(e) { alert('❌ Connection error'); }
@@ -699,25 +668,25 @@ async function resetPassword() {
 // 9. OFFICER AUTH
 // ═══════════════════════════════════════════════════════════════
 async function officerLogin() {
-    const email=document.getElementById('officerEmail').value.trim(),
-          pwd=document.getElementById('officerPassword').value;
+    const email = document.getElementById('officerEmail').value.trim();
+    const pwd   = document.getElementById('officerPassword').value;
     try {
-        const r=await fetch('/api/auth/officer-login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pwd})});
-        const d=await r.json();
+        const r = await fetch('/api/auth/officer-login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pwd})});
+        const d = await r.json();
         if (d.success) { saveSession(d.token,'officer',d.user); loadOfficerDashboard(); }
         else alert('❌ '+d.error);
     } catch(e) { alert('❌ Connection error'); }
 }
 
 async function officerRegister() {
-    const name=document.getElementById('offRegName').value.trim(),
-          email=document.getElementById('offRegEmail').value.trim(),
-          pwd=document.getElementById('offRegPassword').value,
-          code=document.getElementById('offRegCode').value.trim();
+    const name  = document.getElementById('offRegName').value.trim();
+    const email = document.getElementById('offRegEmail').value.trim();
+    const pwd   = document.getElementById('offRegPassword').value;
+    const code  = document.getElementById('offRegCode').value.trim();
     if (!name||!email||!pwd||!code) { alert('Fill all fields'); return; }
     try {
-        const r=await fetch('/api/auth/officer-register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,password:pwd,officer_code:code})});
-        const d=await r.json();
+        const r = await fetch('/api/auth/officer-register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,password:pwd,officer_code:code})});
+        const d = await r.json();
         if (d.success) { saveSession(d.token,'officer',d.user); alert(`✅ Welcome, ${d.user.name}!`); loadOfficerDashboard(); }
         else alert('❌ '+d.error);
     } catch(e) { alert('❌ Connection error'); }
@@ -729,13 +698,13 @@ async function officerRegister() {
 async function loadOfficerDashboard() { showScreen('officerDashboard'); await loadFarmers(); }
 
 async function addFarmer() {
-    const name=document.getElementById('farmerName').value.trim(),
-          aadhar=document.getElementById('farmerAadhar').value.trim(),
-          phone=document.getElementById('farmerPhone').value.trim();
+    const name   = document.getElementById('farmerName').value.trim();
+    const aadhar = document.getElementById('farmerAadhar').value.trim();
+    const phone  = document.getElementById('farmerPhone').value.trim();
     if (!name||!aadhar) { alert('Name and Aadhaar required'); return; }
     try {
-        const r=await fetch('/api/officer/add-farmer',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUserToken}`},body:JSON.stringify({name,aadhar,phone})});
-        const d=await r.json();
+        const r = await fetch('/api/officer/add-farmer',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUserToken}`},body:JSON.stringify({name,aadhar,phone})});
+        const d = await r.json();
         if (d.success) { alert(`✅ ${name} added!`); ['farmerName','farmerAadhar','farmerPhone'].forEach(id=>document.getElementById(id).value=''); loadFarmers(); }
         else alert('❌ '+d.error);
     } catch(e) { alert('❌ Connection error'); }
@@ -743,15 +712,15 @@ async function addFarmer() {
 
 async function loadFarmers() {
     try {
-        const r=await fetch('/api/officer/farmers',{headers:{'Authorization':`Bearer ${currentUserToken}`}});
-        const d=await r.json();
-        const list=document.getElementById('farmersList');
+        const r = await fetch('/api/officer/farmers',{headers:{'Authorization':`Bearer ${currentUserToken}`}});
+        const d = await r.json();
+        const list = document.getElementById('farmersList');
         if (!d.farmers?.length) { list.innerHTML='<p style="color:#999;text-align:center;">No farmers yet.</p>'; return; }
         list.innerHTML='';
-        d.farmers.forEach(f=>{
-            const div=document.createElement('div');
-            div.className='farmer-item';
-            div.innerHTML=`<p><strong>👤 ${f.name}</strong></p><p>📞 ${f.phone||'N/A'}</p><p style="font-size:0.8em;color:#888;">Recs: ${f.recommendations_count}</p><button onclick="startForFarmer(${f.id},'${f.name}')" class="btn btn-primary" style="width:100%;margin-top:8px">🌱 Get Recommendation</button>`;
+        d.farmers.forEach(f => {
+            const div = document.createElement('div');
+            div.className = 'farmer-item';
+            div.innerHTML = `<p><strong>👤 ${f.name}</strong></p><p>📞 ${f.phone||'N/A'}</p><p style="font-size:0.8em;color:#888;">Recs: ${f.recommendations_count}</p><button onclick="startForFarmer(${f.id},'${f.name}')" class="btn btn-primary" style="width:100%;margin-top:8px">🌱 Get Recommendation</button>`;
             list.appendChild(div);
         });
     } catch(e) { console.error(e); }
@@ -760,82 +729,107 @@ async function loadFarmers() {
 function startForFarmer(id, name) { selectedFarmerId=id; showScreen('farmerInputScreen'); }
 
 // ═══════════════════════════════════════════════════════════════
-// 11. PREDICTION
+// 11. LOADING OVERLAY
 // ═══════════════════════════════════════════════════════════════
 function showLoading(msg) {
     const overlay = document.getElementById('loadingOverlay');
     const msgEl   = document.getElementById('loadingMsg');
-    const dict    = T[currentLang] || T.en;
     if (overlay) overlay.classList.remove('hidden');
-    if (msgEl)   msgEl.textContent = msg || (dict.predictBtn || 'Predicting...');
+    if (msgEl)   msgEl.textContent = msg || ((T[currentLang]||T.en).predictBtn || 'Predicting...');
 }
 function hideLoading() {
     const overlay = document.getElementById('loadingOverlay');
     if (overlay) overlay.classList.add('hidden');
 }
 
+// ═══════════════════════════════════════════════════════════════
+// 12. PREDICTION — FIX: full validation before API call
+// ═══════════════════════════════════════════════════════════════
 async function getPrediction() {
     const token = localStorage.getItem('token');
     if (!token) { alert('Session expired. Please login.'); showScreen('welcomeScreen'); return; }
 
     const dict = T[currentLang] || T.en;
 
-    // Validate all inputs before calling API
+    // ── VALIDATE all inputs ──
     const soilCond = document.querySelector('input[name="soil_condition"]:checked');
     const soilFert = document.querySelector('input[name="soil_fertility"]:checked');
     const lastHarv = document.querySelector('input[name="last_harvest"]:checked');
+    const harvestCrop = document.getElementById('harvestCropName')?.value.trim() || '';
     const city     = document.getElementById('cityInput').value.trim();
 
     if (!soilCond) {
-        alert(currentLang === 'hi' ? '⚠ कृपया मिट्टी का प्रकार चुनें' :
-              currentLang === 'te' ? '⚠ దయచేసి నేల రకాన్ని ఎంచుకోండి' :
+        alert(currentLang==='hi' ? '⚠ कृपया मिट्टी का प्रकार चुनें' :
+              currentLang==='te' ? '⚠ దయచేసి నేల రకాన్ని ఎంచుకోండి' :
               '⚠ Please select a Soil Type');
         return;
     }
     if (!soilFert) {
-        alert(currentLang === 'hi' ? '⚠ कृपया मिट्टी की उर्वरता चुनें' :
-              currentLang === 'te' ? '⚠ దయచేసి నేల సారాన్ని ఎంచుకోండి' :
+        alert(currentLang==='hi' ? '⚠ कृपया मिट्टी की उर्वरता चुनें' :
+              currentLang==='te' ? '⚠ దయచేసి నేల సారాన్ని ఎంచుకోండి' :
               '⚠ Please select Soil Fertility');
         return;
     }
     if (!lastHarv) {
-        alert(currentLang === 'hi' ? '⚠ कृपया पिछली फसल की गुणवत्ता चुनें' :
-              currentLang === 'te' ? '⚠ దయచేసి గత పంట నాణ్యతను ఎంచుకోండి' :
+        alert(currentLang==='hi' ? '⚠ कृपया पिछली फसल की गुणवत्ता चुनें' :
+              currentLang==='te' ? '⚠ దయచేసి గత పంట నాణ్యతను ఎంచుకోండి' :
               '⚠ Please select Last Harvest Quality');
         return;
     }
+    if (!harvestCrop) {
+        alert(currentLang==='hi' ? '⚠ कृपया पिछली फसल का नाम दर्ज करें' :
+              currentLang==='te' ? '⚠ దయచేసి గత పంట పేరు నమోదు చేయండి' :
+              '⚠ Please enter your last harvest crop name');
+        return;
+    }
     if (!city) {
-        alert(currentLang === 'hi' ? '⚠ कृपया अपना शहर / गाँव दर्ज करें' :
-              currentLang === 'te' ? '⚠ దయచేసి మీ నగరం / గ్రామం నమోదు చేయండి' :
+        alert(currentLang==='hi' ? '⚠ कृपया अपना शहर / गाँव दर्ज करें' :
+              currentLang==='te' ? '⚠ దయచేసి మీ నగరం / గ్రామం నమోదు చేయండి' :
               '⚠ Please enter your City / Village');
         return;
     }
 
     showLoading();
-    const btn=document.querySelector('[data-key="predictBtn"]');
-    if (btn) { btn.disabled=true; }
+    const btn = document.querySelector('[data-key="predictBtn"]');
+    if (btn) btn.disabled = true;
+
     try {
-        const r=await fetch('/api/predict',{method:'POST',
-            headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},
-            body:JSON.stringify({
-                soil_condition:  document.querySelector('input[name="soil_condition"]:checked')?.value||'loamy',
-                soil_fertility:  document.querySelector('input[name="soil_fertility"]:checked')?.value||'medium',
-                last_harvest_status: document.querySelector('input[name="last_harvest"]:checked')?.value||'good',
-                city:            document.getElementById('cityInput').value.trim()||'Hyderabad',
-                water_level:     2, farmer_id: selectedFarmerId,
-                season: document.getElementById('inputSeason')?.value || ''
+        const r = await fetch('/api/predict', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json','Authorization':`Bearer ${token}`},
+            body: JSON.stringify({
+                soil_condition:      soilCond.value,
+                soil_fertility:      soilFert.value,
+                last_harvest_status: lastHarv.value,
+                last_harvest_crop:   harvestCrop,
+                city:                city,
+                water_level:         2,
+                farmer_id:           selectedFarmerId,
+                season:              document.getElementById('inputSeason')?.value || ''
             })
         });
-        const d=await r.json();
-        if (d.success) { lastCropResult=d.crop; displayResults(d); }
-        else if (r.status===401) { alert('Session expired.'); localStorage.clear(); location.reload(); }
-        else alert('❌ '+d.error);
-    } catch(e) { alert('❌ Error: '+e); }
-    finally { hideLoading(); if(btn){btn.textContent=(T[currentLang]||T.en).predictBtn||'🌱 Predict Best Crop'; btn.disabled=false;} }
+        const d = await r.json();
+        if (d.success) {
+            lastCropResult = d.crop;
+            displayResults(d, harvestCrop, lastHarv.value);
+        } else if (r.status === 401) {
+            alert('Session expired. Please login again.');
+            localStorage.clear();
+            location.reload();
+        } else {
+            alert('❌ ' + d.error);
+        }
+    } catch(e) {
+        alert('❌ Error: ' + e);
+    } finally {
+        hideLoading();
+        if (btn) { btn.textContent = (T[currentLang]||T.en).predictBtn || '🌱 Predict Best Crop'; btn.disabled = false; }
+    }
 }
 
-
-// ── Crop images (Wikimedia Commons free images) ──
+// ═══════════════════════════════════════════════════════════════
+// 13. CROP IMAGES
+// ═══════════════════════════════════════════════════════════════
 const CROP_IMAGES = {
   'rice':        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/White_rice.jpg/320px-White_rice.jpg',
   'maize':       'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Corn_flint.jpg/320px-Corn_flint.jpg',
@@ -861,150 +855,187 @@ const CROP_IMAGES = {
   'coffee':      'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/A_small_cup_of_coffee.JPG/320px-A_small_cup_of_coffee.JPG',
 };
 
-function displayResults(data) {
-    const lang=currentLang;
-    const dict=T[lang]||T.en;
+// ═══════════════════════════════════════════════════════════════
+// 14. DISPLAY RESULTS — FIX: stores data-conf-key + data-fert-raw
+// ═══════════════════════════════════════════════════════════════
+function displayResults(data, harvestCropName, harvestStatus) {
+    const lang = currentLang;
+    const dict = T[lang] || T.en;
 
-    // Crop
-    const cropEl=document.getElementById('resultCrop');
-    cropEl.textContent=data.crop; cropEl.setAttribute('data-raw',data.crop);
-    const ck=`crop_${data.crop.toLowerCase().replace(/\s+/g,'')}`;
-    if (dict[ck]) cropEl.textContent=dict[ck];
+    // Crop name
+    const cropEl = document.getElementById('resultCrop');
+    cropEl.textContent = data.crop;
+    cropEl.setAttribute('data-raw', data.crop);
+    const ck = `crop_${data.crop.toLowerCase().replace(/\s+/g,'')}`;
+    if (dict[ck]) cropEl.textContent = dict[ck];
 
-    document.getElementById('resultEmoji').textContent=data.emoji||'🌾';
+    document.getElementById('resultEmoji').textContent = data.emoji || '🌾';
 
     // Crop image
     const imgEl = document.getElementById('resultCropImage');
     if (imgEl) {
         const imgUrl = CROP_IMAGES[data.crop.toLowerCase().replace(/\s+/g,'')] || '';
         if (imgUrl) {
-            imgEl.src = imgUrl;
-            imgEl.alt = data.crop;
-            imgEl.style.display = 'block';
+            imgEl.src = imgUrl; imgEl.alt = data.crop; imgEl.style.display = 'block';
             imgEl.onerror = () => { imgEl.style.display='none'; };
         } else {
             imgEl.style.display = 'none';
         }
     }
 
-    // Confidence — with explanation
-    const bar=document.getElementById('confidenceBar'),txt=document.getElementById('confidenceText');
-    if(bar) bar.style.width=`${data.confidence}%`;
-    if(txt) txt.textContent=`${data.confidence}%`;
-    // Confidence explanation text
+    // Confidence bar
+    const bar = document.getElementById('confidenceBar');
+    const txt = document.getElementById('confidenceText');
+    if (bar) bar.style.width = `${data.confidence}%`;
+    if (txt) txt.textContent = `${data.confidence}%`;
+
+    // ── FIX: store data-conf-key for re-translation ──
     const confExp = document.getElementById('confidenceExplain');
     if (confExp) {
-        const d2 = T[lang]||T.en;
-       const confKey = data.confidence >= 85 ? 'confHigh' :
-                    data.confidence >= 65 ? 'confMed' : 'confLow';
-    confExp.setAttribute('data-conf-key', confKey);
-    confExp.textContent = d2[confKey] || level;
+        const confKey = data.confidence >= 85 ? 'confHigh' :
+                        data.confidence >= 65 ? 'confMed'  : 'confLow';
+        confExp.setAttribute('data-conf-key', confKey);
+        confExp.textContent = dict[confKey] || '';
     }
 
-    // Fertilizer + explanation
+    // ── FIX: store data-fert-raw for re-translation ──
     const fertNameEl = document.getElementById('fertilizerName');
     fertNameEl.textContent = data.fertilizer.name;
     fertNameEl.setAttribute('data-fert-raw', data.fertilizer.name);
+
     const fertExp = getFertExplanation(data.fertilizer.name, lang);
     currentFertilizerText = fertExp;
     const expEl = document.getElementById('fertilizerExplanation');
     if (expEl) expEl.textContent = fertExp;
 
     // Weather
-    const w=data.weather;
-    document.getElementById('weatherInfo').textContent=`🌡 ${w.temperature}°C  💧 ${w.humidity}%  📍 ${w.city}`;
+    const w = data.weather;
+    document.getElementById('weatherInfo').textContent = `🌡 ${w.temperature}°C  💧 ${w.humidity}%  📍 ${w.city}`;
 
-    // Factors
-    const fl=document.getElementById('factorsList');
-    if(fl&&data.explanation){
-        fl.innerHTML='';
-        const dict2=T[currentLang]||T.en;
-        data.explanation.forEach(([f,s])=>{
-            const li=document.createElement('li');
-            const tkey='factor_'+f.replace(/\s+/g,'');
-            const fname=dict2[tkey]||f;
-            li.textContent=`${fname}: ${s}%`;
-            li.setAttribute('data-en',f);
-            li.setAttribute('data-val',String(s));
+    // Impact Factors
+    const fl = document.getElementById('factorsList');
+    if (fl && data.explanation) {
+        fl.innerHTML = '';
+        data.explanation.forEach(([f, s]) => {
+            const li = document.createElement('li');
+            const tkey = 'factor_' + f.replace(/\s+/g,'');
+            li.textContent = `${dict[tkey]||f}: ${s}%`;
+            li.setAttribute('data-en', f);
+            li.setAttribute('data-val', String(s));
             fl.appendChild(li);
         });
+    }
+
+    // ── Harvest context box ──
+    const hBox = document.getElementById('harvestContextBox');
+    const hTxt = document.getElementById('harvestContextText');
+    if (hBox && hTxt && harvestCropName) {
+        const msg = harvestStatus === 'poor'
+            ? (currentLang==='hi'
+                ? ` आपकी पिछली "${harvestCropName}" फसल खराब थी। हमने मिट्टी सुधार को ध्यान में रखकर यह फसल सुझाई है।`
+                : currentLang==='te'
+                ? ` మీ గత "${harvestCropName}" పంట తక్కువగా ఉంది. నేల మెరుగుదలను దృష్టిలో పెట్టుకుని ఈ పంటను సిఫార్సు చేశాము.`
+                : ` Your last "${harvestCropName}" harvest was poor. We've recommended this crop considering soil recovery.`)
+            : (currentLang==='hi'
+                ? ` आपकी पिछली "${harvestCropName}" फसल अच्छी थी। यह अगली फसल उसी श्रृंखला में सर्वोत्तम है।`
+                : currentLang==='te'
+                ? ` మీ గత "${harvestCropName}" పంట మంచిది. ఇది అదే క్రమంలో ఉత్తమ తదుపరి పంట.`
+                : ` Your last "${harvestCropName}" harvest was good. This is the best follow-up crop for your land.`);
+        hTxt.textContent = msg;
+        hBox.style.display = 'block';
+    } else if (hBox) {
+        hBox.style.display = 'none';
     }
 
     showScreen('resultsScreen');
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 12. FEEDBACK
+// 15. FEEDBACK
 // ═══════════════════════════════════════════════════════════════
 function setRating(v) {
-    selectedRating=v; document.getElementById('fbRating').value=v;
-    document.querySelectorAll('.star').forEach(s=>s.classList.toggle('active',parseInt(s.dataset.val)<=v));
+    selectedRating = v;
+    document.getElementById('fbRating').value = v;
+    document.querySelectorAll('.star').forEach(s => s.classList.toggle('active', parseInt(s.dataset.val) <= v));
 }
 
 function showFeedbackForm() {
-    const el=document.getElementById('fbCrop');
-    if(el&&lastCropResult) el.value=lastCropResult;
-    // Pre-fill season from the input page selection
+    const el = document.getElementById('fbCrop');
+    if (el && lastCropResult) el.value = lastCropResult;
     const inputSeason = document.getElementById('inputSeason')?.value || '';
     const fbSeasonEl  = document.getElementById('fbSeason');
     if (fbSeasonEl && inputSeason) fbSeasonEl.value = inputSeason;
-    selectedRating=0;
-    document.querySelectorAll('.star').forEach(s=>s.classList.remove('active'));
+    selectedRating = 0;
+    document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
     showScreen('feedbackFormScreen');
 }
 
 async function submitFeedback() {
-    const token=localStorage.getItem('token');
-    if(!token){alert('Please login to submit a review');showScreen('farmerLoginScreen');return;}
-    const crop=document.getElementById('fbCrop').value.trim(),
-          rating=parseInt(document.getElementById('fbRating').value),
-          comment=document.getElementById('fbComment').value.trim(),
-          location=document.getElementById('fbLocation').value.trim(),
-          season=document.getElementById('fbSeason').value;
-    if(!crop){alert('Please enter the crop name');return;}
-    if(!rating){alert('Please select a star rating');return;}
-    if(!comment){alert('Please write your experience');return;}
+    const token = localStorage.getItem('token');
+    if (!token) { alert('Please login to submit a review'); showScreen('farmerLoginScreen'); return; }
+    const crop     = document.getElementById('fbCrop').value.trim();
+    const rating   = parseInt(document.getElementById('fbRating').value);
+    const comment  = document.getElementById('fbComment').value.trim();
+    const location = document.getElementById('fbLocation').value.trim();
+    const season   = document.getElementById('fbSeason').value;
+    if (!crop)   { alert('Please enter the crop name'); return; }
+    if (!rating) { alert('Please select a star rating'); return; }
+    if (!comment){ alert('Please write your experience'); return; }
     try {
-        const r=await fetch('/api/feedback',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify({crop,rating,comment,location,season})});
-        const d=await r.json();
-        if(d.success){
+        const r = await fetch('/api/feedback',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify({crop,rating,comment,location,season})});
+        const d = await r.json();
+        if (d.success) {
             alert('🙏 '+d.message);
-            ['fbCrop','fbComment','fbLocation'].forEach(id=>document.getElementById(id).value='');
-            document.getElementById('fbSeason').value=''; setRating(0);
+            ['fbCrop','fbComment','fbLocation'].forEach(id => document.getElementById(id).value='');
+            document.getElementById('fbSeason').value='';
+            setRating(0);
             showScreen('feedbackScreen'); loadFeedback();
         } else alert('❌ '+d.error);
-    } catch(e){alert('❌ Connection error');}
+    } catch(e) { alert('❌ Connection error'); }
 }
 
 async function loadFeedback(page=1) {
-    const crop=document.getElementById('cropFilter')?.value||'';
+    const crop = document.getElementById('cropFilter')?.value || '';
     try {
-        if(page===1){
-            const cr=await fetch('/api/feedback/crops');
-            const cd=await cr.json();
-            const sel=document.getElementById('cropFilter');
-            if(sel&&cd.crops){
-                const cur=sel.value; sel.innerHTML=`<option value="">${(T[currentLang]||T.en).allCrops||'All Crops'}</option>`;
-                cd.crops.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;if(c===cur)o.selected=true;sel.appendChild(o);});
+        if (page===1) {
+            const cr = await fetch('/api/feedback/crops');
+            const cd = await cr.json();
+            const sel = document.getElementById('cropFilter');
+            if (sel && cd.crops) {
+                const cur = sel.value;
+                sel.innerHTML = `<option value="">${(T[currentLang]||T.en).allCrops||'All Crops'}</option>`;
+                cd.crops.forEach(c => {
+                    const o = document.createElement('option');
+                    o.value = c; o.textContent = c;
+                    if (c===cur) o.selected = true;
+                    sel.appendChild(o);
+                });
             }
         }
-        const r=await fetch(`/api/feedback?crop=${encodeURIComponent(crop)}&page=${page}`);
-        const d=await r.json();
+        const r = await fetch(`/api/feedback?crop=${encodeURIComponent(crop)}&page=${page}`);
+        const d = await r.json();
 
-        const statsEl=document.getElementById('feedbackStats');
-        if(statsEl){
-            if(d.total_reviews>0){
-                const filled='★'.repeat(Math.round(d.avg_rating)),empty='☆'.repeat(5-Math.round(d.avg_rating));
-                statsEl.innerHTML=`<div class="feedback-summary">
+        const statsEl = document.getElementById('feedbackStats');
+        if (statsEl) {
+            if (d.total_reviews > 0) {
+                const filled = '★'.repeat(Math.round(d.avg_rating));
+                const empty  = '☆'.repeat(5-Math.round(d.avg_rating));
+                statsEl.innerHTML = `<div class="feedback-summary">
                     <div class="summary-score"><span class="big-rating">${d.avg_rating}</span><span class="stars-display">${filled}${empty}</span><span style="color:#666;font-size:0.82em;">${d.total_reviews} reviews</span></div>
                     <div class="rating-bars">${[5,4,3,2,1].map(s=>{const c=d.rating_dist?.[s]||0,p=d.total_reviews?Math.round(c/d.total_reviews*100):0;return`<div class="rating-bar-row"><span class="rb-label">${s}★</span><div class="rb-track"><div class="rb-fill" style="width:${p}%"></div></div><span class="rb-count">${c}</span></div>`;}).join('')}</div>
                 </div>`;
-            } else statsEl.innerHTML='<p style="color:#999;text-align:center;padding:12px;">No reviews yet. Be the first!</p>';
+            } else {
+                statsEl.innerHTML = '<p style="color:#999;text-align:center;padding:12px;">No reviews yet. Be the first!</p>';
+            }
         }
 
-        const listEl=document.getElementById('feedbackList');
-        if(!d.feedbacks?.length){listEl.innerHTML='<p style="color:#999;text-align:center;padding:20px;">No reviews found.</p>';document.getElementById('feedbackPagination').innerHTML='';return;}
-        listEl.innerHTML=d.feedbacks.map(fb=>`
+        const listEl = document.getElementById('feedbackList');
+        if (!d.feedbacks?.length) {
+            listEl.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">No reviews found.</p>';
+            document.getElementById('feedbackPagination').innerHTML = '';
+            return;
+        }
+        listEl.innerHTML = d.feedbacks.map(fb => `
             <div class="review-card">
                 <div class="review-header">
                     <div><span class="reviewer-name">👤 ${fb.farmer_name}</span>${fb.location?`<span class="reviewer-loc">📍 ${fb.location}</span>`:''}</div>
@@ -1015,92 +1046,50 @@ async function loadFeedback(page=1) {
                 <button class="btn-speak small-speak" onclick="speak('${fb.comment.replace(/'/g,"\\'")}','${currentLang}')" title="Read review">🔊</button>
             </div>`).join('');
 
-        const total=Math.ceil(d.total/10),pag=document.getElementById('feedbackPagination');
-        if(pag&&total>1){pag.innerHTML=`${page>1?`<button onclick="loadFeedback(${page-1})" class="btn btn-secondary" style="margin:0 5px">← Prev</button>`:''}
-            <span style="margin:0 10px;color:#666;">Page ${page} / ${total}</span>
-            ${page<total?`<button onclick="loadFeedback(${page+1})" class="btn btn-primary" style="margin:0 5px">Next →</button>`:''}`;}
-        else if(pag) pag.innerHTML='';
-    } catch(e){console.error(e);document.getElementById('feedbackList').innerHTML='<p style="color:#c00;">Failed to load.</p>';}
+        const total = Math.ceil(d.total/10);
+        const pag   = document.getElementById('feedbackPagination');
+        if (pag && total > 1) {
+            pag.innerHTML = `${page>1?`<button onclick="loadFeedback(${page-1})" class="btn btn-secondary" style="margin:0 5px">← Prev</button>`:''}
+                <span style="margin:0 10px;color:#666;">Page ${page} / ${total}</span>
+                ${page<total?`<button onclick="loadFeedback(${page+1})" class="btn btn-primary" style="margin:0 5px">Next →</button>`:''}`;
+        } else if (pag) pag.innerHTML = '';
+    } catch(e) {
+        console.error(e);
+        document.getElementById('feedbackList').innerHTML = '<p style="color:#c00;">Failed to load reviews.</p>';
+    }
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 13. INIT
+// 16. TRANSLATION (review comments)
 // ═══════════════════════════════════════════════════════════════
-// Translate review comment using browser built-in or fallback
 async function translateReview(idx, originalText, btn) {
     const commentEl = document.getElementById(`review-comment-${idx}`);
     if (!commentEl) return;
-
-    // If already translated, revert to original
     if (btn.getAttribute('data-translated') === '1') {
         commentEl.innerHTML = `"${commentEl.getAttribute('data-original')}"`;
         btn.setAttribute('data-translated','0');
-        const dict=T[currentLang]||T.en;
-        btn.textContent = dict.translateBtn||'🌐 Translate';
+        btn.textContent = (T[currentLang]||T.en).translateBtn || '🌐 Translate';
         return;
     }
-
     btn.textContent = '⏳';
     const targetLang = currentLang === 'hi' ? 'hi' : currentLang === 'te' ? 'te' : 'en';
-    
     try {
-        // Use MyMemory free translation API (no key needed)
-        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(originalText)}&langpair=en|${targetLang}`;
+        const url  = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(originalText)}&langpair=en|${targetLang}`;
         const resp = await fetch(url);
         const data = await resp.json();
         const translated = data.responseData?.translatedText || originalText;
         commentEl.innerHTML = `"${translated}"`;
         btn.setAttribute('data-translated','1');
-        const dict=T[currentLang]||T.en;
-        btn.textContent = dict.translateClose||'✕ Original';
+        btn.textContent = (T[currentLang]||T.en).translateClose || '✕ Original';
     } catch(e) {
         btn.textContent = '❌';
-        setTimeout(()=>{
-            const dict=T[currentLang]||T.en;
-            btn.textContent=dict.translateBtn||'🌐 Translate';
-        },1500);
+        setTimeout(() => { btn.textContent = (T[currentLang]||T.en).translateBtn || '🌐 Translate'; }, 1500);
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const lang=localStorage.getItem('preferredLanguage')||'en';
-    const sel=document.getElementById('languageSelect');
-    if(sel) sel.value=lang;
-    // Apply language after a short delay to ensure DOM is ready
-    changeLanguage(lang);
-    setTimeout(() => changeLanguage(lang), 100);
-
-    if(currentUserToken&&currentUserRole){
-        if(currentUserRole==='officer') loadOfficerDashboard();
-        else showScreen('farmerInputScreen');
-    } else showScreen('welcomeScreen');
-
-    // PWA install prompt — show button in dashboard & input screen
-    window.addEventListener('beforeinstallprompt', e => {
-        e.preventDefault();
-        window._deferredInstall = e;
-        // Show all install buttons
-        ['installAppBtn','installAppBtn2'].forEach(id => {
-            const btn = document.getElementById(id);
-            if (btn) btn.style.display = 'inline-flex';
-        });
-    });
-
-    // If already installed as PWA, hide install buttons
-    window.addEventListener('appinstalled', () => {
-        ['installAppBtn','installAppBtn2'].forEach(id => {
-            const btn = document.getElementById(id);
-            if (btn) btn.style.display = 'none';
-        });
-        console.log('PWA installed successfully');
-    });
-
-    // Keep-alive: ping server every 10 minutes to prevent Render spin-down
-    setInterval(() => {
-        fetch('/ping').catch(() => {});
-    }, 10 * 60 * 1000);
-});
-
+// ═══════════════════════════════════════════════════════════════
+// 17. PWA INSTALL
+// ═══════════════════════════════════════════════════════════════
 function triggerInstall() {
     if (window._deferredInstall) {
         window._deferredInstall.prompt();
@@ -1114,8 +1103,44 @@ function triggerInstall() {
             window._deferredInstall = null;
         });
     } else {
-        // Fallback instructions for iOS or already-installed
-        alert('📲 To install:Android: Tap the menu (⋮) in Chrome → "Add to Home screen"iOS Safari: Tap Share (⬆) → "Add to Home Screen"');
+        alert('📲 To install:\n\nAndroid: Tap menu (⋮) in Chrome → "Add to Home screen"\niOS Safari: Tap Share (⬆) → "Add to Home Screen"');
     }
 }
 
+// ═══════════════════════════════════════════════════════════════
+// 18. INIT
+// ═══════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+    const lang = localStorage.getItem('preferredLanguage') || 'en';
+    const sel  = document.getElementById('languageSelect');
+    if (sel) sel.value = lang;
+    changeLanguage(lang);
+    setTimeout(() => changeLanguage(lang), 100);
+
+    if (currentUserToken && currentUserRole) {
+        if (currentUserRole === 'officer') loadOfficerDashboard();
+        else showScreen('farmerInputScreen');
+    } else {
+        showScreen('welcomeScreen');
+    }
+
+    // PWA install prompt
+    window.addEventListener('beforeinstallprompt', e => {
+        e.preventDefault();
+        window._deferredInstall = e;
+        ['installAppBtn','installAppBtn2'].forEach(id => {
+            const btn = document.getElementById(id);
+            if (btn) btn.style.display = 'inline-flex';
+        });
+    });
+
+    window.addEventListener('appinstalled', () => {
+        ['installAppBtn','installAppBtn2'].forEach(id => {
+            const btn = document.getElementById(id);
+            if (btn) btn.style.display = 'none';
+        });
+    });
+
+    // Keep-alive ping every 10 minutes (prevents Render spin-down)
+    setInterval(() => { fetch('/ping').catch(() => {}); }, 10 * 60 * 1000);
+});

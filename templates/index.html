@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Crop Prediction & Fertilizer Recommendation</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}?v=4">
-    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}?v=4">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}?v=5">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}?v=5">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,15 +14,20 @@
     <meta name="theme-color" content="#2e7d32">
 </head>
 <body>
+
+<!-- ══════════════════════════════════════════
+     LOADING OVERLAY
+══════════════════════════════════════════ -->
 <div id="loadingOverlay" class="loading-overlay hidden">
   <div class="loading-box">
     <div class="spinner"></div>
     <p id="loadingMsg">Predicting best crop...</p>
   </div>
 </div>
+
 <div class="container">
 
-    <!-- NAVBAR — hidden on welcome/literacy screens -->
+    <!-- NAVBAR -->
     <nav class="navbar" id="navbar">
         <div class="nav-brand" data-key="appName">CropAI 🌾</div>
         <div class="nav-right">
@@ -50,7 +55,6 @@
 
         <!-- ══════════════════════════════════════════
              SCREEN 2: LITERACY SELECTION
-             (Voice-enabled: says options aloud, user can speak)
         ══════════════════════════════════════════ -->
         <section id="literacyScreen" class="screen hidden">
             <div class="card">
@@ -323,7 +327,8 @@
 
         <!-- ══════════════════════════════════════════
              SCREEN 9: FARMER INPUT / PREDICTION
-             (Voice for all inputs including radio buttons)
+             FIX 1: Removed default "checked" from all radios
+             FIX 2: Added last harvest crop detail input
         ══════════════════════════════════════════ -->
         <section id="farmerInputScreen" class="screen hidden">
             <div class="card">
@@ -361,7 +366,7 @@
                     </div>
                 </div>
 
-                <!-- Last Harvest -->
+                <!-- Last Harvest Quality -->
                 <div class="form-group">
                     <div class="label-row">
                         <label data-key="harvestLabel">🌾 Last Harvest Quality</label>
@@ -371,9 +376,23 @@
                         </div>
                     </div>
                     <div class="radio-group">
-                        <label><input type="radio" name="last_harvest" value="poor"> <span data-key="poor">Poor</span></label>
-                        <label><input type="radio" name="last_harvest" value="good"> <span data-key="good">Good</span></label>
+                        <label><input type="radio" name="last_harvest" value="poor" onchange="onHarvestChange(this)"> <span data-key="poor">Poor</span></label>
+                        <label><input type="radio" name="last_harvest" value="good" onchange="onHarvestChange(this)"> <span data-key="good">Good</span></label>
                     </div>
+                </div>
+
+                <!-- ── FIX: Last Harvest Crop Details (shown after selecting poor/good) ── -->
+                <div class="form-group" id="harvestDetailGroup" style="display:none;">
+                    <label id="harvestDetailLabel">🌿 Last Harvest Crop Name</label>
+                    <div class="input-row">
+                        <input type="text" id="harvestCropName"
+                               placeholder="e.g. Rice, Wheat, Cotton">
+                        <button class="btn-mic" onclick="startVoice('harvestCropName','text')">🎤</button>
+                        <button class="btn-speak" onclick="speakField('harvestCropName')">🔊</button>
+                    </div>
+                    <small class="hint" id="harvestDetailHint">
+                        Knowing your last crop helps us recommend a better rotation.
+                    </small>
                 </div>
 
                 <!-- City Input -->
@@ -386,18 +405,18 @@
                     </div>
                 </div>
 
-                <div class="button-group">
-                    <!-- Season selection on input page -->
-                    <div class="form-group">
-                        <label id="seasonInputLabel" data-key="seasonInputLabel">🌦 Season (Optional)</label>
-                        <select id="inputSeason" class="full-select">
-                            <option value="" data-key="selectSeason">Select season</option>
-                            <option value="Kharif (Jun-Oct)" data-key="kharif">Kharif (Jun-Oct)</option>
-                            <option value="Rabi (Oct-Mar)" data-key="rabi">Rabi (Oct-Mar)</option>
-                            <option value="Zaid (Mar-Jun)" data-key="zaid">Zaid (Mar-Jun)</option>
-                        </select>
-                    </div>
+                <!-- Season (Optional) -->
+                <div class="form-group">
+                    <label id="seasonInputLabel" data-key="seasonInputLabel">🌦 Season (Optional)</label>
+                    <select id="inputSeason" class="full-select">
+                        <option value="" data-key="selectSeason">Select season</option>
+                        <option value="Kharif (Jun-Oct)" data-key="kharif">Kharif (Jun-Oct)</option>
+                        <option value="Rabi (Oct-Mar)" data-key="rabi">Rabi (Oct-Mar)</option>
+                        <option value="Zaid (Mar-Jun)" data-key="zaid">Zaid (Mar-Jun)</option>
+                    </select>
+                </div>
 
+                <div class="button-group">
                     <button onclick="getPrediction()" class="btn btn-primary" data-key="predictBtn">🌱 Predict Best Crop</button>
                     <button onclick="showScreen('feedbackScreen'); loadFeedback()" class="btn btn-secondary">💬 <span data-key="reviews">Reviews</span></button>
                     <button id="installAppBtn2" onclick="triggerInstall()" class="btn btn-install" style="display:none">📲 <span data-key="installApp">Install App</span></button>
@@ -408,6 +427,7 @@
 
         <!-- ══════════════════════════════════════════
              SCREEN 10: RESULTS
+             FIX: data-conf-key & data-fert-raw stored for re-translation
         ══════════════════════════════════════════ -->
         <section id="resultsScreen" class="screen hidden">
             <div class="card">
@@ -420,6 +440,7 @@
                 </div>
 
                 <div class="result-grid">
+                    <!-- Confidence -->
                     <div class="result-box">
                         <h4 data-key="confLabel">📊 Confidence Score</h4>
                         <div class="confidence-bar">
@@ -427,28 +448,38 @@
                                 <span id="confidenceText">0%</span>
                             </div>
                         </div>
-                        <p id="confidenceExplain" class="conf-explain"></p>
+                        <!-- FIX: data-conf-key attribute enables re-translation on language change -->
+                        <p id="confidenceExplain" class="conf-explain" data-conf-key=""></p>
                     </div>
 
+                    <!-- Weather -->
                     <div class="result-box">
                         <h4 data-key="weatherLabel">🌤 Current Weather</h4>
                         <p id="weatherInfo"></p>
                     </div>
 
-                    <!-- Fertilizer box with TTS speaker -->
+                    <!-- Fertilizer — FIX: data-fert-raw stored for re-translation -->
                     <div class="result-box fertilizer-box">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                             <h4 data-key="fertLabel">💧 Recommended Fertilizer</h4>
                             <button class="btn-speak" onclick="speakFertilizer()" title="Read fertilizer info aloud">🔊</button>
                         </div>
-                        <p id="fertilizerName" style="font-weight:600; color:#2e7d32; margin-bottom:8px;"></p>
+                        <!-- data-fert-raw stores original fertilizer name for re-translation -->
+                        <p id="fertilizerName" data-fert-raw="" style="font-weight:600; color:#2e7d32; margin-bottom:8px;"></p>
                         <div id="fertilizerExplanation" class="fertilizer-explain"></div>
                     </div>
 
+                    <!-- Impact Factors -->
                     <div class="result-box">
                         <h4 data-key="factorsLabel">📈 Impact Factors</h4>
                         <ul id="factorsList"></ul>
                     </div>
+                </div>
+
+                <!-- Last Harvest Context (shown on results if harvest crop was entered) -->
+                <div id="harvestContextBox" class="info-box" style="display:none; margin-top:12px;">
+                    <strong>🌿 Based on your last harvest:</strong>
+                    <span id="harvestContextText"></span>
                 </div>
 
                 <div class="button-group" style="margin-top:20px; flex-wrap:wrap;">
@@ -547,27 +578,51 @@
 
     </main>
 </div>
-<script src="{{ url_for('static', filename='script.js') }}?v=4"></script>
+
+<script src="{{ url_for('static', filename='script.js') }}?v=5"></script>
 <script>
-  // Clear old service worker caches on load
+  // ── Service Worker registration
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js?v=3')
-        .then(r => {
-          console.log('SW registered, scope:', r.scope);
-          // Force update check
-          r.update();
-        })
+      navigator.serviceWorker.register('/sw.js?v=4')
+        .then(r => { console.log('SW registered:', r.scope); r.update(); })
         .catch(e => console.log('SW error:', e));
     });
-    // Unregister any old service workers that might be serving stale cache
-    navigator.serviceWorker.getRegistrations().then(registrations => {
-      for (let reg of registrations) {
-        reg.update();
-      }
+    navigator.serviceWorker.getRegistrations().then(regs => {
+      for (let reg of regs) reg.update();
     });
+  }
+
+  // ── FIX: Last harvest radio change handler
+  // Called by onchange on each harvest radio input
+  function onHarvestChange(radio) {
+    const group   = document.getElementById('harvestDetailGroup');
+    const hint    = document.getElementById('harvestDetailHint');
+    const label   = document.getElementById('harvestDetailLabel');
+    const dict    = (typeof T !== 'undefined' && T[currentLang]) ? T[currentLang] : {};
+
+    if (group) group.style.display = 'block';
+
+    if (radio.value === 'poor') {
+      if (hint) hint.textContent =
+        currentLang === 'hi' ? 'पिछली फसल खराब थी — हम बेहतर फसल की सिफारिश करेंगे।' :
+        currentLang === 'te' ? 'గత పంట తక్కువగా ఉంది — మేము మెరుగైన పంటను సిఫార్సు చేస్తాము.' :
+        'Last harvest was poor — we will recommend a better crop rotation for recovery.';
+      if (label) label.textContent =
+        currentLang === 'hi' ? '🌿 पिछली खराब फसल का नाम' :
+        currentLang === 'te' ? '🌿 గత తక్కువ నాణ్యత పంట పేరు' :
+        '🌿 Last (Poor) Harvest Crop Name';
+    } else {
+      if (hint) hint.textContent =
+        currentLang === 'hi' ? 'पिछली फसल अच्छी थी — हम उसी श्रेणी की सर्वोत्तम अगली फसल सुझाएंगे।' :
+        currentLang === 'te' ? 'గత పంట మంచిది — మేము అదే వర్గంలో ఉత్తమ తదుపరి పంటను సిఫార్సు చేస్తాము.' :
+        'Last harvest was good — we will suggest the best follow-up crop.';
+      if (label) label.textContent =
+        currentLang === 'hi' ? '🌿 पिछली अच्छी फसल का नाम' :
+        currentLang === 'te' ? '🌿 గత మంచి పంట పేరు' :
+        '🌿 Last (Good) Harvest Crop Name';
+    }
   }
 </script>
 </body>
 </html>
-
